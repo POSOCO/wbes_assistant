@@ -1,0 +1,9 @@
+{
+  "name": "wbes_reports_fetch",
+  "version": "0.0.1",
+  "dependencies": {
+    "async": "^2.6.0",
+    "cookie": "^0.3.1",
+    "request": "latest"
+  }
+}

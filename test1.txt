@@ -1,0 +1,1 @@
+http://103.7.130.121/wbes/ReportNetSchedule/ExportNetScheduleSummaryToPDF?scheduleDate=10-11-2017&sellerId=c88b0ddb-e90c-4a89-8855-ac6512897c72&revisionNumber=10&getTokenValue=1510379805154&fileType=csv&regionId=2&byDetails=1&isBuyer=1&isBuyer=1
