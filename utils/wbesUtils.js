@@ -12,6 +12,7 @@ var async = require('async');
 var baseUrl = module.exports.baseUrl = "http://103.7.130.121";
 var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/wbes/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
 var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/wbes/ReportFullSchedule/GetUtils?regionId=2";
+var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl = "%s/wbes/Report/GetUtils?regionId=2";
 // string variables --> baseUrl, date_str, revisionNumber, util_id
 var buyerEntitlementFetchUrl = module.exports.buyerEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=1&byOnBar=1";
 // string parameters --> baseUrl, date_str, utilId, revNum, timestamp
@@ -56,9 +57,13 @@ var getRevisionsForDate = module.exports.getRevisionsForDate = function (date_st
     });
 };
 
-var getUtilities = module.exports.getUtilities = function (callback) {
+var getUtilities = module.exports.getUtilities = function (forEnt, callback) {
     var options = defaultRequestOptions;
-    options.url = StringUtils.parse(utilitiesFetchUrl, baseUrl);
+    if (forEnt) {
+        options.url = StringUtils.parse(entitlementsUtilitiesFetchUrl, baseUrl);
+    } else {
+        options.url = StringUtils.parse(utilitiesFetchUrl, baseUrl);
+    }
     // get the list of utilities
     CSVFetcher.doGetRequest(options, function (err, resBody, res) {
         if (err) {
@@ -100,6 +105,26 @@ var getBuyerEntitlement = module.exports.getBuyerEntitlement = function (utilId,
                 return callback(err);
             }
             var entitlementsArray = JSON.parse(resBody)['jaggedarray'];
+            // remove the revision number from the gen name
+            var row = entitlementsArray[0];
+            for (var i = 0; i < row.length; i++) {
+                var bracketIndex = row[i].indexOf("(");
+                if (bracketIndex != -1) {
+                    row[i] = row[i].substring(0, bracketIndex);
+                }
+            }
+            // duplicate the gen Name across the whole row. The gen Name is above OffBarEnt header
+            var secondRow = entitlementsArray[1];
+            for (var i = 0; i < secondRow.length; i++) {
+                if (secondRow[i] == "OffBarEnt") {
+                    // duplicate the name in other headers too
+                    row[i - 1] = row[i];
+                    row[i + 1] = row[i];
+                    row[i + 2] = row[i];
+                }
+            }
+            entitlementsArray[0] = row;
+            entitlementsArray[1] = secondRow;
             callback(null, entitlementsArray);
         });
     });
@@ -135,7 +160,32 @@ var getBuyerISGSNetSchedules = module.exports.getBuyerISGSNetSchedules = functio
                 return callback(err);
             }
             var isgsNetSchedulesArray = CSVToArray.csvToArray(resBody.replace(/\0/g, ''));
-            callback(null, isgsNetSchedulesArray);
+            // the row with 1st column value as "From Utility" will be the generator header
+            // The row with 1st column value as 1 will be 1st block value and row with value 96 will be 96 block value
+            // find the generator Row
+            var genRow, firstBlkRow = -1;
+            for (var i = 0; i < isgsNetSchedulesArray.length; i++) {
+                if (isgsNetSchedulesArray[i][0] == "From Utility") {
+                    genRow = i;
+                    break;
+                }
+            }
+            if (genRow != -1) {
+                for (var i = genRow; i < isgsNetSchedulesArray.length; i++) {
+                    if (isgsNetSchedulesArray[i][0] == "1") {
+                        firstBlkRow = i;
+                        break;
+                    }
+                }
+            }
+            var newNetSchArray = [];
+            if (genRow != -1 && firstBlkRow != -1) {
+                newNetSchArray.push(isgsNetSchedulesArray[genRow]);
+                for (var i = 0; i < 96; i++) {
+                    newNetSchArray.push(isgsNetSchedulesArray[firstBlkRow + i]);
+                }
+            }
+            callback(null, newNetSchArray);
         });
     });
 };
