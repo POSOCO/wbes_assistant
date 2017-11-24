@@ -17,6 +17,8 @@ var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl
 var buyerEntitlementFetchUrl = module.exports.buyerEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=1&byOnBar=1";
 // string parameters --> baseUrl, date_str, utilId, revNum, timestamp
 var buyerISGSNetScheduleUrl = module.exports.buyerISGSNetScheduleUrl = "%s/wbes/ReportNetSchedule/ExportNetScheduleDetailToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&schType=1";
+// string parameters --> baseUrl, utilId, date_str, rev
+var buyerISGSRequisitionUrl = module.exports.buyerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=true&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -124,7 +126,6 @@ var getBuyerEntitlement = module.exports.getBuyerEntitlement = function (utilId,
                 }
             }
             entitlementsArray[0] = row;
-            entitlementsArray[1] = secondRow;
             callback(null, entitlementsArray);
         });
     });
@@ -186,6 +187,69 @@ var getBuyerISGSNetSchedules = module.exports.getBuyerISGSNetSchedules = functio
                 }
             }
             callback(null, newNetSchArray);
+        });
+    });
+};
+
+
+var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_str, rev, callback) {
+    // http://103.7.130.121/wbes/Report/GetRldcData?isBuyer=true&utilId=20e8bfaf-8fb4-47c7-8522-5c208e3e270a&regionId=2&scheduleDate=24-11-2017&revisionNumber=35&byOnBar=1
+    // fetch cookie first and then do request
+    async.waterfall([
+        function (callback) {
+            fetchCookiesFromReportsUrl(function (err, cookieObj) {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, cookieObj);
+            });
+        }
+    ], function (error, cookieObj) {
+        if (error) {
+            return callback(err);
+        }
+        var options = defaultRequestOptions;
+
+        var tokenString = new Date().getTime();
+        var cookieString = "";
+        cookieString += cookieObj[0];
+        // options.headers.cookie = cookieString;
+        console.log("Cookie String for buyer isgs requisitions is " + cookieString);
+        options.url = StringUtils.parse(buyerISGSRequisitionUrl, baseUrl, utilId, date_str, rev);
+        console.log("Buyer ISGS Requisitions JSON fetch url created is " + options.url);
+
+        // get the requisitions Array
+        CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+            if (err) {
+                return callback(err);
+            }
+            var isgsRequisitionsArray = JSON.parse(resBody)['jaggedarray'];
+
+            // Remove the first row since it has the buyer name only
+            isgsRequisitionsArray.splice(0,1);
+
+            // remove the revision number from the gen name
+            var row = isgsRequisitionsArray[0];
+            for (var i = 0; i < row.length; i++) {
+                var bracketIndex = row[i].indexOf("(");
+                if (bracketIndex != -1) {
+                    row[i] = row[i].substring(0, bracketIndex);
+                }
+            }
+
+            // duplicate the gen Name across the whole row. The gen Name is above OffBarEnt header
+            var secondRow = isgsRequisitionsArray[1];
+            for (var i = 0; i < secondRow.length; i++) {
+                if (secondRow[i] == "OffBarReq") {
+                    // duplicate the name in other headers too
+                    row[i - 1] = row[i];
+                    row[i + 1] = row[i];
+                    row[i + 2] = row[i];
+                }
+            }
+            isgsRequisitionsArray[0] = row;
+
+            callback(null, isgsRequisitionsArray);
         });
     });
 };

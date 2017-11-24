@@ -41,21 +41,21 @@ var date_str = "21-11-2017";
  });
  */
 /*
- // get the entitlements of a utility for a date and a revision number
- WBESUtils.getBuyerEntitlement("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, entitlementsArray) {
- if (err) {
- return console.log(err);
- }
- console.log(entitlementsArray);
- var fs = require('fs');
- fs.writeFile("test.txt", entitlementsArray.join('\n'), function (err) {
- if (err) {
- return console.log(err);
- }
- console.log("The file was saved!");
- });
- });
- */
+// get the entitlements of a utility for a date and a revision number
+WBESUtils.getBuyerEntitlement("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, entitlementsArray) {
+    if (err) {
+        return console.log(err);
+    }
+    console.log(entitlementsArray);
+    var fs = require('fs');
+    fs.writeFile("test.txt", entitlementsArray.join('\n'), function (err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+});
+*/
 
 /*
  //  get the ISGS Net schedules of a state
@@ -66,6 +66,23 @@ var date_str = "21-11-2017";
  console.log(isgsNetSchedulesArray);
  var fs = require('fs');
  fs.writeFile("test.txt", isgsNetSchedulesArray.join('\n'), function (err) {
+ if (err) {
+ return console.log(err);
+ }
+ console.log("The file was saved!");
+ });
+ });
+ */
+
+/*
+ //  get the ISGS Requisitions of a state
+ WBESUtils.getBuyerISGSReq("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, isgsReqArray) {
+ if (err) {
+ return console.log(err);
+ }
+ console.log(isgsReqArray);
+ var fs = require('fs');
+ fs.writeFile("test.txt", isgsReqArray.join('\n'), function (err) {
  if (err) {
  return console.log(err);
  }
