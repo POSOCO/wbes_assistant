@@ -2,5 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{WBES Assistant node_modules}" />
+    <file url="file://$PROJECT_DIR$/tests/test.js" libraries="{ECMAScript 6}" />
   </component>
 </project>
