@@ -5,6 +5,7 @@
 var CSVFetcher = require('./csvFetcher');
 var CSVToArray = require('./csvToArray');
 var StringUtils = require('./stringUtils');
+var ArrayHelper = require('../helpers/arrayHelpers');
 var Cookie = require('cookie');
 var async = require('async');
 
@@ -226,7 +227,7 @@ var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_st
             var isgsRequisitionsArray = JSON.parse(resBody)['jaggedarray'];
 
             // Remove the first row since it has the buyer name only
-            isgsRequisitionsArray.splice(0,1);
+            isgsRequisitionsArray.splice(0, 1);
 
             // remove the revision number from the gen name
             var row = isgsRequisitionsArray[0];
@@ -252,4 +253,56 @@ var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_st
             callback(null, isgsRequisitionsArray);
         });
     });
+};
+
+// get the array of surrenders by the constituent in all the ISGS generators
+var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (utilId, date_str, rev, callback) {
+    // Get the ISGS entitlements array
+    // Get the ISGS requisitions array
+    // For each generator in entitlements, get the corresponding requisitions
+    // Check if there is surrender in the required category (Onbar, Offbar, Total) of the generator
+    var getBuyerEntsArray = function (callback) {
+        getBuyerEntitlement(utilId, date_str, rev, function (err, buyerEntsArray) {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, {'entitlementsMatrix': buyerEntsArray});
+        });
+    };
+
+    var getBuyerReqsArray = function (resObj, callback) {
+        getBuyerISGSReq(utilId, date_str, rev, function (err, buyerReqsArray) {
+            if (err) {
+                return callback(err);
+            }
+            resObj['requisitionsMatrix'] = buyerReqsArray;
+            return callback(null, resObj);
+        });
+    };
+
+    var tasksArray = [getBuyerEntsArray, getBuyerReqsArray];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return callback(err);
+        }
+        // now we have buyer entitlements and requisitions array in the resObj object
+        var entsMatrix = resObj['entitlementsMatrix'];
+        var reqMatrix = resObj['requisitionsMatrix'];
+
+        // Check entsMatrix and reqMatrix is a square matrix of atleast 98 rows and 3 columns
+        var entsMatrixDim = ArrayHelper.getDim(entsMatrix);
+        var reqMatrixDim = ArrayHelper.getDim(reqMatrix);
+        if (entsMatrix.length < 2 || entsMatrix[0] < 98 || entsMatrix[1] < 3) {
+            return callback(new Error('Entitlements matrix is not of minimum required shape of 98*3'));
+        }
+        if (reqMatrix.length < 2 || reqMatrix[0] < 98 || reqMatrix[1] < 3) {
+            return callback(new Error('Requisitions matrix is not of minimum required shape of 98*3'));
+        }
+        
+        var entsFirstRow = entsMatrix[0];
+        var entsSecRow = entsMatrix[1];
+        for (var i = 0; i < entsMatrix.length; i++) {
+            //stub
+        }
+    })
 };
