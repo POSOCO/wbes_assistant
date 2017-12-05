@@ -4,6 +4,7 @@
 var router = require('express').Router();
 var Revision = require('../models/revision');
 var Utility = require('../models/utility');
+var StrUtils = require('../utils/stringUtils');
 var async = require('async');
 
 router.get('/', function (req, res) {
@@ -12,12 +13,14 @@ router.get('/', function (req, res) {
 
 router.get('/home', function (req, res, next) {
     var getRevisions = function (callback) {
-        Revision.getRevisionsForDate(null, function (err, revList) {
+        var todayDate = new Date();
+        var date_str = StrUtils.makeTwoDigits(todayDate.getDate()) + "-" + StrUtils.makeTwoDigits(todayDate.getMonth() + 1) + "-" + todayDate.getFullYear();
+        Revision.getRevisionsForDate(date_str, function (err, revList) {
             if (err) {
                 console.log("error at getRevisions controller");
                 return callback(err);
             }
-            return callback(null, {'revisions': revList});
+            return callback(null, {'revisions': revList, date_str: date_str});
         });
     };
 

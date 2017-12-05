@@ -5,13 +5,23 @@
 </head>
 <body>
 <h1>See ISGS Surrenders</h1>
+<input type="text" id='date_input' value="">
+<input type="text" id='from_blk' value="1">
+<input type="text" id='to_blk' value="96">
+<select name="req_type" id="req_type">
+    <option value="total">Total Req</option>
+    <option value="onbar">On Bar</option>
+    <option value="offbar">Off Bar</option>
+</select>
 <select name="revisions" id="revisions"></select>
 <select name="utils" id="utils"></select>
 <button onclick="getSurrenders()">Get Surrenders</button>
 <script>
     var utilsObj_ = <%- JSON.stringify(utils)%>;
     var revs_ = <%- JSON.stringify(revisions)%>;
+    var dateStr_ = <%- JSON.stringify(date_str)%>;
 </script>
+<script src="./libs/js/jquery.min.js"></script>
 <script src="home.js"></script>
 </body>
 </html>

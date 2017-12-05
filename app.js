@@ -50,6 +50,7 @@ app.use(favicon(__dirname + '/public/img/favicon.ico'));
 // app.use('/', require('./controllers/auth'));
 
 app.use('/', require('./controllers/general'));
+app.use('/api/', require('./controllers/schedule'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -4,6 +4,7 @@
 window.onload = doOnLoadStuff();
 
 function doOnLoadStuff() {
+    document.getElementById('date_input').value = dateStr_;
     var revSelEl = document.getElementById("revisions");
     for (var i = 0; i < revs_.length; i++) {
         var option = document.createElement("option");
@@ -29,8 +30,58 @@ function doOnLoadStuff() {
 }
 
 function getSurrenders() {
+    var revSelEl = document.getElementById("revisions");
+    var rev = revSelEl.options[revSelEl.selectedIndex].value;
     var utilSelEl = document.getElementById("utils");
+    var reqTypeSelEl = document.getElementById("req_type");
     var isSeller = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('data-is_seller');
     var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
-
+    var date_str = document.getElementById('date_input').value;
+    var from_blk_str = document.getElementById('from_blk').value;
+    var to_blk_str = document.getElementById('to_blk').value;
+    var req_type = reqTypeSelEl.options[reqTypeSelEl.selectedIndex].getAttribute('value');
+    var queryStrs = [];
+    queryStrs.push("util_id=" + utilId);
+    queryStrs.push("rev=" + rev);
+    queryStrs.push("is_seller=" + isSeller);
+    queryStrs.push("date_str=" + date_str);
+    queryStrs.push("from=" + from_blk_str);
+    queryStrs.push("to=" + to_blk_str);
+    queryStrs.push("req_type=" + req_type);
+    $.ajax({
+        //fetch categories from sever
+        url: "./api/surrenders" + "?" + queryStrs.join("&"),
+        type: "GET",
+        dataType: "json",
+        success: function (utilSurrObj) {
+            //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
+            console.log("Surrenders fetched are " + JSON.stringify(utilSurrObj));
+            // create header with utilNames
+            var resMatrix = [];
+            if (utilSurrObj.utilNames.length > 0) {
+                var blankValsRow = ["0"];
+                for (var k = 0; k < utilSurrObj.utilNames.length; k++) {
+                    blankValsRow.push("");
+                }
+                resMatrix.push(['TB'].concat(utilSurrObj.utilNames));
+                for (var i = 0; i < 96; i++) {
+                    blankValsRow[0] = (i + 1);
+                    resMatrix.push(blankValsRow);
+                }
+                for (var i = 0; i < utilSurrObj.blks.length; i++) {
+                    var utilSurrBlkVals = utilSurrObj.blks[i].values;
+                    for (var k = 0; k < utilSurrBlkVals.length; k++) {
+                        var blk = Number(utilSurrBlkVals[k]["blk"]);
+                        var surr = Number(utilSurrBlkVals[k]["ent"]) - Number(utilSurrBlkVals[k]["req"]);
+                        resMatrix[blk][i + 1] = surr;
+                    }
+                }
+                console.log(resMatrix);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
+        }
+    });
 }
