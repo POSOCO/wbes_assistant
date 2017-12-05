@@ -59,7 +59,7 @@ var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = fun
         if (err) {
             return callback(err);
         }
-        console.log(res.headers['set-cookie']);
+        // console.log(res.headers['set-cookie']);
         callback(null, res.headers['set-cookie']);
     });
 };
@@ -354,8 +354,8 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
         // first row will have the generator names. Exclude Time block and Block number columns from search
         var genNames = ArrayHelper.getUniqueList(entsFirstRow.slice(2));
 
-        console.log(genNames);
-        console.log(entTypeSearchStr + "  " + reqTypeSearchStr);
+        // console.log(genNames);
+        // console.log(entTypeSearchStr + "  " + reqTypeSearchStr);
 
         // initialize the surrendersObj
         var surrendersObj = {genNames: [], reqType: reqTypeSearchStr, blks: []};
@@ -364,8 +364,8 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
             var entMatrixGenIndices = ArrayHelper.getAllIndexesOfVal(entsFirstRow, genName, true);
             var reqMatrixGenIndices = ArrayHelper.getAllIndexesOfVal(reqFirstRow, genName, true);
 
-            console.log('entMatrixGenIndices ' + entMatrixGenIndices);
-            console.log('reqMatrixGenIndices ' + reqMatrixGenIndices);
+            // console.log('entMatrixGenIndices ' + entMatrixGenIndices);
+            // console.log('reqMatrixGenIndices ' + reqMatrixGenIndices);
 
             var desiredEntCol = -1;
 
@@ -384,7 +384,6 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
             var desiredReqCol = -1;
 
             for (var k = 0; k < reqMatrixGenIndices.length; k++) {
-                console.log(reqSecRow[reqMatrixGenIndices[k]].toLowerCase().trim() + " **");
                 // check for desired requisition type in second row
                 if (reqSecRow[reqMatrixGenIndices[k]].toLowerCase().trim() == reqTypeSearchStr) {
                     desiredReqCol = reqMatrixGenIndices[k];
