@@ -1,2 +1,2 @@
-mocha tests/test.js --timeout 10000;
+mocha tests/test.js --timeout 20000;
 pause;

@@ -94,7 +94,7 @@ describe('WBES Schedules', function () {
     describe('get all surrenders of a buyer', function () {
         it('it should get and dump CSEB surrenders', function (done) {
             //  get the ISGS surrenders of a state
-            WBESUtils.getBuyerISGSSurrenders("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", null, null, null, function (err, isgsSurrObj) {
+            WBESUtils.getUtilISGSSurrenders("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", null, null, null, false, function (err, isgsSurrObj) {
                 if (err) {
                     console.log(err);
                     return done(err);
@@ -149,6 +149,27 @@ describe('WBES Schedules', function () {
                         return console.log(err);
                     }
                     console.log("The file seller_req_test.csv was saved!");
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('get all surrenders of a seller', function () {
+        it('it should get and dump VSTPS-V surrenders', function (done) {
+            //  get the ISGS surrenders of a state
+            WBESUtils.getUtilISGSSurrenders("5df201ba-1574-475a-ad25-b26533170943", date_str, "10", null, null, null, true, function (err, isgsSurrObj) {
+                if (err) {
+                    console.log(err);
+                    return done(err);
+                }
+                // console.log(isgsSurrObj);
+                var fs = require('fs');
+                fs.writeFile("dumps/seller_surr_test.txt", JSON.stringify(isgsSurrObj), function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log("The file seller_surr_test.txt was saved!");
                     done();
                 });
             });

@@ -243,7 +243,7 @@ var getUtilISGSReq = module.exports.getUtilISGSReq = function (utilId, date_str,
         // options.headers.cookie = cookieString;
         console.log("Cookie String for buyer isgs requisitions is " + cookieString);
         var templateUrl = buyerISGSRequisitionUrl;
-        if(isSeller == true){
+        if (isSeller == true) {
             templateUrl = sellerISGSRequisitionUrl;
         }
         options.url = StringUtils.parse(templateUrl, baseUrl, utilId, date_str, rev);
@@ -285,7 +285,7 @@ var getUtilISGSReq = module.exports.getUtilISGSReq = function (utilId, date_str,
 };
 
 // get the array of surrenders by the constituent in all the ISGS generators
-var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (utilId, date_str, rev, fromBlk, toBlk, reqType, callback) {
+var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (utilId, date_str, rev, fromBlk, toBlk, reqType, isSeller, callback) {
     var tempObj = getStartEndBlks(fromBlk, toBlk);
     var startBlk = tempObj.startBlk;
     var endBlk = tempObj.endBlk;
@@ -320,26 +320,26 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
      For each generator in entitlements, get the corresponding requisitions
      Check if there is surrender in the required category (Onbar, Offbar, Total) of the generator
      */
-    var getBuyerEntsArray = function (callback) {
-        getUtilEntitlement(utilId, date_str, rev, false, function (err, buyerEntsArray) {
+    var getUtilEntsArray = function (callback) {
+        getUtilEntitlement(utilId, date_str, rev, isSeller, function (err, utilEntsArray) {
             if (err) {
                 return callback(err);
             }
-            return callback(null, {'entitlementsMatrix': buyerEntsArray});
+            return callback(null, {'entitlementsMatrix': utilEntsArray});
         });
     };
 
-    var getBuyerReqsArray = function (resObj, callback) {
-        getUtilISGSReq(utilId, date_str, rev, false, function (err, buyerReqsArray) {
+    var getUtilReqsArray = function (resObj, callback) {
+        getUtilISGSReq(utilId, date_str, rev, isSeller, function (err, utilReqsArray) {
             if (err) {
                 return callback(err);
             }
-            resObj['requisitionsMatrix'] = buyerReqsArray;
+            resObj['requisitionsMatrix'] = utilReqsArray;
             return callback(null, resObj);
         });
     };
 
-    var tasksArray = [getBuyerEntsArray, getBuyerReqsArray];
+    var tasksArray = [getUtilEntsArray, getUtilReqsArray];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {
             return callback(err);
@@ -370,7 +370,7 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
         // console.log(entTypeSearchStr + "  " + reqTypeSearchStr);
 
         // initialize the surrendersObj
-        var surrendersObj = {genNames: [], reqType: reqTypeSearchStr, blks: []};
+        var surrendersObj = {utilNames: [], reqType: reqTypeSearchStr, blks: []};
         for (var i = 0; i < genNames.length; i++) {
             var genName = genNames[i].trim();
             var entMatrixGenIndices = ArrayHelper.getAllIndexesOfVal(entsFirstRow, genName, true);
@@ -425,8 +425,8 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
 
             if (surrenderBlks.length > 0) {
                 // there is surrender in this generator
-                surrendersObj.genNames.push(genName);
-                surrendersObj.blks.push({genName: genName, values: surrReqArray});
+                surrendersObj.utilNames.push(genName);
+                surrendersObj.blks.push({utilName: genName, values: surrReqArray});
             }
 
         }

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="">
+    <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="seller surr fetch done by generalizing buyer surr fetch">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dumps/seller_req_test.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dumps/seller_surr_test.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dumps/surr_test.txt" afterPath="$PROJECT_DIR$/dumps/surr_test.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/test.js" afterPath="$PROJECT_DIR$/tests/test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test_app.bat" afterPath="$PROJECT_DIR$/test_app.bat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/wbesUtils.js" afterPath="$PROJECT_DIR$/utils/wbesUtils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -53,8 +57,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.88590604">
-              <caret line="155" column="7" selection-start-line="155" selection-start-column="7" selection-end-line="155" selection-end-column="7" />
+            <state vertical-scroll-proportion="0.57214767">
+              <caret line="168" column="30" selection-start-line="168" selection-start-column="30" selection-end-line="168" selection-end-column="30" />
               <folding>
                 <element signature="e#0#47#0" expanded="false" />
               </folding>
@@ -66,7 +70,7 @@
         <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
+              <caret line="427" column="24" selection-start-line="427" selection-start-column="24" selection-end-line="427" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -124,6 +128,7 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/utils/wbesUtils.js" />
         <option value="$PROJECT_DIR$/tests/test.js" />
+        <option value="$PROJECT_DIR$/test_app.bat" />
       </list>
     </option>
   </component>
@@ -370,7 +375,13 @@
       <option name="project" value="LOCAL" />
       <updated>1512460538395</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="seller reqs fetch done by generalizing buyer reqs fetch">
+      <created>1512461516533</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1512461516533</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -407,6 +418,9 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
+  </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
@@ -425,7 +439,8 @@
     <MESSAGE value="started const surrender analysis function" />
     <MESSAGE value="const surrender analysis function done" />
     <MESSAGE value="seller ents fetch done by generalizing buyer ents fetch" />
-    <option name="LAST_COMMIT_MESSAGE" value="seller ents fetch done by generalizing buyer ents fetch" />
+    <MESSAGE value="seller reqs fetch done by generalizing buyer reqs fetch" />
+    <option name="LAST_COMMIT_MESSAGE" value="seller reqs fetch done by generalizing buyer reqs fetch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -773,14 +788,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_app.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.68">
-          <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/chai/chai.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33221477">
@@ -862,15 +869,23 @@
     <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
+          <caret line="427" column="24" selection-start-line="427" selection-start-column="24" selection-end-line="427" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_app.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="31" selection-start-line="0" selection-start-column="31" selection-end-line="0" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.88590604">
-          <caret line="155" column="7" selection-start-line="155" selection-start-column="7" selection-end-line="155" selection-end-column="7" />
+        <state vertical-scroll-proportion="0.57214767">
+          <caret line="168" column="30" selection-start-line="168" selection-start-column="30" selection-end-line="168" selection-end-column="30" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
           </folding>
