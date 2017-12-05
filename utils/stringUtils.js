@@ -21,3 +21,12 @@ module.exports.parseCookieString = function parseCookies(rc) {
 
     return list;
 };
+
+module.exports.makeTwoDigits = function (x) {
+    if (x < 10) {
+        return "0" + x;
+    }
+    else {
+        return x;
+    }
+};

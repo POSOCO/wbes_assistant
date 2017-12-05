@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>ISGS Surrenders</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>See ISGS Surrenders</h1>
+<select name="revisions" id="revisions"></select>
+<select name="utils" id="utils"></select>
+<button onclick="getSurrenders()">Get Surrenders</button>
+<script>
+    var utilsObj_ = <%- JSON.stringify(utils)%>;
+    var revs_ = <%- JSON.stringify(revisions)%>;
+</script>
+<script src="home.js"></script>
+</body>
+</html>

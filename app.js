@@ -2,91 +2,87 @@
  * Created by Nagasudhir on 11/21/2017.
  */
 
-var WBESUtils = require("./utils/wbesUtils");
+var Server_params = require('./config/server_params');
+var express = require('express');
+var morgan = require('morgan');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var cors = require('./config/cors');
+var favicon = require('serve-favicon');
+// var passport = require('./config/passport').get();
+// var flash = require('connect-flash');
 
-var date_str = "21-11-2017";
+var app = express();
+var port = process.env.PORT || 3000;
+
+app.use(cors());
+
+
+app.use(cookieParser());
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+app.use(session({
+    secret: 'anystringoftext',
+    saveUninitialized: true,
+    resave: true
+}));
 
 /*
- var fs = require('fs');
- fs.writeFile("test1.txt", options.url, function(err) {
- if(err) {
- return console.log(err);
- }
- console.log("The file was saved!");
- process.exit();
- });
- */
-/*
- // get the revision Number for Date
- WBESUtils.getRevisionsForDate(date_str, function (err, revisionsArray) {
- if (err) {
- return console.log(err);
- }
- console.log("The revision numbers are " + revisionsArray);
- });
- */
-/*
- // get the utilities
- WBESUtils.getUtilities(false, function (err, utilsObj) {
- if (err) {
- return console.log(err);
- }
- console.log("The buyers are ");
- var utilsStr = [];
- for (var i = 0; i < utilsObj["sellers"].length; i++) {
- utilsStr.push(utilsObj["sellers"][i]["Acronym"]);
- }
- console.log(utilsStr.join(","));
- //console.log(Object.keys(utilsObj["buyers"][0]));
- });
- */
-/*
-// get the entitlements of a utility for a date and a revision number
-WBESUtils.getBuyerEntitlement("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, entitlementsArray) {
-    if (err) {
-        return console.log(err);
-    }
-    console.log(entitlementsArray);
-    var fs = require('fs');
-    fs.writeFile("test.txt", entitlementsArray.join('\n'), function (err) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log("The file was saved!");
-    });
-});
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 */
 
-/*
- //  get the ISGS Net schedules of a state
- WBESUtils.getBuyerISGSNetSchedules("c88b0ddb-e90c-4a89-8855-ac6512897c72", date_str, "10", function (err, isgsNetSchedulesArray) {
- if (err) {
- return console.log(err);
- }
- console.log(isgsNetSchedulesArray);
- var fs = require('fs');
- fs.writeFile("test.txt", isgsNetSchedulesArray.join('\n'), function (err) {
- if (err) {
- return console.log(err);
- }
- console.log("The file was saved!");
- });
- });
- */
+app.use(express.static(__dirname + '/views'));
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
-/*
- //  get the ISGS Requisitions of a state
- WBESUtils.getBuyerISGSReq("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, isgsReqArray) {
- if (err) {
- return console.log(err);
- }
- console.log(isgsReqArray);
- var fs = require('fs');
- fs.writeFile("test.txt", isgsReqArray.join('\n'), function (err) {
- if (err) {
- return console.log(err);
- }
- console.log("The file was saved!");
- });
- });
- */
+app.use(morgan('dev'));
+
+app.set('json spaces', 1);
+
+app.use(favicon(__dirname + '/public/img/favicon.ico'));
+
+//use for authentication of post requests
+// app.use('/', require('./controllers/auth'));
+
+app.use('/', require('./controllers/general'));
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+
+// error handlers
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.json({
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+//because here err: {}
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({
+        message: err.message,
+        error: err
+    });
+});
+
+app.listen(port, function () {
+    console.log('Listening on port ' + port + ' ...');
+});
