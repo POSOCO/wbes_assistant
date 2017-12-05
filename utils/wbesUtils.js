@@ -14,12 +14,14 @@ var baseUrl = module.exports.baseUrl = "http://103.7.130.121";
 var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/wbes/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
 var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/wbes/ReportFullSchedule/GetUtils?regionId=2";
 var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl = "%s/wbes/Report/GetUtils?regionId=2";
-// string variables --> baseUrl, date_str, revisionNumber, util_id
-var buyerEntitlementFetchUrl = module.exports.buyerEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=1&byOnBar=1";
+// string variables --> baseUrl, date_str, rev, util_id
+var buyerISGSEntitlementFetchUrl = module.exports.buyerEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=1&byOnBar=1";
 // string parameters --> baseUrl, date_str, utilId, revNum, timestamp
 var buyerISGSNetScheduleUrl = module.exports.buyerISGSNetScheduleUrl = "%s/wbes/ReportNetSchedule/ExportNetScheduleDetailToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&schType=1";
 // string parameters --> baseUrl, utilId, date_str, rev
 var buyerISGSRequisitionUrl = module.exports.buyerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=true&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
+// string parameters --> baseUrl, date_str, rev, utilId
+var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -94,7 +96,7 @@ var getUtilities = module.exports.getUtilities = function (forEnt, callback) {
     });
 };
 
-var getBuyerEntitlement = module.exports.getBuyerEntitlement = function (utilId, date_str, rev, callback) {
+var getUtilEntitlement = module.exports.getUtilEntitlement = function (utilId, date_str, rev, isSeller, callback) {
     // fetch cookie first and then do request
     async.waterfall([
         function (callback) {
@@ -117,7 +119,11 @@ var getBuyerEntitlement = module.exports.getBuyerEntitlement = function (utilId,
         //cookieString += ";fileDownloadToken=" + tokenString;
         options.headers.cookie = cookieString;
         console.log("Cookie String for buyer entitlement is " + cookieString);
-        options.url = StringUtils.parse(buyerEntitlementFetchUrl, baseUrl, date_str, rev, utilId);
+        var urlTemplate = buyerISGSEntitlementFetchUrl;
+        if (isSeller == true) {
+            urlTemplate = sellerISGSEntitlementFetchUrl;
+        }
+        options.url = StringUtils.parse(urlTemplate, baseUrl, date_str, rev, utilId);
         console.log("Buyer JSON Entitlement fetch url created is " + options.url);
         // get the entitlements Array
         CSVFetcher.doGetRequest(options, function (err, resBody, res) {
@@ -262,7 +268,6 @@ var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_st
                     // duplicate the name in other headers too
                     row[i - 1] = row[i];
                     row[i + 1] = row[i];
-                    row[i + 2] = row[i];
                 }
             }
             isgsRequisitionsArray[0] = row;
@@ -309,7 +314,7 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
      Check if there is surrender in the required category (Onbar, Offbar, Total) of the generator
      */
     var getBuyerEntsArray = function (callback) {
-        getBuyerEntitlement(utilId, date_str, rev, function (err, buyerEntsArray) {
+        getUtilEntitlement(utilId, date_str, rev, false, function (err, buyerEntsArray) {
             if (err) {
                 return callback(err);
             }

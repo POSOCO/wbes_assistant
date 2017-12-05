@@ -48,10 +48,10 @@ describe('WBES Schedules', function () {
         });
     });
 
-    describe('get entitlements', function () {
+    describe('get buyer entitlements', function () {
         it('it should get and dump CSEB entitlement', function (done) {
             // get the entitlements of a utility for a date and a revision number
-            WBESUtils.getBuyerEntitlement("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, entitlementsArray) {
+            WBESUtils.getUtilEntitlement("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", false, function (err, entitlementsArray) {
                 if (err) {
                     console.log(err);
                     return done(err)
@@ -70,7 +70,7 @@ describe('WBES Schedules', function () {
         });
     });
 
-    describe('get requisitions', function () {
+    describe('get buyer requisitions', function () {
         it('it should get and dump CSEB requisitions', function (done) {
             //  get the ISGS Requisitions of a state
             WBESUtils.getBuyerISGSReq("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, isgsReqArray) {
@@ -99,13 +99,35 @@ describe('WBES Schedules', function () {
                     console.log(err);
                     return done(err);
                 }
-                console.log(isgsSurrObj);
+                // console.log(isgsSurrObj);
                 var fs = require('fs');
                 fs.writeFile("dumps/surr_test.txt", JSON.stringify(isgsSurrObj), function (err) {
                     if (err) {
                         return console.log(err);
                     }
                     console.log("The file surr_test.txt was saved!");
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('get seller entitlements', function () {
+        it('it should get and dump VSTPS-V entitlement', function (done) {
+            // get the entitlements of a utility for a date and a revision number
+            WBESUtils.getUtilEntitlement("5df201ba-1574-475a-ad25-b26533170943", date_str, "10", true, function (err, entitlementsArray) {
+                if (err) {
+                    console.log(err);
+                    return done(err)
+                }
+                // console.log(entitlementsArray);
+                var fs = require('fs');
+                fs.writeFile("dumps/seller_ent_test.csv", entitlementsArray.join('\n'), function (err) {
+                    if (err) {
+                        console.log(err);
+                        return done(err);
+                    }
+                    console.log("The seller_ent_test.csv was saved!");
                     done();
                 });
             });
