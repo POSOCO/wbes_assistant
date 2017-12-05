@@ -158,7 +158,7 @@ describe('WBES Schedules', function () {
     describe('get all surrenders of a seller', function () {
         it('it should get and dump VSTPS-V surrenders', function (done) {
             //  get the ISGS surrenders of a state
-            WBESUtils.getUtilISGSSurrenders("5df201ba-1574-475a-ad25-b26533170943", date_str, "10", null, null, null, true, function (err, isgsSurrObj) {
+            WBESUtils.getUtilISGSSurrenders("5df201ba-1574-475a-ad25-b26533170943", date_str, "10", 3, 10, null, true, function (err, isgsSurrObj) {
                 if (err) {
                     console.log(err);
                     return done(err);
