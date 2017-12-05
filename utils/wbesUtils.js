@@ -34,6 +34,23 @@ var defaultRequestOptions = module.exports.defaultRequestOptions = {
     headers: defaultRequestHeaders
 };
 
+// Utility function - gets legitimate start and end blocks from inputs. Any wrong inputs will return 1, 96
+var getStartEndBlks = module.exports.getStartEndBlks = function (fromBlk, toBlk) {
+    var startBlk = 1;
+    var endBlk = 96;
+    if (fromBlk != null && !isNaN(fromBlk) && fromBlk <= 96 && fromBlk >= 1) {
+        startBlk = fromBlk;
+    }
+    if (toBlk != null && !isNaN(toBlk) && toBlk <= 96 && toBlk >= 1) {
+        endBlk = toBlk;
+    }
+    if (startBlk > endBlk) {
+        startBlk = 1;
+        endBlk = 96;
+    }
+    return {startBlk: startBlk, endBlk: endBlk};
+};
+
 var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = function (callback) {
     var options = defaultRequestOptions;
     options.url = "http://103.7.130.121/wbes/";
@@ -256,11 +273,41 @@ var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_st
 };
 
 // get the array of surrenders by the constituent in all the ISGS generators
-var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (utilId, date_str, rev, callback) {
-    // Get the ISGS entitlements array
-    // Get the ISGS requisitions array
-    // For each generator in entitlements, get the corresponding requisitions
-    // Check if there is surrender in the required category (Onbar, Offbar, Total) of the generator
+var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (utilId, date_str, rev, fromBlk, toBlk, reqType, callback) {
+    var tempObj = getStartEndBlks(fromBlk, toBlk);
+    var startBlk = tempObj.startBlk;
+    var endBlk = tempObj.endBlk;
+
+    var onBarReqHeading = 'onbarreq';
+    var offBarReqHeading = 'offbarreq';
+    var totalReqHeading = 'total';
+    var onBarEntHeading = 'onbarent';
+    var offBarEntHeading = 'offbarent';
+    var totalEntHeading = 'total ent';
+    var entTypeSearchStr = totalEntHeading;
+    var reqTypeSearchStr = totalReqHeading;
+    if (typeof reqType == 'string') {
+        if (reqType.toLowerCase() == 'onbar') {
+            entTypeSearchStr = onBarEntHeading;
+            reqTypeSearchStr = onBarReqHeading;
+        }
+        if (reqType.toLowerCase() == 'offbar') {
+            entTypeSearchStr = offBarEntHeading;
+            reqTypeSearchStr = offBarReqHeading;
+        }
+        if (reqType.toLowerCase() == 'total') {
+            entTypeSearchStr = totalEntHeading;
+            reqTypeSearchStr = totalReqHeading;
+        }
+    }
+
+    /*
+     Steps:
+     Get the ISGS entitlements array
+     Get the ISGS requisitions array
+     For each generator in entitlements, get the corresponding requisitions
+     Check if there is surrender in the required category (Onbar, Offbar, Total) of the generator
+     */
     var getBuyerEntsArray = function (callback) {
         getBuyerEntitlement(utilId, date_str, rev, function (err, buyerEntsArray) {
             if (err) {
@@ -298,11 +345,80 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
         if (reqMatrix.length < 2 || reqMatrix[0] < 98 || reqMatrix[1] < 3) {
             return callback(new Error('Requisitions matrix is not of minimum required shape of 98*3'));
         }
-        
+
         var entsFirstRow = entsMatrix[0];
         var entsSecRow = entsMatrix[1];
-        for (var i = 0; i < entsMatrix.length; i++) {
-            //stub
+        var reqFirstRow = reqMatrix[0];
+        var reqSecRow = reqMatrix[1];
+
+        // first row will have the generator names. Exclude Time block and Block number columns from search
+        var genNames = ArrayHelper.getUniqueList(entsFirstRow.slice(2));
+
+        console.log(genNames);
+        console.log(entTypeSearchStr + "  " + reqTypeSearchStr);
+
+        // initialize the surrendersObj
+        var surrendersObj = {genNames: [], reqType: reqTypeSearchStr, blks: []};
+        for (var i = 0; i < genNames.length; i++) {
+            var genName = genNames[i].trim();
+            var entMatrixGenIndices = ArrayHelper.getAllIndexesOfVal(entsFirstRow, genName, true);
+            var reqMatrixGenIndices = ArrayHelper.getAllIndexesOfVal(reqFirstRow, genName, true);
+
+            console.log('entMatrixGenIndices ' + entMatrixGenIndices);
+            console.log('reqMatrixGenIndices ' + reqMatrixGenIndices);
+
+            var desiredEntCol = -1;
+
+            for (var k = 0; k < entMatrixGenIndices.length; k++) {
+                // check for desired requisition type in second row
+                if (entsSecRow[entMatrixGenIndices[k]].toLowerCase().trim() == entTypeSearchStr) {
+                    desiredEntCol = entMatrixGenIndices[k];
+                }
+            }
+
+            if (desiredEntCol == -1) {
+                // return callback(new Error('Could not find the generator name in the Entitlements array'));
+                continue;
+            }
+
+            var desiredReqCol = -1;
+
+            for (var k = 0; k < reqMatrixGenIndices.length; k++) {
+                console.log(reqSecRow[reqMatrixGenIndices[k]].toLowerCase().trim() + " **");
+                // check for desired requisition type in second row
+                if (reqSecRow[reqMatrixGenIndices[k]].toLowerCase().trim() == reqTypeSearchStr) {
+                    desiredReqCol = reqMatrixGenIndices[k];
+                }
+            }
+
+            if (desiredReqCol == -1) {
+                //return callback(new Error('Could not find the generator name in the Requisitions array'));
+                continue;
+            }
+
+            // todo find block index offset explicitly from the time block column
+            var blkIndexOffset = 1;
+            var surrenderBlks = [];
+            var surrReqArray = [];
+            var epsilon = 0.1;
+
+            for (var blk = startBlk; blk < endBlk; blk++) {
+                var blkIndex = blk + blkIndexOffset;
+                var req = Number(reqMatrix[blkIndex][desiredReqCol]);
+                var ent = Number(entsMatrix[blkIndex][desiredEntCol]);
+                if (ent - req > epsilon) {
+                    surrenderBlks.push(blk);
+                    surrReqArray.push({blk: blk, req: req, ent: ent})
+                }
+            }
+
+            if (surrenderBlks.length > 0) {
+                // there is surrender in this generator
+                surrendersObj.genNames.push(genName);
+                surrendersObj.blks.push({genName: genName, values: surrReqArray});
+            }
+
         }
-    })
+        return callback(null, surrendersObj);
+    });
 };
