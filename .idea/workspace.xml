@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="const surrender analysis function done">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dumps/seller_ent_test.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dumps/req_test.csv" afterPath="$PROJECT_DIR$/dumps/req_test.csv" />
+    <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/test.js" afterPath="$PROJECT_DIR$/tests/test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/wbesUtils.js" afterPath="$PROJECT_DIR$/utils/wbesUtils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -52,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.88590604">
+              <caret line="155" column="7" selection-start-line="155" selection-start-column="7" selection-end-line="155" selection-end-column="7" />
               <folding>
                 <element signature="e#0#47#0" expanded="false" />
               </folding>
@@ -64,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wbesUtils.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="wbesUtils.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51510066">
-              <caret line="262" column="0" selection-start-line="262" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -124,8 +122,8 @@
         <option value="$PROJECT_DIR$/helpers/arrayHelpers.js" />
         <option value="$PROJECT_DIR$/tests/utils_test.js" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/tests/test.js" />
         <option value="$PROJECT_DIR$/utils/wbesUtils.js" />
+        <option value="$PROJECT_DIR$/tests/test.js" />
       </list>
     </option>
   </component>
@@ -366,7 +364,13 @@
       <option name="project" value="LOCAL" />
       <updated>1512458766350</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="seller ents fetch done by generalizing buyer ents fetch">
+      <created>1512460538395</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1512460538395</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -420,7 +424,8 @@
     <MESSAGE value="added tests for utils and revs fetch" />
     <MESSAGE value="started const surrender analysis function" />
     <MESSAGE value="const surrender analysis function done" />
-    <option name="LAST_COMMIT_MESSAGE" value="const surrender analysis function done" />
+    <MESSAGE value="seller ents fetch done by generalizing buyer ents fetch" />
+    <option name="LAST_COMMIT_MESSAGE" value="seller ents fetch done by generalizing buyer ents fetch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -854,21 +859,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test.js">
+    <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
+          <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
+    <entry file="file://$PROJECT_DIR$/tests/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51510066">
-          <caret line="262" column="0" selection-start-line="262" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.88590604">
+          <caret line="155" column="7" selection-start-line="155" selection-start-column="7" selection-end-line="155" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#47#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

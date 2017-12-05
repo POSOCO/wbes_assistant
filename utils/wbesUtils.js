@@ -22,6 +22,9 @@ var buyerISGSNetScheduleUrl = module.exports.buyerISGSNetScheduleUrl = "%s/wbes/
 var buyerISGSRequisitionUrl = module.exports.buyerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=true&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
 var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
+// string parameters --> baseUrl, utilId, date_str, rev
+var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
+
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -216,7 +219,7 @@ var getBuyerISGSNetSchedules = module.exports.getBuyerISGSNetSchedules = functio
 };
 
 
-var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_str, rev, callback) {
+var getUtilISGSReq = module.exports.getUtilISGSReq = function (utilId, date_str, rev, isSeller, callback) {
     // http://103.7.130.121/wbes/Report/GetRldcData?isBuyer=true&utilId=20e8bfaf-8fb4-47c7-8522-5c208e3e270a&regionId=2&scheduleDate=24-11-2017&revisionNumber=35&byOnBar=1
     // fetch cookie first and then do request
     async.waterfall([
@@ -239,7 +242,11 @@ var getBuyerISGSReq = module.exports.getBuyerISGSReq = function (utilId, date_st
         cookieString += cookieObj[0];
         // options.headers.cookie = cookieString;
         console.log("Cookie String for buyer isgs requisitions is " + cookieString);
-        options.url = StringUtils.parse(buyerISGSRequisitionUrl, baseUrl, utilId, date_str, rev);
+        var templateUrl = buyerISGSRequisitionUrl;
+        if(isSeller == true){
+            templateUrl = sellerISGSRequisitionUrl;
+        }
+        options.url = StringUtils.parse(templateUrl, baseUrl, utilId, date_str, rev);
         console.log("Buyer ISGS Requisitions JSON fetch url created is " + options.url);
 
         // get the requisitions Array
@@ -323,7 +330,7 @@ var getBuyerISGSSurrenders = module.exports.getBuyerISGSSurrenders = function (u
     };
 
     var getBuyerReqsArray = function (resObj, callback) {
-        getBuyerISGSReq(utilId, date_str, rev, function (err, buyerReqsArray) {
+        getUtilISGSReq(utilId, date_str, rev, false, function (err, buyerReqsArray) {
             if (err) {
                 return callback(err);
             }

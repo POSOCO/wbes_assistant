@@ -73,7 +73,7 @@ describe('WBES Schedules', function () {
     describe('get buyer requisitions', function () {
         it('it should get and dump CSEB requisitions', function (done) {
             //  get the ISGS Requisitions of a state
-            WBESUtils.getBuyerISGSReq("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", function (err, isgsReqArray) {
+            WBESUtils.getUtilISGSReq("20e8bfaf-8fb4-47c7-8522-5c208e3e270a", date_str, "10", false, function (err, isgsReqArray) {
                 if (err) {
                     console.log(err);
                     return done(err);
@@ -84,7 +84,7 @@ describe('WBES Schedules', function () {
                     if (err) {
                         return console.log(err);
                     }
-                    console.log("The file req_test.txt was saved!");
+                    console.log("The file req_test.csv was saved!");
                     done();
                 });
             });
@@ -128,6 +128,27 @@ describe('WBES Schedules', function () {
                         return done(err);
                     }
                     console.log("The seller_ent_test.csv was saved!");
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('get seller requisitions', function () {
+        it('it should get and dump VSTPS-V requisitions', function (done) {
+            //  get the ISGS Requisitions of a state
+            WBESUtils.getUtilISGSReq("5df201ba-1574-475a-ad25-b26533170943", date_str, "10", true, function (err, isgsReqArray) {
+                if (err) {
+                    console.log(err);
+                    return done(err);
+                }
+                // console.log(isgsReqArray);
+                var fs = require('fs');
+                fs.writeFile("dumps/seller_req_test.csv", isgsReqArray.join('\n'), function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log("The file seller_req_test.csv was saved!");
                     done();
                 });
             });
