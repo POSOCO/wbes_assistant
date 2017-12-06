@@ -48,6 +48,7 @@ function getSurrenders() {
     queryStrs.push("from=" + from_blk_str);
     queryStrs.push("to=" + to_blk_str);
     queryStrs.push("req_type=" + req_type);
+	document.getElementById('fetchStatusLabel').innerHTML = 'fetching data...';
     $.ajax({
         //fetch categories from sever
         url: "./api/surrenders" + "?" + queryStrs.join("&"),
@@ -55,6 +56,7 @@ function getSurrenders() {
         dataType: "json",
         success: function (utilSurrObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
+			document.getElementById('fetchStatusLabel').innerHTML = 'fetching done!';
             console.log("Surrenders fetched are " + JSON.stringify(utilSurrObj));
             // create header with utilNames
             var resMatrix = [];
@@ -82,9 +84,13 @@ function getSurrenders() {
                 }
                 console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('surrenderTable'));
-            }
+				document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
+            } else{
+				document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, no surrenders observed!';
+			}
         },
         error: function (jqXHR, textStatus, errorThrown) {
+			document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching...';
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }

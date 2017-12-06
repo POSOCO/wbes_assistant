@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
-<h1>See ISGS Surrenders</h1>
+<h3>See ISGS Surrenders</h3>
 <input type="text" id='date_input' value="">
 <input type="text" id='from_blk' value="1">
 <input type="text" id='to_blk' value="96">
@@ -17,6 +17,7 @@
 <select name="revisions" id="revisions"></select>
 <select name="utils" id="utils"></select>
 <button onclick="getSurrenders()">Get Surrenders</button>
+<span id='fetchStatusLabel'></span>
 <table id="surrenderTable" name="surrenderTable"></table>
 <script>
     var utilsObj_ = <%- JSON.stringify(utils)%>;

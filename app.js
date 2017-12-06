@@ -14,7 +14,7 @@ var favicon = require('serve-favicon');
 // var flash = require('connect-flash');
 
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001;
 
 app.use(cors());
 
