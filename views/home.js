@@ -59,29 +59,48 @@ function getSurrenders() {
             // create header with utilNames
             var resMatrix = [];
             if (utilSurrObj.utilNames.length > 0) {
-                var blankValsRow = ["0"];
+                var blankValsRow = [];
                 for (var k = 0; k < utilSurrObj.utilNames.length; k++) {
                     blankValsRow.push("");
                 }
                 resMatrix.push(['TB'].concat(utilSurrObj.utilNames));
                 for (var i = 0; i < 96; i++) {
-                    blankValsRow[0] = (i + 1);
-                    resMatrix.push(blankValsRow);
+                    resMatrix.push([(i+1)].concat(blankValsRow));
                 }
                 for (var i = 0; i < utilSurrObj.blks.length; i++) {
                     var utilSurrBlkVals = utilSurrObj.blks[i].values;
                     for (var k = 0; k < utilSurrBlkVals.length; k++) {
                         var blk = Number(utilSurrBlkVals[k]["blk"]);
                         var surr = Number(utilSurrBlkVals[k]["ent"]) - Number(utilSurrBlkVals[k]["req"]);
+                        surr = surr.toFixed(1);
                         resMatrix[blk][i + 1] = surr;
                     }
                 }
                 console.log(resMatrix);
+                createTable(resMatrix, document.getElementById('surrenderTable'));
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
+    });
+}
+
+function createTable(tableData, tableEl) {
+    // delete all table rows
+    while(tableEl.rows.length > 0) {
+        tableEl.deleteRow(0);
+    }
+    tableData.forEach(function(rowData) {
+        var row = document.createElement('tr');
+
+        rowData.forEach(function(cellData) {
+            var cell = document.createElement('td');
+            cell.appendChild(document.createTextNode(cellData));
+            row.appendChild(cell);
+        });
+
+        tableEl.appendChild(row);
     });
 }

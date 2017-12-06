@@ -2,6 +2,7 @@
 <head>
     <title>ISGS Surrenders</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
 <h1>See ISGS Surrenders</h1>
@@ -16,6 +17,7 @@
 <select name="revisions" id="revisions"></select>
 <select name="utils" id="utils"></select>
 <button onclick="getSurrenders()">Get Surrenders</button>
+<table id="surrenderTable" name="surrenderTable"></table>
 <script>
     var utilsObj_ = <%- JSON.stringify(utils)%>;
     var revs_ = <%- JSON.stringify(revisions)%>;
