@@ -11,6 +11,8 @@ router.get('/surrenders', function (req, res) {
     var dateStr = req.query.date_str;
     var fromBlk = req.query.from;
     var toBlk = req.query.to;
+    fromBlk = Number(fromBlk);
+    toBlk = Number(toBlk);
     var reqType = req.query.req_type;
     if (isSeller == 'true') {
         isSeller = true;

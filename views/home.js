@@ -59,21 +59,25 @@ function getSurrenders() {
             // create header with utilNames
             var resMatrix = [];
             if (utilSurrObj.utilNames.length > 0) {
+                var displayStartBlk = Number(document.getElementById('from_blk').value);
+                var displayEndBlk = Number(document.getElementById('to_blk').value);
                 var blankValsRow = [];
                 for (var k = 0; k < utilSurrObj.utilNames.length; k++) {
                     blankValsRow.push("");
                 }
                 resMatrix.push(['TB'].concat(utilSurrObj.utilNames));
-                for (var i = 0; i < 96; i++) {
-                    resMatrix.push([(i+1)].concat(blankValsRow));
+                for (var i = 0; i < (displayEndBlk - displayStartBlk + 1); i++) {
+                    resMatrix.push([(displayStartBlk + i)].concat(blankValsRow));
                 }
                 for (var i = 0; i < utilSurrObj.blks.length; i++) {
                     var utilSurrBlkVals = utilSurrObj.blks[i].values;
                     for (var k = 0; k < utilSurrBlkVals.length; k++) {
                         var blk = Number(utilSurrBlkVals[k]["blk"]);
+                        //translate the blk to table Row
+                        var tableRowNum = blk - displayStartBlk + 1;
                         var surr = Number(utilSurrBlkVals[k]["ent"]) - Number(utilSurrBlkVals[k]["req"]);
-                        surr = surr.toFixed(1);
-                        resMatrix[blk][i + 1] = surr;
+                        surr = surr.toFixed(0);
+                        resMatrix[tableRowNum][i + 1] = surr;
                     }
                 }
                 console.log(resMatrix);
@@ -89,13 +93,13 @@ function getSurrenders() {
 
 function createTable(tableData, tableEl) {
     // delete all table rows
-    while(tableEl.rows.length > 0) {
+    while (tableEl.rows.length > 0) {
         tableEl.deleteRow(0);
     }
-    tableData.forEach(function(rowData) {
+    tableData.forEach(function (rowData) {
         var row = document.createElement('tr');
 
-        rowData.forEach(function(cellData) {
+        rowData.forEach(function (cellData) {
             var cell = document.createElement('td');
             cell.appendChild(document.createTextNode(cellData));
             row.appendChild(cell);

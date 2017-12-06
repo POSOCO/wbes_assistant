@@ -412,7 +412,6 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
             var surrenderBlks = [];
             var surrReqArray = [];
             var epsilon = 0.1;
-
             for (var blk = startBlk; blk <= endBlk; blk++) {
                 var blkIndex = blk + blkIndexOffset;
                 var req = Number(reqMatrix[blkIndex][desiredReqCol]);

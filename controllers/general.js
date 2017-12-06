@@ -27,10 +27,10 @@ router.get('/home', function (req, res, next) {
     var getUtils = function (resObj, callback) {
         Utility.getUtilities(true, function (err, utilsObj) {
             if (err) {
+                console.log("error at getUtils controller");
                 console.log(err);
                 return callback(err);
             }
-            console.log("error at getUtils controller");
             resObj['utils'] = utilsObj;
             return callback(null, resObj);
         });
