@@ -4,6 +4,7 @@
 var router = require('express').Router();
 var WBESUtils = require("../utils/wbesUtils");
 var Revision = require("../models/revision");
+var ArrayHelper = require('../helpers/arrayHelpers');
 
 router.get('/surrenders', function (req, res) {
     var utilId = req.query.util_id;
@@ -37,5 +38,24 @@ router.get('/revisions', function (req, res) {
         res.json({revisions: revList});
     });
 });
+
+router.get('/dc', function (req, res) {
+    var utilId = req.query.util_id;
+    var rev = req.query.rev;
+    var dateStr = req.query.date_str;
+    WBESUtils.getISGSDeclarations(dateStr, rev, utilId, function (err, dcMatrixArray) {
+        if (err) {
+            res.json({err: err});
+            return;
+        }
+        var dcMatrixDim = ArrayHelper.getDim(dcMatrixArray);
+        if (dcMatrixDim.length < 2 || dcMatrixDim[0] < 98 || dcMatrixDim[1] < 3) {
+            res.json({err: 'DC matrix is not of minimum required shape of 98*3'});
+            return;
+        }
+        res.json({dc_matrix: dcMatrixArray});
+    });
+});
+
 
 module.exports = router;
