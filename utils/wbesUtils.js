@@ -24,7 +24,8 @@ var buyerISGSRequisitionUrl = module.exports.buyerISGSRequisitionUrl = "%s/wbes/
 var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
 // string parameters --> baseUrl, utilId, date_str, rev
 var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
-
+// string parameters --> baseUrl, date_str, rev, utilId
+var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -430,5 +431,64 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
 
         }
         return callback(null, surrendersObj);
+    });
+};
+
+// get ISGS declarations for a date, rev, utilId
+var getISGSDeclarations = module.exports.getISGSDeclarations = function (date_str, rev, utilId, callback) {
+// fetch cookie first and then do request
+    async.waterfall([
+        function (callback) {
+            fetchCookiesFromReportsUrl(function (err, cookieObj) {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, cookieObj);
+            });
+        }
+    ], function (error, cookieObj) {
+        if (error) {
+            return callback(err);
+        }
+        var options = defaultRequestOptions;
+
+        var tokenString = new Date().getTime();
+        var cookieString = "";
+        cookieString += cookieObj[0];
+        // options.headers.cookie = cookieString;
+        console.log("Cookie String for buyer isgs declaration is " + cookieString);
+        var templateUrl = isgsDeclarationFetchUrl;
+        options.url = StringUtils.parse(templateUrl, baseUrl, date_str, rev, utilId);
+        console.log("ISGS Declaration JSON fetch url created is " + options.url);
+
+        // get the declarations Array
+        CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+            if (err) {
+                return callback(err);
+            }
+            var isgsDeclarationsArray = JSON.parse(resBody)['jaggedarray'];
+
+            // remove the revision number from the gen name
+            var row = isgsDeclarationsArray[0];
+            for (var i = 0; i < row.length; i++) {
+                var bracketIndex = row[i].indexOf("(");
+                if (bracketIndex != -1) {
+                    row[i] = row[i].substring(0, bracketIndex);
+                }
+            }
+
+            // duplicate the gen Name across the whole row. The gen Name is above OffBarDC header
+            var secondRow = isgsDeclarationsArray[1];
+            for (var i = 0; i < secondRow.length; i++) {
+                if (secondRow[i] == "OffBarDC") {
+                    // duplicate the name in other headers too
+                    row[i - 1] = row[i];
+                    row[i + 1] = row[i];
+                }
+            }
+            isgsDeclarationsArray[0] = row;
+
+            callback(null, isgsDeclarationsArray);
+        });
     });
 };
