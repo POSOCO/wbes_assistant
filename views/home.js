@@ -5,13 +5,7 @@ window.onload = doOnLoadStuff();
 
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
-    var revSelEl = document.getElementById("revisions");
-    for (var i = 0; i < revs_.length; i++) {
-        var option = document.createElement("option");
-        option.text = revs_[i];
-        option.value = revs_[i];
-        revSelEl.add(option);
-    }
+    updateRevsList(revs_);
     var utilSelEl = document.getElementById("utils");
     for (var i = 0; i < utilsObj_['sellers'].length; i++) {
         var option = document.createElement("option");
@@ -48,7 +42,7 @@ function getSurrenders() {
     queryStrs.push("from=" + from_blk_str);
     queryStrs.push("to=" + to_blk_str);
     queryStrs.push("req_type=" + req_type);
-	document.getElementById('fetchStatusLabel').innerHTML = 'fetching data...';
+    document.getElementById('fetchStatusLabel').innerHTML = 'fetching data...';
     $.ajax({
         //fetch categories from sever
         url: "./api/surrenders" + "?" + queryStrs.join("&"),
@@ -56,7 +50,7 @@ function getSurrenders() {
         dataType: "json",
         success: function (utilSurrObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
-			document.getElementById('fetchStatusLabel').innerHTML = 'fetching done!';
+            document.getElementById('fetchStatusLabel').innerHTML = 'fetching done!';
             console.log("Surrenders fetched are " + JSON.stringify(utilSurrObj));
             // create header with utilNames
             var resMatrix = [];
@@ -84,13 +78,13 @@ function getSurrenders() {
                 }
                 console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('surrenderTable'));
-				document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
-            } else{
-				document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, no surrenders observed!';
-			}
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
+            } else {
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, no surrenders observed!';
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-			document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching...';
+            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching...';
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
@@ -113,4 +107,44 @@ function createTable(tableData, tableEl) {
 
         tableEl.appendChild(row);
     });
+}
+
+function refreshRevisions() {
+    var date_str = document.getElementById('date_input').value;
+    $.ajax({
+        //fetch revisions from sever
+        url: "./api/revisions?date_str=" + date_str,
+        type: "GET",
+        dataType: "json",
+        success: function (revListObj) {
+            //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
+            document.getElementById('fetchStatusLabel').innerHTML = 'Revisions fetched!';
+            console.log("Revisions fetched are " + JSON.stringify(revListObj));
+            var revListArray = revListObj['revisions'];
+            if (typeof revListArray != 'undefined' && revListArray != null && revListArray.length > 0) {
+                updateRevsList(revListArray);
+                document.getElementById('fetchStatusLabel').innerHTML = 'Revisions updated!';
+            } else {
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, revisions not found!';
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching revisions...';
+            console.log(textStatus, errorThrown);
+            // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
+        }
+    });
+}
+
+function updateRevsList(revsArray) {
+    var revSelEl = document.getElementById("revisions");
+    // clear all the options
+    revSelEl.innerHTML = '';
+    // populate revisions
+    for (var i = 0; i < revsArray.length; i++) {
+        var option = document.createElement("option");
+        option.text = revsArray[i];
+        option.value = revsArray[i];
+        revSelEl.add(option);
+    }
 }

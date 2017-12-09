@@ -3,6 +3,7 @@
  */
 var router = require('express').Router();
 var WBESUtils = require("../utils/wbesUtils");
+var Revision = require("../models/revision");
 
 router.get('/surrenders', function (req, res) {
     var utilId = req.query.util_id;
@@ -23,6 +24,17 @@ router.get('/surrenders', function (req, res) {
             return;
         }
         res.json(utilSurrObj);
+    });
+});
+
+router.get('/revisions', function (req, res) {
+    var dateStr = req.query.date_str;
+    Revision.getRevisionsForDate(dateStr, function (err, revList) {
+        if (err) {
+            res.json({err: err});
+            return;
+        }
+        res.json({revisions: revList});
     });
 });
 
