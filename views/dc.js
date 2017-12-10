@@ -14,6 +14,11 @@ function doOnLoadStuff() {
         option.setAttribute('data-is_seller', 'true');
         utilSelEl.add(option);
     }
+    option = document.createElement("option");
+    option.text = 'ALL';
+    option.value = 'ALL';
+    option.setAttribute('data-is_seller', 'true');
+    utilSelEl.add(option);
 }
 
 function getDC() {
@@ -75,7 +80,53 @@ function getDC() {
                 console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('dcTable'));
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
-                // todo update graph also
+
+                var dcPlotsDiv = document.getElementById("dcPlotsDiv");
+                var traces = [];
+                var xLabels = dcMatrixObj["time_blocks"].map(Number);
+
+                for (var k = 0; k < genNames.length; k++) {
+                    traces.push({
+                        x: xLabels,
+                        y: (dcMatrixObj[genNames[k]]['on_bar_dc']).map(Number),
+                        name: genNames[k] + " (OnBar)"
+                    });
+                    traces.push({
+                        x: xLabels,
+                        y: (dcMatrixObj[genNames[k]]['off_bar_dc']).map(Number),
+                        name: genNames[k] + " (OffBar)"
+                    });
+                    traces.push({
+                        x: xLabels,
+                        y: (dcMatrixObj[genNames[k]]['total_dc']).map(Number),
+                        name: genNames[k] + " (Total)"
+                    });
+                }
+                var layout = {
+                    title: 'DC Plot of for date ' + date_str + ' and Revision ' + rev,
+                    xaxis: {
+                        title: '',
+                        dtick: 4
+                    },
+                    yaxis: {
+                        title: 'DC Value'
+                    },
+                    legend: {
+                        font: {
+                            "size": "20"
+                        },
+                        orientation: "h"
+                    },
+                    margin: {'t': 35},
+                    height: 500
+                };
+                if (utilId == 'ALL') {
+                    layout['margin']['b'] = 400;
+                    layout['legend']['font']['size'] = 12;
+                    layout['height'] = 1000;
+                }
+                Plotly.newPlot(dcPlotsDiv, traces, layout);
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
             } else {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, dc values not found...';
             }
