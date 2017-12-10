@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/header_partial.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.ejs" afterPath="$PROJECT_DIR$/views/dc.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/home.ejs" afterPath="$PROJECT_DIR$/views/home.ejs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WBES Schedules Fetch.iws" />
@@ -523,7 +520,13 @@
       <option name="project" value="LOCAL" />
       <updated>1512890574205</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="added header for navigation">
+      <created>1512890827299</created>
+      <option name="number" value="00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1512890827299</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TodoView">
@@ -592,7 +595,8 @@
     <MESSAGE value="fetch isgs dc api controller done" />
     <MESSAGE value="fetch isgs dc json model done, tested and displayed in client" />
     <MESSAGE value="isgs dc plot client display done" />
-    <option name="LAST_COMMIT_MESSAGE" value="isgs dc plot client display done" />
+    <MESSAGE value="added header for navigation" />
+    <option name="LAST_COMMIT_MESSAGE" value="added header for navigation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,1 +1,1 @@
-pm2 restart app.js
+pm2 restart wbes_assistant
