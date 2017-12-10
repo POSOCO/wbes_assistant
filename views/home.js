@@ -28,12 +28,14 @@ function getSurrenders() {
     var rev = revSelEl.options[revSelEl.selectedIndex].value;
     var utilSelEl = document.getElementById("utils");
     var reqTypeSelEl = document.getElementById("req_type");
+    var displayTypeSelEl = document.getElementById("display_type");
     var isSeller = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('data-is_seller');
     var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
     var date_str = document.getElementById('date_input').value;
     var from_blk_str = document.getElementById('from_blk').value;
     var to_blk_str = document.getElementById('to_blk').value;
     var req_type = reqTypeSelEl.options[reqTypeSelEl.selectedIndex].getAttribute('value');
+    var dis_type = displayTypeSelEl.options[displayTypeSelEl.selectedIndex].getAttribute('value');
     var queryStrs = [];
     queryStrs.push("util_id=" + utilId);
     queryStrs.push("rev=" + rev);
@@ -71,8 +73,18 @@ function getSurrenders() {
                         var blk = Number(utilSurrBlkVals[k]["blk"]);
                         //translate the blk to table Row
                         var tableRowNum = blk - displayStartBlk + 1;
-                        var surr = Number(utilSurrBlkVals[k]["ent"]) - Number(utilSurrBlkVals[k]["req"]);
-                        surr = surr.toFixed(0);
+                        var ent = Number(utilSurrBlkVals[k]["ent"]);
+                        var req = Number(utilSurrBlkVals[k]["req"]);
+                        var surr = ent - req;
+                        if (dis_type == 'ent_perc') {
+                            surr = (surr * 100 / ent).toFixed(0);
+                        } else if (dis_type == 'ent_perc_with_ent') {
+                            surr = (surr * 100 / ent).toFixed(0) + "% of " + ent;
+                        } else if (dis_type == 'ent_perc_with_surr') {
+                            surr = surr + " (" + (surr * 100 / ent).toFixed(0) + "%)";
+                        } else {
+                            surr = surr.toFixed(0);
+                        }
                         resMatrix[tableRowNum][i + 1] = surr;
                     }
                 }

@@ -8,14 +8,20 @@
 <%- include header_partial.ejs %>
 <h3>See ISGS Surrenders</h3>
 <input type="text" id='date_input' value="">
-<input type="text" id='from_blk' value="1">
-<input type="text" id='to_blk' value="96">
+<button onclick="refreshRevisions()">Refresh Revisions</button>
+<input type="text" id='from_blk' value="1" style="width: 50px">
+<input type="text" id='to_blk' value="96" style="width: 50px">
 <select name="req_type" id="req_type">
     <option value="total">Total Req</option>
     <option value="onbar">On Bar</option>
     <option value="offbar">Off Bar</option>
 </select>
-<button onclick="refreshRevisions()">Refresh Revisions</button>
+<select name="display_type" id="display_type">
+    <option value="value">MW Value</option>
+    <option value="ent_perc">% of Ent</option>
+    <option value="ent_perc_with_ent">% Ent with Ent MW</option>
+    <option value="ent_perc_with_surr">Surr MW with % Ent</option>
+</select>
 <select name="revisions" id="revisions"></select>
 
 <select name="utils" id="utils"></select>
