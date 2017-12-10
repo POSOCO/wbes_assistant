@@ -150,12 +150,41 @@ function getDC() {
                 }
                 Plotly.newPlot(dcPlotsDiv, traces, layout);
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
+                fetchNetSchAfterDC(dcMatrixObj);
             } else {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, dc values not found...';
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching...';
+            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching dc...';
+            console.log(textStatus, errorThrown);
+            // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
+        }
+    });
+}
+
+function fetchNetSchAfterDC(dcMatrixObj) {
+    var revSelEl = document.getElementById("revisions");
+    var rev = revSelEl.options[revSelEl.selectedIndex].value;
+    var utilSelEl = document.getElementById("utils");
+    var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
+    var date_str = document.getElementById('date_input').value;
+    var queryStrs = [];
+    queryStrs.push("util_id=" + utilId);
+    queryStrs.push("rev=" + rev);
+    queryStrs.push("date_str=" + date_str);
+    queryStrs.push("is_seller=true");
+    document.getElementById('fetchStatusLabel').innerHTML = 'fetching Net Sch data...';
+    $.ajax({
+        //fetch categories from sever
+        url: "./api/net_sch" + "?" + queryStrs.join("&"),
+        type: "GET",
+        dataType: "json",
+        success: function (netSchMatrixObj) {
+            // todo add additional data to dcMatrixObj and display table with plots and enable only net sch of plot in the net sch columns
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching net schedules...';
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }

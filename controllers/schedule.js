@@ -52,5 +52,21 @@ router.get('/dc', function (req, res) {
     });
 });
 
+router.get('/net_sch', function (req, res) {
+    var utilId = req.query.util_id;
+    var rev = req.query.rev;
+    var dateStr = req.query.date_str;
+    var isSeller = req.query.is_seller;
+    if (isSeller == 'true') {
+        isSeller = true;
+    }
+    Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+        if (err) {
+            res.json({err: err});
+            return;
+        }
+        res.json(netSchObj);
+    });
+});
 
 module.exports = router;
