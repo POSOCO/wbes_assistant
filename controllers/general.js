@@ -11,37 +11,47 @@ router.get('/', function (req, res) {
     res.redirect('/home');
 });
 
+var getRevisions = function (callback) {
+    var todayDate = new Date();
+    var date_str = StrUtils.makeTwoDigits(todayDate.getDate()) + "-" + StrUtils.makeTwoDigits(todayDate.getMonth() + 1) + "-" + todayDate.getFullYear();
+    Revision.getRevisionsForDate(date_str, function (err, revList) {
+        if (err) {
+            console.log("error at getRevisions controller");
+            return callback(err);
+        }
+        return callback(null, {'revisions': revList, date_str: date_str});
+    });
+};
+
+var getUtils = function (resObj, callback) {
+    Utility.getUtilities(true, function (err, utilsObj) {
+        if (err) {
+            console.log("error at getUtils controller");
+            console.log(err);
+            return callback(err);
+        }
+        resObj['utils'] = utilsObj;
+        return callback(null, resObj);
+    });
+};
+
 router.get('/home', function (req, res, next) {
-    var getRevisions = function (callback) {
-        var todayDate = new Date();
-        var date_str = StrUtils.makeTwoDigits(todayDate.getDate()) + "-" + StrUtils.makeTwoDigits(todayDate.getMonth() + 1) + "-" + todayDate.getFullYear();
-        Revision.getRevisionsForDate(date_str, function (err, revList) {
-            if (err) {
-                console.log("error at getRevisions controller");
-                return callback(err);
-            }
-            return callback(null, {'revisions': revList, date_str: date_str});
-        });
-    };
-
-    var getUtils = function (resObj, callback) {
-        Utility.getUtilities(true, function (err, utilsObj) {
-            if (err) {
-                console.log("error at getUtils controller");
-                console.log(err);
-                return callback(err);
-            }
-            resObj['utils'] = utilsObj;
-            return callback(null, resObj);
-        });
-    };
-
     var tasksArray = [getRevisions, getUtils];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {
             return next(err);
         }
         res.render('home', resObj);
+    });
+});
+
+router.get('/isgs_dc', function (req, res, next) {
+    var tasksArray = [getRevisions, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('dc', resObj);
     });
 });
 

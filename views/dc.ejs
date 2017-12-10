@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>ISGS Surrenders</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+<h3>See ISGS DC</h3>
+<input type="text" id='date_input' value="">
+<input type="text" id='from_blk' value="1">
+<input type="text" id='to_blk' value="96">
+<button onclick="refreshRevisions()">Refresh Revisions</button>
+<select name="revisions" id="revisions"></select>
+
+<select name="utils" id="utils"></select>
+<button onclick="getDC()">Get Declarations</button>
+<span id='fetchStatusLabel'></span>
+<table id="dcTable" name="dcTable"></table>
+<script>
+    var utilsObj_ = <%- JSON.stringify(utils)%>;
+    var revs_ = <%- JSON.stringify(revisions)%>;
+    var dateStr_ = <%- JSON.stringify(date_str)%>;
+</script>
+<script src="./libs/js/jquery.min.js"></script>
+<script src="domUtils.js"></script>
+<script src="revision.js"></script>
+<script src="dc.js"></script>
+</body>
+</html>

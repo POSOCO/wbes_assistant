@@ -435,7 +435,7 @@ var getUtilISGSSurrenders = module.exports.getUtilISGSSurrenders = function (uti
 };
 
 // get ISGS declarations for a date, rev, utilId
-var getISGSDeclarations = module.exports.getISGSDeclarations = function (date_str, rev, utilId, callback) {
+var getISGSDeclarationsArray = module.exports.getISGSDeclarationsArray = function (date_str, rev, utilId, callback) {
 // fetch cookie first and then do request
     async.waterfall([
         function (callback) {

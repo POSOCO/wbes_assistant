@@ -125,7 +125,7 @@ function refreshRevisions() {
                 updateRevsList(revListArray);
                 document.getElementById('fetchStatusLabel').innerHTML = 'Revisions updated!';
             } else {
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, revisions not found!';
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, revisions not found...';
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
