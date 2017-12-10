@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/libs/js/plotly.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/header_partial.ejs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.ejs" afterPath="$PROJECT_DIR$/views/dc.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.js" afterPath="$PROJECT_DIR$/views/dc.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/home.ejs" afterPath="$PROJECT_DIR$/views/home.ejs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WBES Schedules Fetch.iws" />
@@ -42,8 +42,8 @@
       <file leaf-file-name="dc.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/dc.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.153846">
-              <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+            <state vertical-scroll-proportion="-4.576923">
+              <caret line="7" column="33" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -52,21 +52,33 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="header_partial.ejs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/views/header_partial.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.08947369">
+              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="home.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/home.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.1923075">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state vertical-scroll-proportion="-4.576923">
+              <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dc.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dc.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/dc.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7315436">
-              <caret line="121" column="18" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="125" column="44" selection-start-line="125" selection-start-column="44" selection-end-line="125" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -169,7 +181,6 @@
         <option value="$PROJECT_DIR$/views/home.css" />
         <option value="$PROJECT_DIR$/controllers/revision.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/views/home.ejs" />
         <option value="$PROJECT_DIR$/tests/test.js" />
         <option value="$PROJECT_DIR$/views/revision.js" />
         <option value="$PROJECT_DIR$/views/domUtils.js" />
@@ -180,8 +191,10 @@
         <option value="$PROJECT_DIR$/dumps/isgs_dc_test.json" />
         <option value="$PROJECT_DIR$/controllers/general.js" />
         <option value="$PROJECT_DIR$/views/home.js" />
-        <option value="$PROJECT_DIR$/views/dc.ejs" />
         <option value="$PROJECT_DIR$/views/dc.js" />
+        <option value="$PROJECT_DIR$/views/header_partial.ejs" />
+        <option value="$PROJECT_DIR$/views/dc.ejs" />
+        <option value="$PROJECT_DIR$/views/home.ejs" />
       </list>
     </option>
   </component>
@@ -504,7 +517,13 @@
       <option name="project" value="LOCAL" />
       <updated>1512886497322</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="isgs dc plot client display done">
+      <created>1512890574205</created>
+      <option name="number" value="00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1512890574205</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TodoView">
@@ -572,7 +591,8 @@
     <MESSAGE value="fetch isgs dc json wbes util added and tested" />
     <MESSAGE value="fetch isgs dc api controller done" />
     <MESSAGE value="fetch isgs dc json model done, tested and displayed in client" />
-    <option name="LAST_COMMIT_MESSAGE" value="fetch isgs dc json model done, tested and displayed in client" />
+    <MESSAGE value="isgs dc plot client display done" />
+    <option name="LAST_COMMIT_MESSAGE" value="isgs dc plot client display done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -581,16 +601,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -935,14 +945,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/home.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.1923075">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dumps/isgs_dc_test.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.0438596">
@@ -989,10 +991,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/dc.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="125" column="44" selection-start-line="125" selection-start-column="44" selection-end-line="125" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/dc.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.153846">
-          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+        <state vertical-scroll-proportion="-4.576923">
+          <caret line="7" column="33" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
           <folding>
             <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1000,11 +1010,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/dc.js">
+    <entry file="file://$PROJECT_DIR$/views/home.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7315436">
-          <caret line="121" column="18" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
+        <state vertical-scroll-proportion="-4.576923">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/header_partial.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08947369">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
