@@ -26,6 +26,9 @@ var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl
 var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
 var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
+// string parameters --> baseUrl, date_str, utilId, rev, timestamp
+var sellerIsgsNetSchFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
+var buyerIsgsNetSchFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -215,6 +218,46 @@ var getBuyerISGSNetSchedules = module.exports.getBuyerISGSNetSchedules = functio
                 }
             }
             callback(null, newNetSchArray);
+        });
+    });
+};
+
+
+var getUtilISGSNetSchedules = module.exports.getUtilISGSNetSchedules = function (utilId, date_str, rev, isSeller, callback) {
+    // fetch cookie first and then do request
+    async.waterfall([
+        function (callback) {
+            fetchCookiesFromReportsUrl(function (err, cookieObj) {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, cookieObj);
+            });
+        }
+    ], function (error, cookieObj) {
+        if (error) {
+            return callback(err);
+        }
+        var options = defaultRequestOptions;
+
+        var tokenString = new Date().getTime();
+        var cookieString = "";
+        cookieString += cookieObj[0];
+        // options.headers.cookie = cookieString;
+        console.log("Cookie String for util isgs net schedules is " + cookieString);
+        var templateUrl = sellerIsgsNetSchFetchUrl;
+        if (isSeller != true) {
+            templateUrl = buyerIsgsNetSchFetchUrl;
+        }
+        options.url = StringUtils.parse(templateUrl, baseUrl, date_str, utilId, rev, tokenString);
+        console.log("Util ISGS Net schedules CSV fetch url created is " + options.url);
+        // get the net schedules Array
+        CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+            if (err) {
+                return callback(err);
+            }
+            var isgsNetSchedulesArray = CSVToArray.csvToArray(resBody.replace(/\0/g, ''));
+            callback(null, isgsNetSchedulesArray);
         });
     });
 };

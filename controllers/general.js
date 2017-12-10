@@ -23,10 +23,10 @@ var getRevisions = function (callback) {
     });
 };
 
-var getUtils = function (resObj, callback) {
+var getEntUtils = function (resObj, callback) {
     Utility.getUtilities(true, function (err, utilsObj) {
         if (err) {
-            console.log("error at getUtils controller");
+            console.log("error at getEntUtils controller");
             console.log(err);
             return callback(err);
         }
@@ -35,8 +35,20 @@ var getUtils = function (resObj, callback) {
     });
 };
 
+var getUtils = function (resObj, callback) {
+    Utility.getUtilities(false, function (err, utilsObj) {
+        if (err) {
+            console.log("error at getUtils controller");
+            console.log(err);
+            return callback(err);
+        }
+        resObj['utils_net_sch'] = utilsObj;
+        return callback(null, resObj);
+    });
+};
+
 router.get('/home', function (req, res, next) {
-    var tasksArray = [getRevisions, getUtils];
+    var tasksArray = [getRevisions, getEntUtils];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {
             return next(err);
@@ -46,7 +58,7 @@ router.get('/home', function (req, res, next) {
 });
 
 router.get('/isgs_dc', function (req, res, next) {
-    var tasksArray = [getRevisions, getUtils];
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {
             return next(err);

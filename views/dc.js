@@ -21,6 +21,29 @@ function doOnLoadStuff() {
     utilSelEl.add(option);
 }
 
+function AcronymFromNetSchAcronym(acr) {
+    var searchArray = utilsObj_['sellers'];
+    var sourceArray = utilsNetSchObj_['sellers'];
+    var searchUtilId = null;
+    // find the entry in source array for util Id
+    for (var i = 0; i < sourceArray.length; i++) {
+        if (sourceArray[i]['Acronym'] == acr) {
+            searchUtilId = sourceArray[i]['UtilId'];
+            break;
+        }
+    }
+    if (searchUtilId == null) {
+        return null;
+    }
+    for (var i = 0; i < searchArray.length; i++) {
+        if (searchArray[i]['UtilId'] == searchUtilId) {
+            return searchArray[i]['Acronym'];
+            break;
+        }
+    }
+    return null;
+}
+
 function getDC() {
     var revSelEl = document.getElementById("revisions");
     var rev = revSelEl.options[revSelEl.selectedIndex].value;

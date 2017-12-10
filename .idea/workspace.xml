@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/home.ejs" afterPath="$PROJECT_DIR$/views/home.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/home.js" afterPath="$PROJECT_DIR$/views/home.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dumps/test_isgs_full_sch.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dumps/test_isgs_full_sch.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.ejs" afterPath="$PROJECT_DIR$/views/dc.ejs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.js" afterPath="$PROJECT_DIR$/views/dc.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/general.js" afterPath="$PROJECT_DIR$/controllers/general.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dumps/isgs_dc_test.json" afterPath="$PROJECT_DIR$/dumps/isgs_dc_test.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/schedule.js" afterPath="$PROJECT_DIR$/models/schedule.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/test_isgs_dc_fetch.js" afterPath="$PROJECT_DIR$/tests/test_isgs_dc_fetch.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/wbesUtils.js" afterPath="$PROJECT_DIR$/utils/wbesUtils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WBES Schedules Fetch.iws" />
@@ -26,34 +33,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="general.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controllers/general.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="44" column="29" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#46#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="dc.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/dc.ejs">
           <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.115385">
+              <caret line="24" column="23" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utility.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/utility.js">
+          <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="33" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="header_partial.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/header_partial.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.9615384">
-              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="home.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/home.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.076923">
-              <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
+              <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
               <folding>
-                <element signature="n#style#0;n#input#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#0#46#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -63,42 +71,30 @@
         <entry file="file://$PROJECT_DIR$/views/dc.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="125" column="44" selection-start-line="125" selection-start-column="44" selection-end-line="125" selection-end-column="44" />
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="schedule.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="home.ejs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/home.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-14.423077">
+              <caret line="31" column="48" selection-start-line="31" selection-start-column="48" selection-end-line="31" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="schedule.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/models/schedule.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="34" column="41" selection-start-line="34" selection-start-column="41" selection-end-line="34" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.6006711">
+              <caret line="94" column="27" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
               <folding>
                 <element signature="e#0#47#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="home.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/views/home.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.87416106">
-              <caret line="83" column="44" selection-start-line="83" selection-start-column="44" selection-end-line="83" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#46#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/test.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -107,19 +103,19 @@
         <entry file="file://$PROJECT_DIR$/tests/test_isgs_dc_fetch.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="40" column="35" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
+              <caret line="91" column="41" selection-start-line="91" selection-start-column="41" selection-end-line="91" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_file.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/test_file.js">
+      <file leaf-file-name="revision.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/revision.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="44" column="68" selection-start-line="44" selection-start-column="32" selection-end-line="44" selection-end-column="68" />
+              <caret line="41" column="1" selection-start-line="41" selection-start-column="1" selection-end-line="41" selection-end-column="1" />
               <folding>
-                <element signature="e#0#47#0" expanded="false" />
+                <element signature="n#!!doc;n#refreshRevisions#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -129,7 +125,7 @@
         <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="195" column="23" selection-start-line="195" selection-start-column="23" selection-end-line="195" selection-end-column="23" />
+              <caret line="88" column="38" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -177,17 +173,18 @@
         <option value="$PROJECT_DIR$/tests/test.js" />
         <option value="$PROJECT_DIR$/views/revision.js" />
         <option value="$PROJECT_DIR$/views/domUtils.js" />
-        <option value="$PROJECT_DIR$/utils/wbesUtils.js" />
         <option value="$PROJECT_DIR$/controllers/schedule.js" />
-        <option value="$PROJECT_DIR$/tests/test_isgs_dc_fetch.js" />
-        <option value="$PROJECT_DIR$/models/schedule.js" />
         <option value="$PROJECT_DIR$/dumps/isgs_dc_test.json" />
-        <option value="$PROJECT_DIR$/controllers/general.js" />
-        <option value="$PROJECT_DIR$/views/dc.js" />
         <option value="$PROJECT_DIR$/views/header_partial.ejs" />
-        <option value="$PROJECT_DIR$/views/dc.ejs" />
-        <option value="$PROJECT_DIR$/views/home.ejs" />
         <option value="$PROJECT_DIR$/views/home.js" />
+        <option value="$PROJECT_DIR$/utils/wbesUtils.js" />
+        <option value="$PROJECT_DIR$/controllers/general.js" />
+        <option value="$PROJECT_DIR$/views/home.ejs" />
+        <option value="$PROJECT_DIR$/views/dc.ejs" />
+        <option value="$PROJECT_DIR$/views/dc.js" />
+        <option value="$PROJECT_DIR$/models/schedule.js" />
+        <option value="$PROJECT_DIR$/tests/test_isgs_dc_fetch.js" />
+        <option value="$PROJECT_DIR$/dumps/test_isgs_full_sch.json" />
       </list>
     </option>
   </component>
@@ -259,7 +256,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
+              <option name="myItemId" value="tests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -273,25 +270,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WBES Assistant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WBES Assistant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
+              <option name="myItemId" value="models" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -508,7 +487,13 @@
       <option name="project" value="LOCAL" />
       <updated>1512890827299</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="surrender display type feature added in client">
+      <created>1512928663757</created>
+      <option name="number" value="00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1512928663757</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TodoView">
@@ -526,21 +511,21 @@
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28700906" sideWeight="0.8397436" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.49697885" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.5030211" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279743" sideWeight="0.49697885" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.49356914" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3231511" sideWeight="0.49697885" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26510575" sideWeight="0.16025642" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -578,23 +563,16 @@
     <MESSAGE value="fetch isgs dc json model done, tested and displayed in client" />
     <MESSAGE value="isgs dc plot client display done" />
     <MESSAGE value="added header for navigation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added header for navigation" />
+    <MESSAGE value="surrender display type feature added in client" />
+    <option name="LAST_COMMIT_MESSAGE" value="surrender display type feature added in client" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/stringUtils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -803,16 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/utility.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#46#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/home.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.14261745">
@@ -865,26 +833,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/revision.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="41" column="1" selection-start-line="41" selection-start-column="1" selection-end-line="41" selection-end-column="1" />
-          <folding>
-            <element signature="n#!!doc;n#refreshRevisions#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/general.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="22" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#46#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/domUtils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -919,32 +867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/schedule.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="41" selection-start-line="34" selection-start-column="41" selection-end-line="34" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/dc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="125" column="44" selection-start-line="125" selection-start-column="44" selection-end-line="125" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/dc.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="33" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/header_partial.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.9615384">
@@ -953,18 +875,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test.js">
+    <entry file="file://$PROJECT_DIR$/views/home.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-          <folding />
+          <caret line="82" column="70" selection-start-line="82" selection-start-column="70" selection-end-line="82" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_isgs_dc_fetch.js">
+    <entry file="file://$PROJECT_DIR$/tests/test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="40" column="35" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
+          <caret line="37" column="17" selection-start-line="37" selection-start-column="17" selection-end-line="37" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -972,9 +896,19 @@
     <entry file="file://$PROJECT_DIR$/tests/test_file.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="44" column="68" selection-start-line="44" selection-start-column="32" selection-end-line="44" selection-end-column="68" />
+          <caret line="73" column="4" selection-start-line="61" selection-start-column="1" selection-end-line="73" selection-end-column="4" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/revision.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="41" column="1" selection-start-line="41" selection-start-column="1" selection-end-line="41" selection-end-column="1" />
+          <folding>
+            <element signature="n#!!doc;n#refreshRevisions#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -982,28 +916,88 @@
     <entry file="file://$PROJECT_DIR$/utils/wbesUtils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="195" column="23" selection-start-line="195" selection-start-column="23" selection-end-line="195" selection-end-column="23" />
+          <caret line="88" column="38" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="46" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/utility.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/general.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="29" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/home.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.076923">
-          <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
+        <state vertical-scroll-proportion="-14.423077">
+          <caret line="31" column="48" selection-start-line="31" selection-start-column="48" selection-end-line="31" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/dc.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.115385">
+          <caret line="24" column="23" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/dc.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_isgs_dc_fetch.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="91" column="41" selection-start-line="91" selection-start-column="41" selection-end-line="91" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dumps/test_isgs_full_sch.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.550877">
+          <caret line="131" column="0" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#input#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#1286#3308#0" expanded="false" />
+            <element signature="e#3322#5056#0" expanded="false" />
+            <element signature="e#5069#6803#0" expanded="false" />
+            <element signature="e#6816#8550#0" expanded="false" />
+            <element signature="e#8563#10297#0" expanded="false" />
+            <element signature="e#10310#12044#0" expanded="false" />
+            <element signature="e#12058#13408#0" expanded="false" />
+            <element signature="e#13423#15445#0" expanded="false" />
+            <element signature="e#15482#17408#0" expanded="false" />
+            <element signature="e#17422#19156#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/home.js">
+    <entry file="file://$PROJECT_DIR$/models/schedule.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87416106">
-          <caret line="83" column="44" selection-start-line="83" selection-start-column="44" selection-end-line="83" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.6006711">
+          <caret line="94" column="27" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
           <folding>
-            <element signature="e#0#46#0" expanded="false" />
+            <element signature="e#0#47#0" expanded="false" />
           </folding>
         </state>
       </provider>
