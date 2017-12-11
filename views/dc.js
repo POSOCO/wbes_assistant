@@ -21,7 +21,7 @@ function doOnLoadStuff() {
     utilSelEl.add(option);
 }
 
-function AcronymFromNetSchAcronym(acr) {
+function acronymFromNetSchAcronym(acr) {
     var searchArray = utilsObj_['sellers'];
     var sourceArray = utilsNetSchObj_['sellers'];
     var searchUtilId = null;
@@ -62,11 +62,11 @@ function getDC() {
         dataType: "json",
         success: function (dcMatrixObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
-            document.getElementById('fetchStatusLabel').innerHTML = 'fetching done!';
+            document.getElementById('fetchStatusLabel').innerHTML = 'fetching dc done!';
             console.log("DC Object fetched is " + JSON.stringify(dcMatrixObj));
             // check if dcMatrixObj is correct
             if (dcMatrixObj == undefined || dcMatrixObj == null || dcMatrixObj['gen_names'] == undefined) {
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, but response not as desired...';
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching dc done, but response not as desired...';
                 return;
             }
 
@@ -150,7 +150,7 @@ function getDC() {
                 }
                 Plotly.newPlot(dcPlotsDiv, traces, layout);
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
-                fetchNetSchAfterDC(dcMatrixObj);
+                // fetchNetSchAfterDC(dcMatrixObj);
             } else {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, dc values not found...';
             }
@@ -182,6 +182,121 @@ function fetchNetSchAfterDC(dcMatrixObj) {
         dataType: "json",
         success: function (netSchMatrixObj) {
             // todo add additional data to dcMatrixObj and display table with plots and enable only net sch of plot in the net sch columns
+            //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
+            document.getElementById('fetchStatusLabel').innerHTML = 'fetching net schedules done!';
+            console.log("Net Sch Object fetched is " + JSON.stringify(netSchMatrixObj));
+            // check if netSchMatrixObj is correct
+            if (netSchMatrixObj == undefined || netSchMatrixObj == null || netSchMatrixObj['gen_names'] == undefined) {
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching net scheduled done, but response not as desired...';
+                return;
+            }
+
+            var resMatrix = [];
+
+
+            if (netSchMatrixObj['gen_names'].length > 0) {
+                var genNames = netSchMatrixObj["gen_names"];
+                var dcGenNames = [];
+
+                for (var i = 0; i < genNames.length; i++) {
+                    var dcUtilAcronym = acronymFromNetSchAcronym(genNames[i]);
+                    if (dcUtilAcronym == null) {
+                        dcUtilAcronym = genNames[i];
+                    }
+                    dcGenNames.push(dcUtilAcronym);
+                }
+
+                // copy the dcMatrixObj for adding schedules also
+                var dcSchMatrixObj = dcMatrixObj;
+                for (var i = 0; i < genNames.length; i++) {
+                    if (dcSchMatrixObj[dcGenNames[i]] != undefined) {
+                        //stub
+                    } else {
+                        // todo convert net sch gen name to sc gen name and handle separately if dc gen name not found
+                    }
+                }
+                var displayStartBlk = Number(document.getElementById('from_blk').value);
+                var displayEndBlk = Number(document.getElementById('to_blk').value);
+
+                // create header with utilNames
+                var row = [''];
+                var row2 = ['TB'];
+
+                for (var i = 0; i < netSchMatrixObj["gen_names"].length; i++) {
+                    row = row.concat([netSchMatrixObj["gen_names"][i], netSchMatrixObj["gen_names"][i], netSchMatrixObj["gen_names"][i]]);
+                    row2 = row2.concat(['OnBar', 'OffBar', 'Total']);
+                }
+                resMatrix.push(row);
+                resMatrix.push(row2);
+
+                for (var i = 0; i < netSchMatrixObj["time_blocks"].length; i++) {
+                    var blk = +netSchMatrixObj["time_blocks"][i];
+                    if (blk < displayStartBlk || blk > displayEndBlk) {
+                        continue;
+                    }
+                    var row = [blk];
+                    for (var k = 0; k < genNames.length; k++) {
+                        var onBarDCVal = (+netSchMatrixObj[genNames[k]]['on_bar_dc'][i]);
+                        var offBarDCVal = (+netSchMatrixObj[genNames[k]]['off_bar_dc'][i]).toFixed(0);
+                        var totDCVal = (+netSchMatrixObj[genNames[k]]['total_dc'][i]).toFixed(0);
+                        row = row.concat([onBarDCVal, offBarDCVal, totDCVal]);
+                    }
+                    resMatrix.push(row);
+                }
+                console.log(resMatrix);
+                createTable(resMatrix, document.getElementById('dcTable'));
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
+
+                var dcPlotsDiv = document.getElementById("dcPlotsDiv");
+                var traces = [];
+                var xLabels = netSchMatrixObj["time_blocks"].map(Number);
+
+                for (var k = 0; k < genNames.length; k++) {
+                    traces.push({
+                        x: xLabels,
+                        y: (netSchMatrixObj[genNames[k]]['on_bar_dc']).map(Number),
+                        name: genNames[k] + " (OnBar)"
+                    });
+                    traces.push({
+                        x: xLabels,
+                        y: (netSchMatrixObj[genNames[k]]['off_bar_dc']).map(Number),
+                        name: genNames[k] + " (OffBar)"
+                    });
+                    traces.push({
+                        x: xLabels,
+                        y: (netSchMatrixObj[genNames[k]]['total_dc']).map(Number),
+                        name: genNames[k] + " (Total)"
+                    });
+                }
+                var layout = {
+                    title: 'DC Plot of for date ' + date_str + ' and Revision ' + rev,
+                    xaxis: {
+                        title: '',
+                        dtick: 4
+                    },
+                    yaxis: {
+                        title: 'DC Value'
+                    },
+                    legend: {
+                        font: {
+                            "size": "20"
+                        },
+                        orientation: "h"
+                    },
+                    margin: {'t': 35},
+                    height: 500
+                };
+                if (utilId == 'ALL') {
+                    layout['margin']['b'] = 400;
+                    layout['legend']['font']['size'] = 12;
+                    layout['height'] = 1000;
+                }
+                Plotly.newPlot(dcPlotsDiv, traces, layout);
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
+                fetchNetSchAfterDC(netSchMatrixObj);
+            } else {
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, dc values not found...';
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching net schedules...';
