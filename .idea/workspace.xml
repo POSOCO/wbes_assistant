@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80b159fe-0dfa-4424-8503-0f7fe8a99f13" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.ejs" afterPath="$PROJECT_DIR$/views/dc.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/dc.js" afterPath="$PROJECT_DIR$/views/dc.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WBES Schedules Fetch.iws" />
@@ -75,8 +73,8 @@
       <file leaf-file-name="dc.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/dc.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.6442953">
-              <caret line="370" column="37" selection-start-line="370" selection-start-column="37" selection-end-line="370" selection-end-column="37" />
+            <state vertical-scroll-proportion="5.352349">
+              <caret line="341" column="23" selection-start-line="341" selection-start-column="23" selection-end-line="341" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -545,7 +543,13 @@
       <option name="project" value="LOCAL" />
       <updated>1513017670984</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="net sch client done">
+      <created>1513020333548</created>
+      <option name="number" value="00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1513020333548</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TodoView">
@@ -559,9 +563,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28700906" sideWeight="0.8397436" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28700906" sideWeight="0.8397436" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.49697885" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.5030211" order="11" side_tool="true" content_ui="tabs" />
@@ -619,7 +623,8 @@
     <MESSAGE value="util net sch fetch json and csv done and tested" />
     <MESSAGE value="net sch client display work started" />
     <MESSAGE value="net sch client working" />
-    <option name="LAST_COMMIT_MESSAGE" value="net sch client working" />
+    <MESSAGE value="net sch client done" />
+    <option name="LAST_COMMIT_MESSAGE" value="net sch client done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1044,8 +1049,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/dc.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6442953">
-          <caret line="370" column="37" selection-start-line="370" selection-start-column="37" selection-end-line="370" selection-end-column="37" />
+        <state vertical-scroll-proportion="5.352349">
+          <caret line="341" column="23" selection-start-line="341" selection-start-column="23" selection-end-line="341" selection-end-column="23" />
           <folding />
         </state>
       </provider>
