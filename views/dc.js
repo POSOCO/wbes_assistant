@@ -82,7 +82,7 @@ function getDC() {
         success: function (dcMatrixObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
             document.getElementById('fetchStatusLabel').innerHTML = 'fetching dc done!';
-            console.log("DC Object fetched is " + JSON.stringify(dcMatrixObj));
+            //console.log("DC Object fetched is " + JSON.stringify(dcMatrixObj));
             // check if dcMatrixObj is correct
             if (dcMatrixObj == undefined || dcMatrixObj == null || dcMatrixObj['gen_names'] == undefined) {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching dc done, but response not as desired...';
@@ -120,15 +120,21 @@ function getDC() {
                     }
                     resMatrix.push(row);
                 }
-                console.log(resMatrix);
+                //console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('dcTable'));
                 document.getElementById('fetchStatusLabel').innerHTML = 'dc fetching and table update done!';
 
                 var dcPlotsDiv = document.getElementById("dcPlotsDiv");
-                var traces = [];
+
                 var xLabels = dcMatrixObj["time_blocks"].map(Number);
 
                 for (var k = 0; k < genNames.length; k++) {
+                    var div = document.createElement('div');
+                    div.className = 'sch_plot_div';
+                    div.id = 'plotDiv_' + k;
+                    div.style.border = '1px gray dashed';
+                    dcPlotsDiv.appendChild(div);
+                    var traces = [];
                     traces.push({
                         x: xLabels,
                         y: (dcMatrixObj[genNames[k]]['on_bar_dc']).map(Number),
@@ -144,31 +150,26 @@ function getDC() {
                         y: (dcMatrixObj[genNames[k]]['total_dc']).map(Number),
                         name: genNames[k] + " (Total)"
                     });
-                }
-                var layout = {
-                    title: 'DC Plot for date ' + date_str + ' and Revision ' + rev,
-                    xaxis: {
-                        title: '',
-                        dtick: 4
-                    },
-                    yaxis: {
-                        title: 'DC Value'
-                    },
-                    legend: {
-                        font: {
-                            "size": "20"
+                    var layout = {
+                        title: genNames[k] + ' DC for date ' + date_str + ' and Revision ' + rev,
+                        xaxis: {
+                            title: '',
+                            dtick: 4
                         },
-                        orientation: "h"
-                    },
-                    margin: {'t': 35},
-                    height: 500
-                };
-                if (utilId == 'ALL') {
-                    layout['margin']['b'] = 400;
-                    layout['legend']['font']['size'] = 12;
-                    layout['height'] = 1000;
+                        yaxis: {
+                            title: 'DC Value'
+                        },
+                        legend: {
+                            font: {
+                                "size": "20"
+                            },
+                            orientation: "h"
+                        },
+                        margin: {'t': 35},
+                        height: 500
+                    };
+                    Plotly.newPlot(div, traces, layout);
                 }
-                Plotly.newPlot(dcPlotsDiv, traces, layout);
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
                 fetchNetSchAfterDC(dcMatrixObj);
             } else {
@@ -203,7 +204,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
         success: function (netSchMatrixObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
             document.getElementById('fetchStatusLabel').innerHTML = 'fetching net schedules done!';
-            console.log("Net Sch Object fetched is " + JSON.stringify(netSchMatrixObj));
+            //console.log("Net Sch Object fetched is " + JSON.stringify(netSchMatrixObj));
             // check if netSchMatrixObj is correct
             if (netSchMatrixObj == undefined || netSchMatrixObj == null || netSchMatrixObj['gen_names'] == undefined) {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching net scheduled done, but response not as desired...';
@@ -212,8 +213,25 @@ function fetchNetSchAfterDC(dcMatrixObj) {
 
             var resMatrix = [];
 
-
             if (netSchMatrixObj['gen_names'].length > 0) {
+                // copy the dcMatrixObj for adding schedules also
+                var dcSchMatrixObj = dcMatrixObj;
+                // initialise the net schedule attributes of the dcSchMatrixObj to 0
+                var zeroValuesArray = [];
+                for (var i = 0; i < 96; i++) {
+                    zeroValuesArray.push(0);
+                }
+                for (var i = 0; i < dcSchMatrixObj["gen_names"].length; i++) {
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['isgs'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['mtoa'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['lta'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['iex'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['pxi'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['urs'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['rras'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['total'] = zeroValuesArray;
+                }
+
                 var genNames = netSchMatrixObj["gen_names"];
                 var dcGenNames = [];
 
@@ -226,8 +244,6 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     dcGenNames.push(dcUtilAcronym);
                 }
 
-                // copy the dcMatrixObj for adding schedules also
-                var dcSchMatrixObj = dcMatrixObj;
                 for (var i = 0; i < genNames.length; i++) {
                     // genNames is net sch acronym and dcGenNames is dc acronym
                     if (dcSchMatrixObj[dcGenNames[i]] != undefined) {
@@ -281,99 +297,100 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     }
                     resMatrix.push(row);
                 }
-                console.log(resMatrix);
+                //console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('dcTable'));
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
 
                 var dcPlotsDiv = document.getElementById("dcPlotsDiv");
                 dcPlotsDiv.innerHTML = '';
-                //stub
-                var traces = [];
+
                 var xLabels = dcSchMatrixObj["time_blocks"].map(Number);
 
                 for (var k = 0; k < dcSchMatrixObj["gen_names"].length; k++) {
+                    // dynamically create divs - https://stackoverflow.com/questions/14094697/javascript-how-to-create-new-div-dynamically-change-it-move-it-modify-it-in
+                    var div = document.createElement('div');
+                    div.className = 'sch_plot_div';
+                    div.id = 'plotDiv_' + k;
+                    div.style.border = '1px gray dashed';
+                    dcPlotsDiv.appendChild(div);
                     var genName = dcSchMatrixObj["gen_names"][k];
+                    var traces = [];
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['on_bar_dc']).map(Number),
-                        name: genName + " (OnBar)"
+                        name: "OnBar"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['off_bar_dc']).map(Number),
-                        name: genName + " (OffBar)"
+                        name: "OffBar"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['total_dc']).map(Number),
-                        name: genName + " (Total DC)"
+                        name: "Total DC"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['isgs']).map(Number),
-                        name: genName + " (ISGS)"
+                        name: "ISGS"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['mtoa']).map(Number),
-                        name: genName + " (MTOA)"
+                        name: "MTOA"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['lta']).map(Number),
-                        name: genName + " (LTA)"
+                        name: "LTA"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['iex']).map(Number),
-                        name: genName + " (IEX)"
+                        name: "IEX"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['pxi']).map(Number),
-                        name: genName + " (PXI)"
+                        name: "PXI"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['urs']).map(Number),
-                        name: genName + " (URS)"
+                        name: "URS"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['rras']).map(Number),
-                        name: genName + " (RRAS)"
+                        name: "RRAS"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['total']).map(Number),
-                        name: genName + " (TOTAL)"
+                        name: "TOTAL"
                     });
+                    var layout = {
+                        title: genName + ' Schedules for date ' + date_str + ' and Revision ' + rev,
+                        xaxis: {
+                            title: '',
+                            dtick: 4
+                        },
+                        yaxis: {
+                            title: 'MW Value'
+                        },
+                        legend: {
+                            font: {
+                                "size": "20"
+                            },
+                            orientation: "h"
+                        },
+                        margin: {'t': 35},
+                        height: 500
+                    };
+                    Plotly.newPlot(div, traces, layout);
                 }
                 // todo enable only net sch of plot in the net sch columns
-                var layout = {
-                    title: 'Schedules Plot for date ' + date_str + ' and Revision ' + rev,
-                    xaxis: {
-                        title: '',
-                        dtick: 4
-                    },
-                    yaxis: {
-                        title: 'MW Value'
-                    },
-                    legend: {
-                        font: {
-                            "size": "20"
-                        },
-                        orientation: "h"
-                    },
-                    margin: {'t': 35},
-                    height: 500
-                };
-                if (utilId == 'ALL') {
-                    layout['margin']['b'] = 400;
-                    layout['legend']['font']['size'] = 12;
-                    layout['height'] = 3500;
-                }
-                Plotly.newPlot(dcPlotsDiv, traces, layout);
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
             } else {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, net schedules values not found...';
