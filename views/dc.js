@@ -112,7 +112,6 @@ function getDC() {
                     var genNames = dcMatrixObj["gen_names"];
                     row = [blk];
                     for (var k = 0; k < genNames.length; k++) {
-                        //todo use blk instead of i
                         var onBarDCVal = (+dcMatrixObj[genNames[k]]['on_bar_dc'][blk - 1]).toFixed(0);
                         var offBarDCVal = (+dcMatrixObj[genNames[k]]['off_bar_dc'][blk - 1]).toFixed(0);
                         var totDCVal = (+dcMatrixObj[genNames[k]]['total_dc'][blk - 1]).toFixed(0);
@@ -256,7 +255,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         dcSchMatrixObj[dcGenNames[i]]['rras'] = netSchMatrixObj[genNames[i]]['rras'];
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
                     } else {
-                        // todo convert net sch gen name to sch gen name and handle separately if dc gen name not found
+                        // todo handle separately if dc gen name of a corresponding net sch gen name is not found
                     }
                 }
                 var displayStartBlk = Number(document.getElementById('from_blk').value);
