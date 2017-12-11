@@ -1,12 +1,12 @@
 <html>
 <head>
-    <title>ISGS Surrenders</title>
+    <title>ISGS Schedules</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
 <%- include header_partial.ejs %>
-<h3>See ISGS DC</h3>
+<h3>See ISGS Schedules</h3>
 <input type="text" id='date_input' value="">
 <button onclick="refreshRevisions()">Refresh Revisions</button>
 <input type="text" id='from_blk' value="1">
@@ -14,7 +14,7 @@
 <select name="revisions" id="revisions"></select>
 
 <select name="utils" id="utils"></select>
-<button onclick="getDC()">Get Declarations</button>
+<button onclick="getDC()">Get Schedules</button>
 <span id='fetchStatusLabel'></span>
 
 <div id="dcPlotsDiv" style="border: 1px gray dashed;margin-top: 8px"></div>

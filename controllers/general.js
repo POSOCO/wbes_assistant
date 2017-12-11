@@ -57,7 +57,7 @@ router.get('/home', function (req, res, next) {
     });
 });
 
-router.get('/isgs_dc', function (req, res, next) {
+router.get('/isgs', function (req, res, next) {
     var tasksArray = [getRevisions, getEntUtils, getUtils];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {

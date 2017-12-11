@@ -38,8 +38,8 @@ describe('WBES DC', function () {
         });
 
         it('it should get and dump VSTPS-V DC json', function (done) {
-            //  get the VSTPS-V DC json
-            SchedulesModel.getIsgsDcObj(date_str, "10", "5df201ba-1574-475a-ad25-b26533170943", function (err, isgsDcObj) {
+            //  get the VSTPS-V DC json 5df201ba-1574-475a-ad25-b26533170943
+            SchedulesModel.getIsgsDcObj(date_str, "10", "ALL", function (err, isgsDcObj) {
                 if (err) {
                     console.log(err);
                     return done(err);
