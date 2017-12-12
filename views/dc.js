@@ -138,17 +138,17 @@ function getDC() {
                     traces.push({
                         x: xLabels,
                         y: (dcMatrixObj[genNames[k]]['on_bar_dc']).map(Number),
-                        name: genNames[k] + " (OnBar)"
+                        name: "OnBar"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcMatrixObj[genNames[k]]['off_bar_dc']).map(Number),
-                        name: genNames[k] + " (OffBar)"
+                        name: "OffBar"
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcMatrixObj[genNames[k]]['total_dc']).map(Number),
-                        name: genNames[k] + " (Total)"
+                        name: "Total"
                     });
                     var layout = {
                         title: genNames[k] + ' DC for date ' + date_str + ' and Revision ' + rev,
@@ -230,6 +230,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['urs'] = zeroValuesArray;
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['rras'] = zeroValuesArray;
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['total'] = zeroValuesArray;
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['margin'] = zeroValuesArray;
                 }
 
                 var genNames = netSchMatrixObj["gen_names"];
@@ -255,6 +256,9 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         dcSchMatrixObj[dcGenNames[i]]['urs'] = netSchMatrixObj[genNames[i]]['urs'];
                         dcSchMatrixObj[dcGenNames[i]]['rras'] = netSchMatrixObj[genNames[i]]['rras'];
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
+                        for (var k = 0; k < 96; k++) {
+                            dcSchMatrixObj[dcGenNames[i]]['margin'][k] = +dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k] - +netSchMatrixObj[genNames[i]]['total'][k];
+                        }
                     } else {
                         // todo handle separately if dc gen name of a corresponding net sch gen name is not found
                     }
@@ -364,6 +368,12 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['rras']).map(Number),
                         name: "RRAS"
+                    });
+                    traces.push({
+                        x: xLabels,
+                        y: (dcSchMatrixObj[genName]['margin']).map(Number),
+                        name: "Margin",
+                        visible: 'legendonly'
                     });
                     traces.push({
                         x: xLabels,
