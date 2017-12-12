@@ -124,6 +124,7 @@ function getDC() {
                 document.getElementById('fetchStatusLabel').innerHTML = 'dc fetching and table update done!';
 
                 var dcPlotsDiv = document.getElementById("dcPlotsDiv");
+                dcPlotsDiv.innerHTML = '';
 
                 var xLabels = dcMatrixObj["time_blocks"].map(Number);
 
