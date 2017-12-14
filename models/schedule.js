@@ -104,6 +104,7 @@ var getIsgsNetSchObj = module.exports.getIsgsNetSchObj = function (utilId, dateS
             netSchObj[genNames[i]]['isgs'] = [];
             netSchObj[genNames[i]]['mtoa'] = [];
             netSchObj[genNames[i]]['lta'] = [];
+            netSchObj[genNames[i]]['stoa'] = [];
             netSchObj[genNames[i]]['iex'] = [];
             netSchObj[genNames[i]]['pxi'] = [];
             netSchObj[genNames[i]]['urs'] = [];
@@ -120,7 +121,7 @@ var getIsgsNetSchObj = module.exports.getIsgsNetSchObj = function (utilId, dateS
                 continue;
             }
             var netSchType = netSchMatrixArray[1][matrixCol].trim().toLowerCase();
-            if (['isgs', 'mtoa', 'lta', 'iex', 'pxi', 'urs', 'rras', 'total'].indexOf(netSchType) > -1) {
+            if (['isgs', 'mtoa', 'lta', 'stoa', 'iex', 'pxi', 'urs', 'rras', 'total'].indexOf(netSchType) > -1) {
                 // fill the dc values in the appropriate object array
                 var dcValsList = [];
                 for (var matrixRow = 2; matrixRow < Math.min(netSchMatrixArray.length, 98); matrixRow++) {
