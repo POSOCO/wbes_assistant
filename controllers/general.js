@@ -67,4 +67,14 @@ router.get('/isgs', function (req, res, next) {
     });
 });
 
+router.get('/margins', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('margin', resObj);
+    });
+});
+
 module.exports = router;

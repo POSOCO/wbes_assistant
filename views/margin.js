@@ -7,6 +7,11 @@ function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
     updateRevsList(revs_);
     var utilSelEl = document.getElementById("utils");
+    option = document.createElement("option");
+    option.text = 'ALL';
+    option.value = 'ALL';
+    option.setAttribute('data-is_seller', 'true');
+    utilSelEl.add(option);
     for (var i = 0; i < utilsObj_['sellers'].length; i++) {
         var option = document.createElement("option");
         option.text = utilsObj_['sellers'][i]['Acronym'];
@@ -14,11 +19,6 @@ function doOnLoadStuff() {
         option.setAttribute('data-is_seller', 'true');
         utilSelEl.add(option);
     }
-    option = document.createElement("option");
-    option.text = 'ALL';
-    option.value = 'ALL';
-    option.setAttribute('data-is_seller', 'true');
-    utilSelEl.add(option);
 }
 
 function acronymFromNetSchAcronym(acr) {
@@ -63,7 +63,7 @@ function netSchDcGenNameMap(acr) {
     return searchArray[searchUtilIndex];
 }
 
-function getDC() {
+function getMargins() {
     var revSelEl = document.getElementById("revisions");
     var rev = revSelEl.options[revSelEl.selectedIndex].value;
     var utilSelEl = document.getElementById("utils");
@@ -98,8 +98,8 @@ function getDC() {
                 var row = [''];
                 var row2 = ['TB'];
                 for (var i = 0; i < dcMatrixObj["gen_names"].length; i++) {
-                    row = row.concat([dcMatrixObj["gen_names"][i], dcMatrixObj["gen_names"][i], dcMatrixObj["gen_names"][i]]);
-                    row2 = row2.concat(['OnBar', 'OffBar', 'Total DC']);
+                    row = row.concat([dcMatrixObj["gen_names"][i]]);
+                    row2 = row2.concat(['OnBar']);
                 }
                 resMatrix.push(row);
                 resMatrix.push(row2);
@@ -115,7 +115,7 @@ function getDC() {
                         var onBarDCVal = (+dcMatrixObj[genNames[k]]['on_bar_dc'][blk - 1]).toFixed(0);
                         var offBarDCVal = (+dcMatrixObj[genNames[k]]['off_bar_dc'][blk - 1]).toFixed(0);
                         var totDCVal = (+dcMatrixObj[genNames[k]]['total_dc'][blk - 1]).toFixed(0);
-                        row = row.concat([onBarDCVal, offBarDCVal, totDCVal]);
+                        row = row.concat([onBarDCVal]);
                     }
                     resMatrix.push(row);
                 }
@@ -127,50 +127,7 @@ function getDC() {
                 dcPlotsDiv.innerHTML = '';
 
                 var xLabels = dcMatrixObj["time_blocks"].map(Number);
-
-                for (var k = 0; k < genNames.length; k++) {
-                    var div = document.createElement('div');
-                    div.className = 'sch_plot_div';
-                    div.id = 'plotDiv_' + k;
-                    div.style.border = '1px gray dashed';
-                    dcPlotsDiv.appendChild(div);
-                    var traces = [];
-                    traces.push({
-                        x: xLabels,
-                        y: (dcMatrixObj[genNames[k]]['on_bar_dc']).map(Number),
-                        name: "OnBar"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcMatrixObj[genNames[k]]['off_bar_dc']).map(Number),
-                        name: "OffBar"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcMatrixObj[genNames[k]]['total_dc']).map(Number),
-                        name: "Total"
-                    });
-                    var layout = {
-                        title: genNames[k] + ' DC for date ' + date_str + ' and Revision ' + rev,
-                        xaxis: {
-                            title: '',
-                            dtick: 4
-                        },
-                        yaxis: {
-                            title: 'DC Value'
-                        },
-                        legend: {
-                            font: {
-                                "size": "20"
-                            },
-                            orientation: "h"
-                        },
-                        margin: {'t': 35},
-                        height: 500
-                    };
-                    Plotly.newPlot(div, traces, layout);
-                }
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
+                document.getElementById('fetchStatusLabel').innerHTML = 'fetching DC values done!';
                 fetchNetSchAfterDC(dcMatrixObj);
             } else {
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, dc values not found...';
@@ -224,6 +181,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     }
                     return zeroValuesArray;
                 };
+
                 for (var i = 0; i < dcSchMatrixObj["gen_names"].length; i++) {
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['isgs'] = zeroValues();
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['mtoa'] = zeroValues();
@@ -262,7 +220,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         dcSchMatrixObj[dcGenNames[i]]['rras'] = netSchMatrixObj[genNames[i]]['rras'];
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
                         for (var k = 0; k < 96; k++) {
-                            dcSchMatrixObj[dcGenNames[i]]['margin'][k] = +dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k] - +netSchMatrixObj[genNames[i]]['total'][k];
+                            dcSchMatrixObj[dcGenNames[i]]['margin'][k] = (+dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k]) - (+dcSchMatrixObj[dcGenNames[i]]['total'][k]);
                         }
                     } else {
                         // todo handle separately if dc gen name of a corresponding net sch gen name is not found
@@ -277,8 +235,8 @@ function fetchNetSchAfterDC(dcMatrixObj) {
 
                 for (var i = 0; i < dcSchMatrixObj["gen_names"].length; i++) {
                     var genName = dcSchMatrixObj["gen_names"][i];
-                    row = row.concat([genName, genName, genName, genName, genName, genName, genName, genName, genName, genName, genName]);
-                    row2 = row2.concat(['OnBar', 'OffBar', 'Total DC', 'ISGS', 'MTOA', 'LTA', 'STOA', 'IEX', 'PXI', 'URS', 'RRAS', 'Net Schedule']);
+                    row = row.concat([genName, genName, genName]);
+                    row2 = row2.concat(['OnBar', 'Net Schedule', 'Margin']);
                 }
                 resMatrix.push(row);
                 resMatrix.push(row2);
@@ -303,7 +261,8 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         var ursVal = (+dcSchMatrixObj[genName]['urs'][blk - 1]).toFixed(0);
                         var rrasVal = (+dcSchMatrixObj[genName]['rras'][blk - 1]).toFixed(0);
                         var totalVal = (+dcSchMatrixObj[genName]['total'][blk - 1]).toFixed(0);
-                        row = row.concat([onBarDCVal, offBarDCVal, totDCVal, isgsVal, mtoaVal, stoaVal, ltaVal, iexVal, pxiVal, ursVal, rrasVal, totalVal]);
+                        var marginVal = (+dcSchMatrixObj[genName]['margin'][blk - 1]).toFixed(0);
+                        row = row.concat([onBarDCVal, totalVal, marginVal]);
                     }
                     resMatrix.push(row);
                 }
@@ -315,102 +274,75 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 dcPlotsDiv.innerHTML = '';
 
                 var xLabels = dcSchMatrixObj["time_blocks"].map(Number);
-
+                var traces = [];
+                var div = document.createElement('div');
+                div.className = 'sch_plot_div';
+                div.id = 'plotDiv_0';
+                div.style.border = '1px gray dashed';
+                dcPlotsDiv.appendChild(div);
                 for (var k = 0; k < dcSchMatrixObj["gen_names"].length; k++) {
                     // dynamically create divs - https://stackoverflow.com/questions/14094697/javascript-how-to-create-new-div-dynamically-change-it-move-it-modify-it-in
-                    var div = document.createElement('div');
-                    div.className = 'sch_plot_div';
-                    div.id = 'plotDiv_' + k;
-                    div.style.border = '1px gray dashed';
-                    dcPlotsDiv.appendChild(div);
+                    //stub todo create the margins plot
                     var genName = dcSchMatrixObj["gen_names"][k];
-                    var traces = [];
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['on_bar_dc']).map(Number),
-                        name: "OnBar"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['off_bar_dc']).map(Number),
-                        name: "OffBar"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['total_dc']).map(Number),
-                        name: "Total DC"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['isgs']).map(Number),
-                        name: "ISGS"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['mtoa']).map(Number),
-                        name: "MTOA"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['stoa']).map(Number),
-                        name: "STOA"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['lta']).map(Number),
-                        name: "LTA"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['iex']).map(Number),
-                        name: "IEX"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['pxi']).map(Number),
-                        name: "PXI"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['urs']).map(Number),
-                        name: "URS"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['rras']).map(Number),
-                        name: "RRAS"
-                    });
-                    traces.push({
-                        x: xLabels,
-                        y: (dcSchMatrixObj[genName]['total']).map(Number),
-                        name: "TOTAL"
-                    });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['margin']).map(Number),
-                        name: "Margin",
-                        visible: 'legendonly'
+                        fill: 'tonexty',
+                        name: genName
                     });
-                    var layout = {
-                        title: genName + ' Schedules for date ' + date_str + ' and Revision ' + rev,
-                        xaxis: {
-                            title: '',
-                            dtick: 4
-                        },
-                        yaxis: {
-                            title: 'MW Value'
-                        },
-                        legend: {
-                            font: {
-                                "size": "20"
-                            },
-                            orientation: "h"
-                        },
-                        margin: {'t': 35},
-                        height: 500
-                    };
-                    Plotly.newPlot(div, traces, layout);
                 }
+                traces[0].fill = 'tozeroy';
+                var layout = {
+                    title: 'Margins for date ' + date_str + ' and Revision ' + rev,
+                    xaxis: {
+                        title: 'Block Number',
+                        dtick: 4
+                    },
+                    yaxis: {
+                        title: 'Margin'
+                    },
+                    legend: {
+                        font: {
+                            "size": "10"
+                        },
+                        orientation: "h"
+                    },
+                    margin: {'t': 35},
+                    height: 800
+                };
+                Plotly.newPlot(div, stackedArea(traces), layout);
+                div
+                    .on('plotly_hover', function (data) {
+                        if (data.points.length > 0) {
+                            var pointIndex = data.points[0]['pointNumber'];
+                            var textDataArray = document.getElementById("plotDiv_0").data;
+                            var infoStrings = [];
+                            for (var i = textDataArray.length - 1; i >= 0; i--) {
+                                infoStrings.push(textDataArray[i]['text'][pointIndex]);
+                            }
+                            document.getElementById("reserveInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
+                        }
+                    })
+                    .on('plotly_unhover', function (data) {
+                        //document.getElementById("reserveInfoDiv").innerHTML = '';
+                    });
+                function stackedArea(traces) {
+                    var i, j;
+                    for (i = 0; i < traces.length; i++) {
+                        traces[i].text = [];
+                        traces[i].hoverinfo = 'text';
+                        for (j = 0; j < (traces[i]['y'].length); j++) {
+                            traces[i].text.push(traces[i]['name'] + " (" + traces[i]['y'][j].toFixed(0) + ")");
+                        }
+                    }
+                    for (i = 1; i < traces.length; i++) {
+                        for (j = 0; j < (Math.min(traces[i]['y'].length, traces[i - 1]['y'].length)); j++) {
+                            traces[i]['y'][j] += traces[i - 1]['y'][j];
+                        }
+                    }
+                    return traces;
+                }
+
                 // todo enable only net sch of plot in the net sch columns
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
             } else {
