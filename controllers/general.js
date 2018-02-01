@@ -77,4 +77,14 @@ router.get('/margins', function (req, res, next) {
     });
 });
 
+router.get('/rras', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('rras', resObj);
+    });
+});
+
 module.exports = router;
