@@ -21,6 +21,7 @@
 <div id="reserveInfoDiv" style="width: 9%;float: left;margin-top: 50px;"></div>
 
 <table id="dcTable" name="dcTable" style="margin-top: 8px"></table>
+<button id="exportBtn" onclick="exportTableToCSV('margin_export.csv')">Export Table</button>
 <script>
     var utilsObj_ = <%- JSON.stringify(utils)%>;
     var utilsNetSchObj_ = <%- JSON.stringify(utils_net_sch)%>;
