@@ -133,3 +133,64 @@ var getIsgsNetSchObj = module.exports.getIsgsNetSchObj = function (utilId, dateS
         return callback(null, netSchObj);
     });
 };
+
+var getISGSURSAvailedObj = module.exports.getISGSURSAvailedObj = function (dateStr, fromTB, toTB, rev, utilId, callback) {
+    WBESUtils.getISGSURSAvailedArray(dateStr, rev, utilId, function (err, ursAvailedRows) {
+        if (err) {
+            callback(new Error(err));
+            return;
+        }
+        var ursAvailedRowsDim = ArrayHelper.getDim(ursAvailedRows);
+        if (ursAvailedRowsDim.length < 2 || ursAvailedRowsDim[0] < 102 || ursAvailedRowsDim[1] < 1) {
+            callback(new Error('URS availed matrix is not of minimum required shape of 98*1'));
+            return;
+        }
+        if (fromTB == null || isNaN(fromTB)) {
+            fromTB = 1;
+        }
+        if (toTB == null || isNaN(toTB)) {
+            toTB = 1;
+        }
+        // get all the genNames from 1st row
+        var genNamesRow = ursAvailedRows[0];
+        var consNamesRow = ursAvailedRows[1];
+        var URSAvailedInfoArray = []; // list of [gen, cons, min, max] arrays
+        for (var colIter = 0; colIter < genNamesRow.length; colIter++) {
+            if (genNamesRow[colIter] == null || genNamesRow[colIter] == "") {
+                continue;
+            }
+            var genName = genNamesRow[colIter];
+            var consName = consNamesRow[colIter];
+            // Now find the range of the URS availed by iterating in the column
+            var maxURSAvailed = null;
+            var minURSAvailed = null;
+            for (var blkIter = 1; blkIter < 97; blkIter++) {
+                var rowIter = blkIter + 1;
+                var mwVal = Math.round(Number(ursAvailedRows[rowIter][colIter]));
+                if (mwVal > 1) {
+                    if (maxURSAvailed == null || mwVal > maxURSAvailed) {
+                        maxURSAvailed = mwVal;
+                    }
+                    if (minURSAvailed == null || mwVal < minURSAvailed) {
+                        minURSAvailed = mwVal;
+                    }
+                }
+            }
+            if (minURSAvailed != null && maxURSAvailed != null) {
+                // we got valid URS summary, so push to the URSAvailedInfoArray array
+                URSAvailedInfoArray.push([genName, consName, minURSAvailed, maxURSAvailed]);
+            }
+        }
+        // sort the info by max URS availed
+        // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
+        var compareFunc = function(a,b) {
+            if (a[3] < b[3])
+                return 1;
+            if (a[3] > b[3])
+                return -1;
+            return 0;
+        };
+        URSAvailedInfoArray.sort(compareFunc);
+        return callback(null, URSAvailedInfoArray);
+    });
+};

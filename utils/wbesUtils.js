@@ -29,6 +29,9 @@ var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/
 // string parameters --> baseUrl, date_str, utilId, rev, timestamp
 var sellerIsgsNetSchFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
 var buyerIsgsNetSchFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
+// string parameters --> baseUrl, date_str, rev, utilId
+var isgsURSAvailedFetchUrl = module.exports.isgsURSAvailedFetchUrl = "%s/wbes/Report/GetUrsReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnReg=0";
+
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -532,6 +535,55 @@ var getISGSDeclarationsArray = module.exports.getISGSDeclarationsArray = functio
             isgsDeclarationsArray[0] = row;
 
             callback(null, isgsDeclarationsArray);
+        });
+    });
+};
+
+// get ISGS URS Availed for a date, rev, utilId
+var getISGSURSAvailedArray = module.exports.getISGSURSAvailedArray = function (date_str, rev, utilId, callback) {
+// fetch cookie first and then do request
+    async.waterfall([
+        function (callback) {
+            fetchCookiesFromReportsUrl(function (err, cookieObj) {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, cookieObj);
+            });
+        }
+    ], function (error, cookieObj) {
+        if (error) {
+            return callback(err);
+        }
+        var options = defaultRequestOptions;
+
+        var tokenString = new Date().getTime();
+        var cookieString = "";
+        cookieString += cookieObj[0];
+        // options.headers.cookie = cookieString;
+        console.log("Cookie String for buyer isgs declaration is " + cookieString);
+        var templateUrl = isgsURSAvailedFetchUrl;
+        options.url = StringUtils.parse(templateUrl, baseUrl, date_str, rev, utilId);
+        console.log("ISGS URS Availed JSON fetch url created is " + options.url);
+
+        // get the declarations Array
+        CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+            if (err) {
+                return callback(err);
+            }
+            var isgsURSAvailedArray = JSON.parse(resBody)['jaggedarray'];
+
+            // remove the revision number from the beneficiary name
+            var row = isgsURSAvailedArray[1];
+            for (var i = 0; i < row.length; i++) {
+                var bracketIndex = row[i].indexOf("(");
+                if (bracketIndex != -1) {
+                    row[i] = row[i].substring(0, bracketIndex);
+                }
+            }
+            isgsURSAvailedArray[1] = row;
+
+            callback(null, isgsURSAvailedArray);
         });
     });
 };
