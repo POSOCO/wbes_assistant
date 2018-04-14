@@ -28,13 +28,13 @@ function getURSSummary() {
     var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
     var date_str = document.getElementById('date_input').value;
     var from_str = document.getElementById('from_blk').value;
-    var to_str = document.getElementById('from_blk').value;
+    var to_str = document.getElementById('to_blk').value;
     var queryStrs = [];
     queryStrs.push("util_id=" + utilId);
     queryStrs.push("rev=" + rev);
     queryStrs.push("date_str=" + date_str);
-    queryStrs.push("from=" + date_str);
-    queryStrs.push("to=" + date_str);
+    queryStrs.push("from=" + from_str);
+    queryStrs.push("to=" + to_str);
     document.getElementById('fetchStatusLabel').innerHTML = 'fetching URS Summary data...';
     $.ajax({
         //fetch categories from sever
@@ -69,4 +69,17 @@ function getURSSummary() {
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
     });
+}
+
+function setShift(shiftCode){
+	if(shiftCode == 1){
+		document.getElementById('from_blk').value = 33;
+		document.getElementById('to_blk').value = 58;
+	} else if(shiftCode == 2){
+		document.getElementById('from_blk').value = 59;
+		document.getElementById('to_blk').value = 84;
+	}else if(shiftCode == 3){
+		document.getElementById('from_blk').value = 1;
+		document.getElementById('to_blk').value = 32;
+	}
 }

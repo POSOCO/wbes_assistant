@@ -73,8 +73,8 @@ router.get('/urs_summary', function (req, res) {
     var utilId = req.query.util_id;
     var rev = req.query.rev;
     var dateStr = req.query.date_str;
-    var fromBlk = req.query.from;
-    var toBlk = req.query.to;
+    var fromBlk = Number(req.query.from);
+    var toBlk = Number(req.query.to);
     Schedule.getISGSURSAvailedObj(dateStr, fromBlk, toBlk, rev, utilId, function (err, ursSummaryArray) {
         if (err) {
             res.json({err: err});

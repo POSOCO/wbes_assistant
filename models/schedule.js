@@ -164,7 +164,7 @@ var getISGSURSAvailedObj = module.exports.getISGSURSAvailedObj = function (dateS
             // Now find the range of the URS availed by iterating in the column
             var maxURSAvailed = null;
             var minURSAvailed = null;
-            for (var blkIter = 1; blkIter < 97; blkIter++) {
+            for (var blkIter = fromTB; blkIter < (toTB + 1); blkIter++) {
                 var rowIter = blkIter + 1;
                 var mwVal = Math.round(Number(ursAvailedRows[rowIter][colIter]));
                 if (mwVal > 1) {

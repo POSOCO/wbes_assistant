@@ -16,7 +16,10 @@
 <select name="utils" id="utils"></select>
 <button onclick="getURSSummary()">Get URS Summary</button>
 <span id='fetchStatusLabel'></span>
-
+<br><br>
+<button onclick="setShift(1)">Morning Shift</button>
+<button onclick="setShift(2)">Evening Shift</button>
+<button onclick="setShift(3)">Night Shift</button>
 
 <table id="summaryTable" name="summaryTable" style="margin-top: 8px"></table>
 <button id="exportBtn" onclick="exportTableToCSV('urs_summary_export.csv')">Export Table</button>
