@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>ISGS URS Summary</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+<%- include header_partial.ejs %>
+<h3>ISGS URS Summary</h3>
+<input type="text" id='date_input' value="">
+<button onclick="refreshRevisions()">Refresh Revisions</button>
+<input type="text" id='from_blk' value="1">
+<input type="text" id='to_blk' value="96">
+<select name="revisions" id="revisions"></select>
+
+<select name="utils" id="utils"></select>
+<button onclick="getURSSummary()">Get URS Summary</button>
+<span id='fetchStatusLabel'></span>
+
+
+<table id="summaryTable" name="summaryTable" style="margin-top: 8px"></table>
+<button id="exportBtn" onclick="exportTableToCSV('urs_summary_export.csv')">Export Table</button>
+<script>
+    var utilsObj_ = <%- JSON.stringify(utils)%>;
+    var revs_ = <%- JSON.stringify(revisions)%>;
+    var dateStr_ = <%- JSON.stringify(date_str)%>;
+</script>
+<script src="./libs/js/jquery.min.js"></script>
+<script src="domUtils.js"></script>
+<script src="revision.js"></script>
+<script src="urs_summary.js"></script>
+</body>
+</html>
