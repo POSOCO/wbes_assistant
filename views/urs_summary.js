@@ -53,7 +53,7 @@ function getURSSummary() {
             var summaryArray = URSSummaryObj['summary_array'];
             if (summaryArray.length > 0) {
                 //console.log(summaryArray);
-                var resMatrix = [];
+                var resMatrix = [["Generator", "Constituent", "Quantum (MW)"]];
                 for (var i = 0; i < summaryArray.length; i++) {
                     resMatrix.push([summaryArray[i][0], summaryArray[i][1].replace("_Beneficiary", ""), summaryArray[i][2] + " - " + summaryArray[i][3]]);
                 }
