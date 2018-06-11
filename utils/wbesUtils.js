@@ -11,7 +11,6 @@ var async = require('async');
 
 
 var baseUrl = module.exports.baseUrl = "http://scheduling.wrldc.in";
-var baseUrlNR = module.exports.baseUrl = "http://103.7.128.190";
 var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/wbes/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
 var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/wbes/ReportFullSchedule/GetUtils?regionId=2";
 var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl = "%s/wbes/Report/GetUtils?regionId=2";
@@ -26,14 +25,12 @@ var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl
 // string parameters --> baseUrl, utilId, date_str, rev
 var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
-var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byOnBar=1";
+var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0";
 // string parameters --> baseUrl, date_str, utilId, rev, timestamp
-var sellerIsgsNetSchFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
-var buyerIsgsNetSchFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
+var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
+var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
 // string parameters --> baseUrl, date_str, rev, utilId
 var isgsURSAvailedFetchUrl = module.exports.isgsURSAvailedFetchUrl = "%s/wbes/Report/GetUrsReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnReg=0";
-// string parameters --> baseUrlNR, date_str, timestamp, rev
-var isgsURSMarginFetchUrl = module.exports.isgsURSMarginFetchUrl = "%s/wbes/Report/ExportUrsBreakUpToPDF?scheduleDate=%s&getTokenValue=%s&fileType=csv&Region=3&UtilId=ALL&isBuyer=0&byOnReg=0";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -67,7 +64,7 @@ var getStartEndBlks = module.exports.getStartEndBlks = function (fromBlk, toBlk)
 
 var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = function (callback) {
     var options = defaultRequestOptions;
-    options.url = "http://103.7.130.121/wbes/";
+    options.url = baseUrl + "/wbes/";
     // get the cookies from response header
     CSVFetcher.doGetRequest(options, function (err, resBody, res) {
         if (err) {

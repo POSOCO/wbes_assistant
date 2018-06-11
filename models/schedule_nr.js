@@ -1,7 +1,7 @@
 /**
  * Created by Nagasudhir on 12/10/2017.
  */
-var WBESUtils = require("../utils/wbesUtils");
+var WBESUtils = require("../utils/nrWbesUtils");
 var ArrayHelper = require('../helpers/arrayHelpers');
 
 var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId, callback) {
@@ -57,8 +57,8 @@ var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId,
             } else {
                 dcType = dcType.trim().toLowerCase();
             }
-            var dcTypeStrDict = { 'onbardc': 'on_bar_dc', 'offbardc': 'off_bar_dc', 'total': 'total_dc' };
-            if (['onbardc', 'offbardc', 'total'].indexOf(dcType) > -1) {
+            var dcTypeStrDict = { 'onbardc': 'on_bar_dc', 'combineddc': 'on_bar_dc', 'dc': 'on_bar_dc', 'offbardc': 'off_bar_dc', 'total': 'total_dc', 'sellerdc': 'total_dc' };
+            if (['dc', 'onbardc', 'offbardc', 'combineddc', 'total', 'sellerdc'].indexOf(dcType) > -1) {
                 // fill the dc values in the appropriate object array
                 var dcValsList = [];
                 for (var matrixRow = 2; matrixRow < Math.min(dcMatrixArray.length, 98); matrixRow++) {
@@ -127,75 +127,14 @@ var getIsgsNetSchObj = module.exports.getIsgsNetSchObj = function (utilId, dateS
             }
             var netSchType = netSchMatrixArray[1][matrixCol].trim().toLowerCase();
             if (['isgs', 'mtoa', 'lta', 'stoa', 'iex', 'pxi', 'urs', 'rras', 'total'].indexOf(netSchType) > -1) {
-                // fill the dc values in the appropriate object array
-                var dcValsList = [];
+                // fill the values in the appropriate object array
+                var valsList = [];
                 for (var matrixRow = 2; matrixRow < Math.min(netSchMatrixArray.length, 98); matrixRow++) {
-                    dcValsList.push(netSchMatrixArray[matrixRow][matrixCol]);
+                    valsList.push(netSchMatrixArray[matrixRow][matrixCol]);
                 }
-                netSchObj[genName][netSchType] = dcValsList;
+                netSchObj[genName][netSchType] = valsList;
             }
         }
         return callback(null, netSchObj);
-    });
-};
-
-var getISGSURSAvailedObj = module.exports.getISGSURSAvailedObj = function (dateStr, fromTB, toTB, rev, utilId, callback) {
-    WBESUtils.getISGSURSAvailedArray(dateStr, rev, utilId, function (err, ursAvailedRows) {
-        if (err) {
-            callback(new Error(err));
-            return;
-        }
-        var ursAvailedRowsDim = ArrayHelper.getDim(ursAvailedRows);
-        if (ursAvailedRowsDim.length < 2 || ursAvailedRowsDim[0] < 102 || ursAvailedRowsDim[1] < 1) {
-            callback(new Error('URS availed matrix is not of minimum required shape of 98*1'));
-            return;
-        }
-        if (fromTB == null || isNaN(fromTB)) {
-            fromTB = 1;
-        }
-        if (toTB == null || isNaN(toTB)) {
-            toTB = 1;
-        }
-        // get all the genNames from 1st row
-        var genNamesRow = ursAvailedRows[0];
-        var consNamesRow = ursAvailedRows[1];
-        var URSAvailedInfoArray = []; // list of [gen, cons, min, max] arrays
-        for (var colIter = 0; colIter < genNamesRow.length; colIter++) {
-            if (genNamesRow[colIter] == null || genNamesRow[colIter] == "") {
-                continue;
-            }
-            var genName = genNamesRow[colIter];
-            var consName = consNamesRow[colIter];
-            // Now find the range of the URS availed by iterating in the column
-            var maxURSAvailed = null;
-            var minURSAvailed = null;
-            for (var blkIter = fromTB; blkIter < (toTB + 1); blkIter++) {
-                var rowIter = blkIter + 1;
-                var mwVal = Math.round(Number(ursAvailedRows[rowIter][colIter]));
-                if (mwVal > 1) {
-                    if (maxURSAvailed == null || mwVal > maxURSAvailed) {
-                        maxURSAvailed = mwVal;
-                    }
-                    if (minURSAvailed == null || mwVal < minURSAvailed) {
-                        minURSAvailed = mwVal;
-                    }
-                }
-            }
-            if (minURSAvailed != null && maxURSAvailed != null) {
-                // we got valid URS summary, so push to the URSAvailedInfoArray array
-                URSAvailedInfoArray.push([genName, consName, minURSAvailed, maxURSAvailed]);
-            }
-        }
-        // sort the info by max URS availed
-        // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
-        var compareFunc = function (a, b) {
-            if (a[3] < b[3])
-                return 1;
-            if (a[3] > b[3])
-                return -1;
-            return 0;
-        };
-        URSAvailedInfoArray.sort(compareFunc);
-        return callback(null, URSAvailedInfoArray);
     });
 };

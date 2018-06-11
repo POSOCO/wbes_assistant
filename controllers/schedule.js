@@ -5,6 +5,7 @@ var router = require('express').Router();
 var WBESUtils = require("../utils/wbesUtils");
 var Revision = require("../models/revision");
 var Schedule = require("../models/schedule");
+var ScheduleNR = require("../models/schedule_nr");
 
 router.get('/surrenders', function (req, res) {
     var utilId = req.query.util_id;
@@ -81,6 +82,36 @@ router.get('/urs_summary', function (req, res) {
             return;
         }
         res.json({summary_array: ursSummaryArray});
+    });
+});
+
+router.get('/dc_nr', function (req, res) {
+    var utilId = req.query.util_id;
+    var rev = req.query.rev;
+    var dateStr = req.query.date_str;
+    ScheduleNR.getIsgsDcObj(dateStr, rev, utilId, function (err, dcObj) {
+        if (err) {
+            res.json({err: err});
+            return;
+        }
+        res.json(dcObj);
+    });
+});
+
+router.get('/net_sch_nr', function (req, res) {
+    var utilId = req.query.util_id;
+    var rev = req.query.rev;
+    var dateStr = req.query.date_str;
+    var isSeller = req.query.is_seller;
+    if (isSeller == 'true') {
+        isSeller = true;
+    }
+    ScheduleNR.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+        if (err) {
+            res.json({err: err});
+            return;
+        }
+        res.json(netSchObj);
     });
 });
 
