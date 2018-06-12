@@ -57,8 +57,8 @@ var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId,
             } else {
                 dcType = dcType.trim().toLowerCase();
             }
-            var dcTypeStrDict = { 'dc':'on_bar_dc', 'combineddc':'on_bar_dc', 'onbardc': 'on_bar_dc', 'offbardc': 'off_bar_dc', 'total': 'total_dc' };
-            if (['onbardc', 'offbardc', 'total', 'combineddc','dc'].indexOf(dcType) > -1) {
+            var dcTypeStrDict = { 'sellerdc': 'total_dc', 'dc':'on_bar_dc', 'combineddc':'on_bar_dc', 'onbardc': 'on_bar_dc', 'offbardc': 'off_bar_dc', 'total': 'total_dc' };
+            if (['onbardc', 'offbardc', 'total', 'combineddc','dc', 'sellerdc'].indexOf(dcType) > -1) {
                 // fill the dc values in the appropriate object array
                 var dcValsList = [];
                 for (var matrixRow = 2; matrixRow < Math.min(dcMatrixArray.length, 98); matrixRow++) {
