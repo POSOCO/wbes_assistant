@@ -23,6 +23,18 @@ var getRevisions = function (callback) {
     });
 };
 
+var getRevisionsNR = function (callback) {
+    var todayDate = new Date();
+    var date_str = StrUtils.makeTwoDigits(todayDate.getDate()) + "-" + StrUtils.makeTwoDigits(todayDate.getMonth() + 1) + "-" + todayDate.getFullYear();
+    Revision.getNRRevisionsForDate(date_str, function (err, revList) {
+        if (err) {
+            console.log("error at getRevisions controller");
+            return callback(err);
+        }
+        return callback(null, {'revisions': revList, date_str: date_str});
+    });
+};
+
 var getEntUtils = function (resObj, callback) {
     Utility.getUtilities(true, function (err, utilsObj) {
         if (err) {
@@ -94,6 +106,16 @@ router.get('/urs_summary', function (req, res, next) {
             return next(err);
         }
         res.render('urs_summary', resObj);
+    });
+});
+
+router.get('/margins_nr', function (req, res, next) {
+    var tasksArray = [getRevisionsNR];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('margins_nr', resObj);
     });
 });
 
