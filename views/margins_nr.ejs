@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>ISGS Margins</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+<%- include header_partial.ejs %>
+<h3>See ISGS Margins</h3>
+<input type="text" id='date_input' value="">
+<button onclick="refreshRevisions()">Refresh Revisions</button>
+<input type="text" id='from_blk' value="1">
+<input type="text" id='to_blk' value="96">
+<select name="revisions" id="revisions"></select>
+
+<button onclick="getMargins()">Get Margins</button>
+<span id='fetchStatusLabel'></span>
+
+<div id="dcPlotsDiv" style="width: 90%; float: left"></div>
+<div id="reserveInfoDiv" style="width: 9%;float: left;margin-top: 50px;"></div>
+
+<table id="dcTable" name="dcTable" style="margin-top: 8px"></table>
+<button id="exportBtn" onclick="exportTableToCSV('margin_export.csv')">Export Table</button>
+<script>
+    var revs_ = <%- JSON.stringify(revisions)%>;
+    var dateStr_ = <%- JSON.stringify(date_str)%>;
+</script>
+<script src="./libs/js/jquery.min.js"></script>
+<script src="./libs/js/plotly.min.js"></script>
+<script src="domUtils.js"></script>
+<script src="revision.js"></script>
+<script src="margins_nr.js"></script>
+</body>
+</html>
