@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>ISGS Margins</title>
+    <title>NR ISGS Margins</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="home.css">
 </head>
@@ -16,7 +16,12 @@
 <button onclick="getMargins()">Get Margins</button>
 <span id='fetchStatusLabel'></span>
 
-<div id="dcPlotsDiv" style="width: 90%; float: left"></div>
+<div style="width: 90%; float: left">
+    <div id="dcPlotsDiv"></div>
+    <div id="genSelectionDiv"></div>
+    <button id="selectAllGenBtn" onclick="selectAllGen()">Select All</button>
+    <button id="deselectAllGenBtn" onclick="deselectAllGen()">Deselect All</button>
+</div>
 <div id="reserveInfoDiv" style="width: 9%;float: left;margin-top: 50px;"></div>
 
 <table id="dcTable" name="dcTable" style="margin-top: 8px"></table>

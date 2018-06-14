@@ -3,9 +3,13 @@
  */
 window.onload = doOnLoadStuff();
 
+var isCheckBoxesListCreated = false;
+var initialDesiredGenerators = ['ANTA', 'AURY', 'CHAMERA2', 'CHAMERA3', 'DADRI', 'DADRT2', 'DHAULIGNGA', 'DULHASTI', 'JHAJJAR', 'KISHANGANGA', 'KOLDAM', 'KOTESHWR', 'NAPP', 'NJPC', 'PARBATI3', 'RAMPUR', 'RAPPC', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SEWA2', 'SINGRAULI', 'SINGRAULI_HYDRO', 'TEHRI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4', 'URI2'];
+
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
     updateRevsList(revs_);
+    getMargins();
 }
 
 function getMargins() {
@@ -115,7 +119,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 // copy the dcMatrixObj for adding schedules also
                 var dcSchMatrixObj = dcMatrixObj;
                 // initialise the net schedule attributes of the dcSchMatrixObj to 0
-                var zeroValues = function(){
+                var zeroValues = function () {
                     var zeroValuesArray = [];
                     for (var i = 0; i < 96; i++) {
                         zeroValuesArray.push(0);
@@ -182,6 +186,32 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 createTable(resMatrix, document.getElementById('dcTable'));
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
 
+                // Now create the checkbox list
+                if (isCheckBoxesListCreated == false) {
+                    var genSelectionDiv = document.getElementById('genSelectionDiv');
+                    genSelectionDiv.innerHTML = '';
+                    for (var k = 0; k < dcSchMatrixObj["gen_names"].length; k++) {
+                        var genName = dcSchMatrixObj["gen_names"][k];
+                        //check if the genName is a desired one
+                        var checkedString = '';
+                        if (initialDesiredGenerators.indexOf(genName) > -1) {
+                            checkedString = ' checked';
+                        }
+                        genSelectionDiv.innerHTML += '<label style="margin-right:20px"><input type="checkbox" class="gen_select" onclick="getMargins()"' + checkedString + ' value="' + genName + '"> ' + genName + '</label>';
+                    }
+                    isCheckBoxesListCreated = true;
+                }
+
+                // find the required generators from checkboxes
+                var genSelectionElements = document.getElementsByClassName("gen_select");
+                activeGenerators = [];
+                for (var i = 0; i < genSelectionElements.length; i++) {
+                    var isCheckedStatus = genSelectionElements[i].checked;
+                    if (typeof isCheckedStatus != "undefined" && isCheckedStatus == true) {
+                        activeGenerators.push(genSelectionElements[i].value);
+                    }
+                }
+
                 var dcPlotsDiv = document.getElementById("dcPlotsDiv");
                 dcPlotsDiv.innerHTML = '';
 
@@ -194,8 +224,10 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 dcPlotsDiv.appendChild(div);
                 for (var k = 0; k < dcSchMatrixObj["gen_names"].length; k++) {
                     // dynamically create divs - https://stackoverflow.com/questions/14094697/javascript-how-to-create-new-div-dynamically-change-it-move-it-modify-it-in
-                    //stub todo create the margins plot
-                    var genName = dcSchMatrixObj["gen_names"][k];
+                    genName = dcSchMatrixObj["gen_names"][k];
+                    if (activeGenerators.length != 0 && activeGenerators.indexOf(genName) == -1) {
+                        continue;
+                    }
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['margin']).map(Number),
@@ -219,7 +251,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         },
                         orientation: "h"
                     },
-                    margin: {'t': 35},
+                    margin: { 't': 35 },
                     height: 800
                 };
                 Plotly.newPlot(div, stackedArea(traces), layout);
@@ -267,4 +299,20 @@ function fetchNetSchAfterDC(dcMatrixObj) {
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
     });
+}
+
+function selectAllGen() {
+    var genSelectionElements = document.getElementsByClassName("gen_select");
+    for (var i = 0; i < genSelectionElements.length; i++) {
+        genSelectionElements[i].checked = true;
+    }
+    getMargins();
+}
+
+function deselectAllGen() {
+    var genSelectionElements = document.getElementsByClassName("gen_select");
+    for (var i = 0; i < genSelectionElements.length; i++) {
+        genSelectionElements[i].checked = false;
+    }
+    getMargins();
 }

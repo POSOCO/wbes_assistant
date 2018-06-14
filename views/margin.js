@@ -19,6 +19,7 @@ function doOnLoadStuff() {
         option.setAttribute('data-is_seller', 'true');
         utilSelEl.add(option);
     }
+    getMargins();
 }
 
 function acronymFromNetSchAcronym(acr) {
