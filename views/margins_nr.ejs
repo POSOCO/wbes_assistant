@@ -6,15 +6,7 @@
 </head>
 <body>
 <%- include header_partial.ejs %>
-<h3>See ISGS Margins</h3>
-<input type="text" id='date_input' value="">
-<button onclick="refreshRevisions()">Refresh Revisions</button>
-<input type="text" id='from_blk' value="1">
-<input type="text" id='to_blk' value="96">
-<select name="revisions" id="revisions"></select>
-
-<button onclick="getMargins()">Get Margins</button>
-<span id='fetchStatusLabel'></span>
+<h2 style='text-align: center;'>NR ISGS Margins</h2>
 
 <div style="width: 90%; float: left">
     <div id="dcPlotsDiv"></div>
@@ -23,6 +15,18 @@
     <button id="deselectAllGenBtn" onclick="deselectAllGen()">Deselect All</button>
 </div>
 <div id="reserveInfoDiv" style="width: 9%;float: left;margin-top: 50px;"></div>
+
+<div style="clear: both;">
+    <br>
+    <input type="text" id='date_input' value="">
+    <button onclick="refreshRevisions()">Refresh Revisions</button>
+    <input type="text" id='from_blk' value="1">
+    <input type="text" id='to_blk' value="96">
+    <select name="revisions" id="revisions"></select>
+
+    <button onclick="getMargins()">Get Margins</button>
+    <span id='fetchStatusLabel'></span>
+</div>
 
 <table id="dcTable" name="dcTable" style="margin-top: 8px"></table>
 <button id="exportBtn" onclick="exportTableToCSV('margin_export.csv')">Export Table</button>
