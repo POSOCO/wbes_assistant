@@ -27,7 +27,7 @@ function updateMarginTimerPeriodFromUI(){
     var marginFetchPeriodInput = document.getElementById("marginFetchPeriodInput");
     if(marginFetchPeriodInput){
         var marginFetchPeriodMins = marginFetchPeriodInput.value;
-        updateMarginTimerPeriod(marginFetchPeriodMins*60*60*1000);
+        updateMarginTimerPeriod(marginFetchPeriodMins*60*1000);
     }
 }
 
@@ -45,8 +45,9 @@ function updateNonNegativeHideState(){
 
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
-    updateRevsList(revs_);    
-    getMargins();
+    updateRevsList(revs_);
+    //getMargins();
+    updateTimerCallback();
 }
 
 function getMargins() {
@@ -108,8 +109,10 @@ function getMargins() {
                 createTable(resMatrix, document.getElementById('dcTable'));
                 document.getElementById('fetchStatusLabel').innerHTML = 'dc fetching and table update done!';
 
+                /*
                 var dcPlotsDiv = document.getElementById("dcPlotsDiv");
                 dcPlotsDiv.innerHTML = '';
+                */
 
                 var xLabels = dcMatrixObj["time_blocks"].map(Number);
                 document.getElementById('fetchStatusLabel').innerHTML = 'fetching DC values done!';
