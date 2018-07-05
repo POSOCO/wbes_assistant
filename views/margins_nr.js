@@ -6,6 +6,35 @@ window.onload = doOnLoadStuff();
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = ['ANTA', 'AURY', 'CHAMERA2', 'CHAMERA3', 'DADRI', 'DADRT2', 'DHAULIGNGA', 'DULHASTI', 'JHAJJAR', 'KISHANGANGA', 'KOLDAM', 'KOTESHWR', 'NAPP', 'NJPC', 'PARBATI3', 'RAMPUR', 'RAPPC', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SEWA2', 'SINGRAULI', 'SINGRAULI_HYDRO', 'TEHRI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4', 'URI2'];
 var hideNegativeMargins = true;
+var marginReloadTimerId = null;
+var marginReloadMills = 300000; // 5 mins
+
+function stopMarginTimer(){
+    clearInterval(marginReloadTimerId);
+}
+
+function updateMarginTimerPeriod(periodMilli){
+    marginReloadMills = periodMilli;
+}
+
+function configMarginTimer(){
+    stopMarginTimer();
+    marginReloadTimerId = setInterval(getMargins, marginReloadMills);
+    getMargins();
+}
+
+function updateMarginTimerPeriodFromUI(){
+    var marginFetchPeriodInput = document.getElementById("marginFetchPeriodInput");
+    if(marginFetchPeriodInput){
+        var marginFetchPeriodMins = marginFetchPeriodInput.value;
+        updateMarginTimerPeriod(marginFetchPeriodMins*60*60*1000);
+    }
+}
+
+function updateTimerCallback(){
+    updateMarginTimerPeriodFromUI();
+    configMarginTimer();
+}
 
 function updateNonNegativeHideState(){
     var hideNegativeCheckbox = document.getElementById("hideNegativeCheckbox");
