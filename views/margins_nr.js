@@ -5,14 +5,23 @@ window.onload = doOnLoadStuff();
 
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = ['ANTA', 'AURY', 'CHAMERA2', 'CHAMERA3', 'DADRI', 'DADRT2', 'DHAULIGNGA', 'DULHASTI', 'JHAJJAR', 'KISHANGANGA', 'KOLDAM', 'KOTESHWR', 'NAPP', 'NJPC', 'PARBATI3', 'RAMPUR', 'RAPPC', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SEWA2', 'SINGRAULI', 'SINGRAULI_HYDRO', 'TEHRI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4', 'URI2'];
+var hideNegativeMargins = true;
+
+function updateNonNegativeHideState(){
+    var hideNegativeCheckbox = document.getElementById("hideNegativeCheckbox");
+    if(hideNegativeCheckbox){
+        hideNegativeMargins = hideNegativeCheckbox.checked;
+    }
+}
 
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
-    updateRevsList(revs_);
+    updateRevsList(revs_);    
     getMargins();
 }
 
 function getMargins() {
+    updateNonNegativeHideState();
     var revSelEl = document.getElementById("revisions");
     var rev = revSelEl.options[revSelEl.selectedIndex].value;
     var date_str = document.getElementById('date_input').value;
@@ -146,7 +155,11 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     if (dcSchMatrixObj[dcGenNames[i]] != undefined) {
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
                         for (var k = 0; k < 96; k++) {
-                            dcSchMatrixObj[dcGenNames[i]]['margin'][k] = (+dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k]) - (+dcSchMatrixObj[dcGenNames[i]]['total'][k]);
+                            var marginTemp = (+dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k]) - (+dcSchMatrixObj[dcGenNames[i]]['total'][k]);
+                            if((hideNegativeMargins != false) && (marginTemp < 0)){
+                                marginTemp = 0
+                            }
+                            dcSchMatrixObj[dcGenNames[i]]['margin'][k] = marginTemp;
                         }
                     } else {
                         // todo handle separately if dc gen name of a corresponding net sch gen name is not found
