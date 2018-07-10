@@ -1,13 +1,14 @@
 /**
  * Created by Nagasudhir on 12/5/2017.
  */
-window.onload = doOnLoadStuff();
 
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = ['ANTA', 'AURY', 'CHAMERA2', 'CHAMERA3', 'DADRI', 'DADRT2', 'DHAULIGNGA', 'DULHASTI', 'JHAJJAR', 'KISHANGANGA', 'KOLDAM', 'KOTESHWR', 'NAPP', 'NJPC', 'PARBATI3', 'RAMPUR', 'RAPPC', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SEWA2', 'SINGRAULI', 'SINGRAULI_HYDRO', 'TEHRI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4', 'URI2'];
 var hideNegativeMargins = true;
 var marginReloadTimerId = null;
 var marginReloadMills = 300000; // 5 mins
+
+window.onload = doOnLoadStuff();
 
 function stopMarginTimer(){
     clearInterval(marginReloadTimerId);
@@ -26,7 +27,7 @@ function configMarginTimer(){
 function updateMarginTimerPeriodFromUI(){
     var marginFetchPeriodInput = document.getElementById("marginFetchPeriodInput");
     if(marginFetchPeriodInput){
-        var marginFetchPeriodMins = marginFetchPeriodInput.value;
+		var marginFetchPeriodMins = marginFetchPeriodInput.value;
         updateMarginTimerPeriod(marginFetchPeriodMins*60*1000);
     }
 }
@@ -43,6 +44,33 @@ function updateNonNegativeHideState(){
     }
 }
 
+function updateDayIfTimerRunning(){
+	var updateDateCheckbox = document.getElementById("updateDateCheckbox");
+	if (updateDateCheckbox == null || updateDateCheckbox.checked != true){
+		// auto date update feature is disabled
+		return;
+	}
+    if(marginReloadTimerId != null){
+		// timer is running, check date and change to today
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+
+		var yyyy = today.getFullYear();
+		if(dd<10){
+			dd='0'+dd;
+		} 
+		if(mm<10){
+			mm='0'+mm;
+		} 
+		var todayStr = dd+'-'+mm+'-'+yyyy;
+		if(document.getElementById('date_input').value != todayStr){
+			document.getElementById('date_input').value = todayStr;
+			location.reload();
+		}		
+	}
+}
+
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
     updateRevsList(revs_);
@@ -52,6 +80,7 @@ function doOnLoadStuff() {
 
 function getMargins() {
     updateNonNegativeHideState();
+	updateDayIfTimerRunning();
     var revSelEl = document.getElementById("revisions");
     var rev = revSelEl.options[revSelEl.selectedIndex].value;
     var date_str = document.getElementById('date_input').value;
@@ -59,7 +88,7 @@ function getMargins() {
     queryStrs.push("util_id=ALL");
     queryStrs.push("rev=" + rev);
     queryStrs.push("date_str=" + date_str);
-    document.getElementById('fetchStatusLabel').innerHTML = 'fetching DC data...';
+    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching DC data...';
     $.ajax({
         //fetch categories from sever
         url: "./api/dc_nr" + "?" + queryStrs.join("&"),
@@ -67,11 +96,11 @@ function getMargins() {
         dataType: "json",
         success: function (dcMatrixObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
-            document.getElementById('fetchStatusLabel').innerHTML = 'fetching dc done!';
+            document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching dc done!';
             //console.log("DC Object fetched is " + JSON.stringify(dcMatrixObj));
             // check if dcMatrixObj is correct
             if (dcMatrixObj == undefined || dcMatrixObj == null || dcMatrixObj['gen_names'] == undefined) {
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching dc done, but response not as desired...';
+                document.getElementById('fetchStatusLabel').innerHTML =  (new Date()).toLocaleString() + ': fetching dc done, but response not as desired...';
                 return;
             }
 
@@ -107,7 +136,7 @@ function getMargins() {
                 }
                 //console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('dcTable'));
-                document.getElementById('fetchStatusLabel').innerHTML = 'dc fetching and table update done!';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': dc fetching and table update done!';
 
                 /*
                 var dcPlotsDiv = document.getElementById("dcPlotsDiv");
@@ -115,14 +144,14 @@ function getMargins() {
                 */
 
                 var xLabels = dcMatrixObj["time_blocks"].map(Number);
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching DC values done!';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching DC values done!';
                 fetchNetSchAfterDC(dcMatrixObj);
             } else {
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, dc values not found...';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching done, dc values not found...';
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching dc...';
+            document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching dc...';
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
@@ -138,7 +167,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
     queryStrs.push("rev=" + rev);
     queryStrs.push("date_str=" + date_str);
     queryStrs.push("is_seller=true");
-    document.getElementById('fetchStatusLabel').innerHTML = 'fetching Net Sch data...';
+    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching Net Sch data...';
     $.ajax({
         //fetch categories from sever
         url: "./api/net_sch_nr" + "?" + queryStrs.join("&"),
@@ -146,11 +175,11 @@ function fetchNetSchAfterDC(dcMatrixObj) {
         dataType: "json",
         success: function (netSchMatrixObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
-            document.getElementById('fetchStatusLabel').innerHTML = 'fetching net schedules done!';
+            document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching net schedules done!';
             //console.log("Net Sch Object fetched is " + JSON.stringify(netSchMatrixObj));
             // check if netSchMatrixObj is correct
             if (netSchMatrixObj == undefined || netSchMatrixObj == null || netSchMatrixObj['gen_names'] == undefined) {
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching net schedules done, but response not as desired...';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching net schedules done, but response not as desired...';
                 return;
             }
 
@@ -229,7 +258,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 }
                 //console.log(resMatrix);
                 createTable(resMatrix, document.getElementById('dcTable'));
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching and table update done!';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching and table update done!';
 
                 // Now create the checkbox list
                 if (isCheckBoxesListCreated == false) {
@@ -333,13 +362,13 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 }
 
                 // todo enable only net sch of plot in the net sch columns
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching, table, plot update done!';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching, table, plot update done!';
             } else {
-                document.getElementById('fetchStatusLabel').innerHTML = 'fetching done, net schedules values not found...';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching done, net schedules values not found...';
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            document.getElementById('fetchStatusLabel').innerHTML = 'error in fetching net schedules...';
+            document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching net schedules...';
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
