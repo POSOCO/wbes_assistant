@@ -5,82 +5,79 @@
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = ['ANTA', 'AURY', 'CHAMERA2', 'CHAMERA3', 'DADRI', 'DADRT2', 'DHAULIGNGA', 'DULHASTI', 'JHAJJAR', 'KISHANGANGA', 'KOLDAM', 'KOTESHWR', 'NAPP', 'NJPC', 'PARBATI3', 'RAMPUR', 'RAPPC', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SEWA2', 'SINGRAULI', 'SINGRAULI_HYDRO', 'TEHRI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4', 'URI2'];
 var hideNegativeMargins = true;
-var marginReloadTimerId = null;
-var marginReloadMills = 300000; // 5 mins
 
 window.onload = doOnLoadStuff();
 
-function stopMarginTimer(){
-    clearInterval(marginReloadTimerId);
-}
-
-function updateMarginTimerPeriod(periodMilli){
-    marginReloadMills = periodMilli;
-}
-
-function configMarginTimer(){
-    stopMarginTimer();
-    marginReloadTimerId = setInterval(getMargins, marginReloadMills);
+function updateTimerBtnCallback() {
+    updateTimerPeriodFromUI("marginFetchPeriodInput");
+    restartTimer(timerFunc);
     getMargins();
 }
 
-function updateMarginTimerPeriodFromUI(){
-    var marginFetchPeriodInput = document.getElementById("marginFetchPeriodInput");
-    if(marginFetchPeriodInput){
-		var marginFetchPeriodMins = marginFetchPeriodInput.value;
-        updateMarginTimerPeriod(marginFetchPeriodMins*60*1000);
-    }
-}
-
-function updateTimerCallback(){
-    updateMarginTimerPeriodFromUI();
-    configMarginTimer();
-}
-
-function updateNonNegativeHideState(){
+function updateNonNegativeHideState() {
     var hideNegativeCheckbox = document.getElementById("hideNegativeCheckbox");
-    if(hideNegativeCheckbox){
+    if (hideNegativeCheckbox) {
         hideNegativeMargins = hideNegativeCheckbox.checked;
     }
 }
 
-function updateDayIfTimerRunning(){
-	var updateDateCheckbox = document.getElementById("updateDateCheckbox");
-	if (updateDateCheckbox == null || updateDateCheckbox.checked != true){
-		// auto date update feature is disabled
-		return;
-	}
-    if(marginReloadTimerId != null){
-		// timer is running, check date and change to today
-		var today = new Date();
-		var dd = today.getDate();
-		var mm = today.getMonth()+1; //January is 0!
+function updateDateString() {
+    var updateDateCheckbox = document.getElementById("updateDateCheckbox");
+    if (updateDateCheckbox == null || updateDateCheckbox.checked != true) {
+        // auto date update feature is disabled
+        return;
+    }
+    // check date and change to today
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
 
-		var yyyy = today.getFullYear();
-		if(dd<10){
-			dd='0'+dd;
-		} 
-		if(mm<10){
-			mm='0'+mm;
-		} 
-		var todayStr = dd+'-'+mm+'-'+yyyy;
-		if(document.getElementById('date_input').value != todayStr){
-			document.getElementById('date_input').value = todayStr;
-			location.reload();
-		}		
-	}
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    var todayStr = dd + '-' + mm + '-' + yyyy;
+    if (document.getElementById('date_input').value != todayStr) {
+        document.getElementById('date_input').value = todayStr;
+    }
 }
 
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
     updateRevsList(revs_);
+    updateNonNegativeHideState();
     //getMargins();
-    updateTimerCallback();
+    updateTimerBtnCallback();
+}
+
+function timerFunc() {
+    // timer execution
+    updateDateString();
+    updateNonNegativeHideState();
+    async.waterfall([
+        function (callback) {
+            // update the revisions
+            refreshRevisionsCb(function (err, revListArray) {
+                if (!err) {
+                    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': Revisions fetched!';
+                    callback(null, true);
+                } else {
+                    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': Revisions not fetched...';
+                    callback(err);
+                }
+            });
+        }
+    ], function (err, res) {
+        // handle err if required
+        // do margin fetching
+        getMargins();
+    });
 }
 
 function getMargins() {
-    updateNonNegativeHideState();
-	updateDayIfTimerRunning();
     var revSelEl = document.getElementById("revisions");
     var rev = revSelEl.options[revSelEl.selectedIndex].value;
     var date_str = document.getElementById('date_input').value;
@@ -100,7 +97,7 @@ function getMargins() {
             //console.log("DC Object fetched is " + JSON.stringify(dcMatrixObj));
             // check if dcMatrixObj is correct
             if (dcMatrixObj == undefined || dcMatrixObj == null || dcMatrixObj['gen_names'] == undefined) {
-                document.getElementById('fetchStatusLabel').innerHTML =  (new Date()).toLocaleString() + ': fetching dc done, but response not as desired...';
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching dc done, but response not as desired...';
                 return;
             }
 
@@ -217,7 +214,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
                         for (var k = 0; k < 96; k++) {
                             var marginTemp = (+dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k]) - (+dcSchMatrixObj[dcGenNames[i]]['total'][k]);
-                            if((hideNegativeMargins != false) && (marginTemp < 0)){
+                            if ((hideNegativeMargins != false) && (marginTemp < 0)) {
                                 marginTemp = 0
                             }
                             dcSchMatrixObj[dcGenNames[i]]['margin'][k] = marginTemp;

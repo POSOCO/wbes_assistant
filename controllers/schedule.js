@@ -40,6 +40,17 @@ router.get('/revisions', function (req, res) {
     });
 });
 
+router.get('/revisions_nr', function (req, res) {
+    var dateStr = req.query.date_str;
+    Revision.getNRRevisionsForDate(dateStr, function (err, revList) {
+        if (err) {
+            res.json({err: err});
+            return;
+        }
+        res.json({revisions: revList});
+    });
+});
+
 router.get('/dc', function (req, res) {
     var utilId = req.query.util_id;
     var rev = req.query.rev;

@@ -16,8 +16,8 @@
     <label><input type="checkbox" name="hideNegativeCheckbox" id="hideNegativeCheckbox" checked onchange="getMargins()"/>Hide Non Negative Margins</label>
 	<label><input type="checkbox" name="updateDateCheckbox" id="updateDateCheckbox" checked onchange="getMargins()"/>Auto set to today date</label>
     <br>
-    <input type="number" value="5" id="marginFetchPeriodInput" name="marginFetchPeriodInput"/>
-    <button onclick="updateTimerCallback()">Update Margin Fetch Periodicity in Mins</button>
+    <input type="number" value="10" id="marginFetchPeriodInput" name="marginFetchPeriodInput"/>
+    <button onclick="updateTimerBtnCallback()">Update Margin Fetch Periodicity in Mins</button>
 </div>
 <div id="reserveInfoDiv" style="width: 9%;float: left;margin-top: 50px;"></div>
 
@@ -41,7 +41,9 @@
 </script>
 <script src="./libs/js/jquery.min.js"></script>
 <script src="./libs/js/plotly.min.js"></script>
+<script src="./libs/js/async.min.js"></script>
 <script src="domUtils.js"></script>
+<script src="timerStuff.js"></script>
 <script src="revision.js"></script>
 <script src="margins_nr.js"></script>
 </body>
