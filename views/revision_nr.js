@@ -11,7 +11,7 @@ function refreshRevisionsCb(callback) {
     var date_str = document.getElementById('date_input').value;
     $.ajax({
         //fetch revisions from sever
-        url: "./api/revisions?date_str=" + date_str,
+        url: "./api/revisions_nr?date_str=" + date_str,
         type: "GET",
         dataType: "json",
         success: function (revListObj) {
