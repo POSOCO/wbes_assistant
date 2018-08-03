@@ -221,7 +221,8 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         dcSchMatrixObj[dcGenNames[i]]['rras'] = netSchMatrixObj[genNames[i]]['rras'];
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
                         for (var k = 0; k < 96; k++) {
-                            dcSchMatrixObj[dcGenNames[i]]['margin'][k] = (+dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k]) - (+dcSchMatrixObj[dcGenNames[i]]['total'][k]);
+                            var marginTemp = (+dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k]) - (+dcSchMatrixObj[dcGenNames[i]]['total'][k]);
+							dcSchMatrixObj[dcGenNames[i]]['margin'][k] = (marginTemp > 0) ? marginTemp : 0;
                         }
                     } else {
                         // todo handle separately if dc gen name of a corresponding net sch gen name is not found
