@@ -79,7 +79,7 @@ router.get('/isgs', function (req, res, next) {
     });
 });
 
-router.get('/margins', function (req, res, next) {
+router.get('/margins_wr', function (req, res, next) {
     var tasksArray = [getRevisions, getEntUtils, getUtils];
     async.waterfall(tasksArray, function (err, resObj) {
         if (err) {
@@ -119,4 +119,13 @@ router.get('/margins_nr', function (req, res, next) {
     });
 });
 
+router.get('/margins', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('margins_wr', resObj);
+    });
+});
 module.exports = router;
