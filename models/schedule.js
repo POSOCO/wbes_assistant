@@ -2,6 +2,7 @@
  * Created by Nagasudhir on 12/10/2017.
  */
 var WBESUtils = require("../utils/wbesUtils");
+var WBESDcSchUtils = require("../utils/wbesDCSchUtils");
 var ArrayHelper = require('../helpers/arrayHelpers');
 
 var getIsgsDcObj = module.exports.getIsgsDcObj = function (dateStr, rev, utilId, callback) {
@@ -199,3 +200,14 @@ var getISGSURSAvailedObj = module.exports.getISGSURSAvailedObj = function (dateS
         return callback(null, URSAvailedInfoArray);
     });
 };
+
+var getISGSDCSchObj = module.exports.getISGSDCSchObj = function (utilId, dateStr, rev, callback) {
+    WBESDcSchUtils.getIsgsDcOnbarSchObj(dateStr,rev,utilId,function (err, dcSchObj) {
+        if (err) {
+            callback(new Error(err));
+            return;
+        }
+        return callback(null, dcSchObj);
+    });
+    
+}

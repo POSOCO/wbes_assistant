@@ -26,6 +26,8 @@ var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl
 var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
 var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0";
+// string parameters --> baseUrl, date_str, rev, utilId
+var isgsOnbarSchFetchUrl = module.exports.isgsOnbarSchFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=1";
 // string parameters --> baseUrl, date_str, utilId, rev, timestamp
 var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
 var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
