@@ -125,7 +125,7 @@ router.get('/margins', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        res.render('margins_wr', resObj);
+        res.render('margins_wr_v2', resObj);
     });
 });
 module.exports = router;
