@@ -233,6 +233,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['pxi'] = zeroValues();
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['urs'] = zeroValues();
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['rras'] = zeroValues();
+                    dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['sced'] = zeroValues();
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['total'] = zeroValues();
                     dcSchMatrixObj[dcSchMatrixObj["gen_names"][i]]['margin'] = zeroValues();
                 }
@@ -260,6 +261,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         dcSchMatrixObj[dcGenNames[i]]['pxi'] = netSchMatrixObj[genNames[i]]['pxi'];
                         dcSchMatrixObj[dcGenNames[i]]['urs'] = netSchMatrixObj[genNames[i]]['urs'];
                         dcSchMatrixObj[dcGenNames[i]]['rras'] = netSchMatrixObj[genNames[i]]['rras'];
+                        dcSchMatrixObj[dcGenNames[i]]['sced'] = netSchMatrixObj[genNames[i]]['sced'];
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
                         for (var k = 0; k < 96; k++) {
                             dcSchMatrixObj[dcGenNames[i]]['margin'][k] = +dcSchMatrixObj[dcGenNames[i]]['on_bar_dc'][k] - +netSchMatrixObj[genNames[i]]['total'][k];
@@ -277,8 +279,8 @@ function fetchNetSchAfterDC(dcMatrixObj) {
 
                 for (var i = 0; i < dcSchMatrixObj["gen_names"].length; i++) {
                     var genName = dcSchMatrixObj["gen_names"][i];
-                    row = row.concat([genName, genName, genName, genName, genName, genName, genName, genName, genName, genName, genName]);
-                    row2 = row2.concat(['OnBar', 'OffBar', 'Total DC', 'ISGS', 'MTOA', 'LTA', 'STOA', 'IEX', 'PXI', 'URS', 'RRAS', 'Net Schedule']);
+                    row = row.concat([genName, genName, genName, genName, genName, genName, genName, genName, genName, genName, genName, genName, genName]);
+                    row2 = row2.concat(['OnBar', 'OffBar', 'Total DC', 'ISGS', 'MTOA', 'LTA', 'STOA', 'IEX', 'PXI', 'URS', 'RRAS', 'SCED', 'Net Schedule']);
                 }
                 resMatrix.push(row);
                 resMatrix.push(row2);
@@ -302,8 +304,9 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         var pxiVal = (+dcSchMatrixObj[genName]['pxi'][blk - 1]).toFixed(0);
                         var ursVal = (+dcSchMatrixObj[genName]['urs'][blk - 1]).toFixed(0);
                         var rrasVal = (+dcSchMatrixObj[genName]['rras'][blk - 1]).toFixed(0);
+                        var scedVal = (+dcSchMatrixObj[genName]['sced'][blk - 1]).toFixed(0);
                         var totalVal = (+dcSchMatrixObj[genName]['total'][blk - 1]).toFixed(0);
-                        row = row.concat([onBarDCVal, offBarDCVal, totDCVal, isgsVal, mtoaVal, stoaVal, ltaVal, iexVal, pxiVal, ursVal, rrasVal, totalVal]);
+                        row = row.concat([onBarDCVal, offBarDCVal, totDCVal, isgsVal, mtoaVal, stoaVal, ltaVal, iexVal, pxiVal, ursVal, rrasVal, scedVal, totalVal]);
                     }
                     resMatrix.push(row);
                 }
@@ -379,6 +382,11 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['rras']).map(Number),
                         name: "RRAS"
+                    });
+                    traces.push({
+                        x: xLabels,
+                        y: (dcSchMatrixObj[genName]['sced']).map(Number),
+                        name: "SCED"
                     });
                     traces.push({
                         x: xLabels,
