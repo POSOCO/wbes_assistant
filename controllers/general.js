@@ -128,4 +128,14 @@ router.get('/margins', function (req, res, next) {
         res.render('margins_wr_v2', resObj);
     });
 });
+
+router.get('/sced_wr', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('sced_wr', resObj);
+    });
+});
 module.exports = router;
