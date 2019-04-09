@@ -5,7 +5,7 @@
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = [];
 var hideNegativeSced = false;
-var global_g = { 'scedObj': {}, 'plot_title':'SCED Plot' };
+var global_g = { 'scedObj': {}, 'plot_title': 'SCED Plot' };
 
 window.onload = doOnLoadStuff();
 
@@ -212,11 +212,11 @@ function updatePlot() {
         traces.push({
             x: xLabels,
             y: (scedObj[genName]['sced']).map(Number),
-            fill: 'tonexty',
+            type: 'bar',
             name: genName
         });
     }
-    traces[0].fill = 'tozeroy';
+    
     var layout = {
         title: global_g['plot_title'],
         xaxis: {
@@ -232,10 +232,11 @@ function updatePlot() {
             },
             orientation: "h"
         },
+        barmode: 'relative',
         margin: { 't': 35 },
         height: 800
     };
-    Plotly.newPlot(div, stackedArea(traces), layout);
+    Plotly.newPlot(div, traces, layout);
     div
         .on('plotly_hover', function (data) {
             if (data.points.length > 0) {
@@ -251,22 +252,6 @@ function updatePlot() {
         .on('plotly_unhover', function (data) {
             //document.getElementById("reserveInfoDiv").innerHTML = '';
         });
-    function stackedArea(traces) {
-        var i, j;
-        for (i = 0; i < traces.length; i++) {
-            traces[i].text = [];
-            traces[i].hoverinfo = 'text';
-            for (j = 0; j < (traces[i]['y'].length); j++) {
-                traces[i].text.push(traces[i]['name'] + " (" + traces[i]['y'][j].toFixed(0) + ")");
-            }
-        }
-        for (i = 1; i < traces.length; i++) {
-            for (j = 0; j < (Math.min(traces[i]['y'].length, traces[i - 1]['y'].length)); j++) {
-                traces[i]['y'][j] += traces[i - 1]['y'][j];
-            }
-        }
-        return traces;
-    }
 
     document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching, table, plot update done!';
 }
