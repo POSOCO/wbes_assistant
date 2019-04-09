@@ -1,0 +1,23 @@
+<html>
+
+<head>
+    <title>ISGS Variable Costs Rs/kWH</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="rates_wr.css">
+</head>
+
+<body>
+    <%- include header_partial.ejs %>
+    <h3>ISGS Variable Costs</h3>
+    <div id='ratesFormDiv'>
+        <table id='ratesFormTable'></table>
+        <button onclick="submitGenRates()">Submit</button>
+    </div>
+    <script>
+        var ratesObj_ = <%- JSON.stringify(rates) %>;
+    </script>
+    <script src="./libs/js/jquery.min.js"></script>
+    <script src="rates_wr.js"></script>
+</body>
+
+</html>
