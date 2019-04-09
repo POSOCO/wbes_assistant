@@ -4,6 +4,7 @@
 var router = require('express').Router();
 var Revision = require('../models/revision');
 var Utility = require('../models/utility');
+var Rates = require('../models/rates');
 var StrUtils = require('../utils/stringUtils');
 var async = require('async');
 
@@ -136,6 +137,15 @@ router.get('/sced_wr', function (req, res, next) {
             return next(err);
         }
         res.render('sced_wr', resObj);
+    });
+});
+
+router.get('/rates_wr', function (req, res, next) {
+    Rates.getVariableCosts(function (err, ratesObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('rates_wr', ratesObj);
     });
 });
 module.exports = router;
