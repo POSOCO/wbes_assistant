@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>WR ISGS SCED</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+<%- include header_partial.ejs %>
+<h2 style='text-align: center;'>WR ISGS SCED</h2>
+
+<div style="width: 90%; float: left">
+    <div id="dcPlotsDiv"></div>
+    <div id="genSelectionDiv"></div>
+    <button id="selectAllGenBtn" onclick="selectAllGen()">Select All</button>
+    <button id="deselectAllGenBtn" onclick="deselectAllGen()">Deselect All</button>
+    <label><input type="checkbox" name="hideNegativeCheckbox" id="hideNegativeCheckbox" onchange="getSced()"/>Hide Non Negative SCED</label>
+	<label><input type="checkbox" name="updateDateCheckbox" id="updateDateCheckbox" checked onchange="getSced()"/>Auto set to today date</label>
+    <br>
+    <input type="number" value="10" id="scedFetchPeriodInput" name="scedFetchPeriodInput"/>
+    <button onclick="updateTimerBtnCallback()">Update SCED Fetch Periodicity in Mins</button>
+</div>
+<div id="reserveInfoDiv" style="width: 9%;float: left;margin-top: 50px;"></div>
+
+<div style="clear: both;">
+    <br>
+    <input type="text" id='date_input' value="">
+    <button onclick="refreshRevisions()">Refresh Revisions</button>
+    <select name="revisions" id="revisions"></select>
+
+    <button onclick="getSced()">Get SCED</button>
+    <span id='fetchStatusLabel'></span>
+</div>
+
+<table id="dcTable" name="dcTable" style="margin-top: 8px"></table>
+<button id="exportBtn" onclick="exportTableToCSV('sced_export.csv')">Export Table</button>
+<script>
+    var revs_ = <%- JSON.stringify(revisions)%>;
+    var dateStr_ = <%- JSON.stringify(date_str)%>;
+</script>
+<script src="./libs/js/jquery.min.js"></script>
+<script src="./libs/js/plotly.min.js"></script>
+<script src="./libs/js/async.min.js"></script>
+<script src="domUtils.js"></script>
+<script src="timerStuff.js"></script>
+<script src="revision.js"></script>
+<script src="sced_wr.js"></script>
+</body>
+</html>
