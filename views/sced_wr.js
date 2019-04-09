@@ -203,19 +203,40 @@ function updatePlot() {
     div.id = 'plotDiv_0';
     div.style.border = '1px gray dashed';
     dcPlotsDiv.appendChild(div);
+    // initialize netScedVals array
+    var netScedVals = [];
     for (var k = 0; k < scedObj["gen_names"].length; k++) {
         // dynamically create divs - https://stackoverflow.com/questions/14094697/javascript-how-to-create-new-div-dynamically-change-it-move-it-modify-it-in
         genName = scedObj["gen_names"][k];
         if (activeGenerators.length != 0 && activeGenerators.indexOf(genName) == -1) {
             continue;
         }
+        var schVals = (scedObj[genName]['sced']).map(Number);
         traces.push({
             x: xLabels,
-            y: (scedObj[genName]['sced']).map(Number),
+            y: schVals,
             type: 'bar',
             name: genName
         });
+        if (netScedVals.length == 0) {
+            netScedVals = schVals
+        } else {
+            // adding 2 arrays - https://stackoverflow.com/questions/24094466/javascript-sum-two-arrays-in-single-iteration
+            netScedVals = netScedVals.map(function (num, idx) {
+                return num + schVals[idx];
+            });
+        }
     }
+    // adding net sced line plot
+    traces.push({
+        x: xLabels,
+        y: schVals,
+        type: 'lines',
+        line: {
+            width: 3
+        },
+        name: 'Net SCED'
+    });
 
     var layout = {
         title: global_g['plot_title'],
