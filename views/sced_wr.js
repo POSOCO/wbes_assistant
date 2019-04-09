@@ -3,7 +3,7 @@
  */
 
 var isCheckBoxesListCreated = false;
-var initialDesiredGenerators = [];
+var initialDesiredGenerators = ["CGPL", "KSTPS_I&II", "KSTPS7", "MOUDA", "MOUDA_II", "NSPCL", "SASAN", "SIPAT_I", "SIPAT_II", "SOLAPUR", "VSTPS_I", "VSTPS_II", "VSTPS_III", "VSTPS_IV", "VSTPS_V"];
 var hideNegativeSced = false;
 var global_g = { 'scedObj': {}, 'plot_title': 'SCED Plot' };
 
@@ -216,7 +216,7 @@ function updatePlot() {
             name: genName
         });
     }
-    
+
     var layout = {
         title: global_g['plot_title'],
         xaxis: {
@@ -244,7 +244,7 @@ function updatePlot() {
                 var textDataArray = document.getElementById("plotDiv_0").data;
                 var infoStrings = [];
                 for (var i = textDataArray.length - 1; i >= 0; i--) {
-                    infoStrings.push(textDataArray[i]['text'][pointIndex]);
+                    infoStrings.push(textDataArray[i]['name'] + " ( " + textDataArray[i]['y'][pointIndex] + " )");
                 }
                 document.getElementById("reserveInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
             }
