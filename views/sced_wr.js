@@ -225,12 +225,16 @@ function updatePlot() {
             netScedVals = netScedVals.map(function (num, idx) {
                 return num + schVals[idx];
             });
+            /* for (let schIter = 0; schIter < schVals.length; schIter++) {
+                netScedVals[schIter] += schVals[schIter];
+
+            } */
         }
     }
     // adding net sced line plot
     traces.push({
         x: xLabels,
-        y: schVals,
+        y: netScedVals,
         type: 'lines',
         line: {
             width: 3
