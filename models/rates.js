@@ -14,20 +14,18 @@ module.exports.setVariableCosts = function (ratesObj, callback) {
     var ratesObj;
     readFile(__dirname + '/rates.json', 'utf8', function (err, data) {
         if (err) { return callback(err); }
-        ratesObj = JSON.parse(data);
-        for (var gen in rates) {
-            if (rates.hasOwnProperty(gen)) {
-                ratesObj[gen] = rates[gen];
-            }
+        var systemRates = JSON.parse(data);
+        for (var gen in ratesObj) {
+            systemRates[gen] = Number(ratesObj[gen]);
         }
-        var jsonContent = JSON.stringify(ratesObj);
+        var jsonContent = JSON.stringify(systemRates);
         writeFile(__dirname + '/rates.json', jsonContent, 'utf8', function (err) {
             if (err) {
-                console.log("An error occured while writing JSON Object to File.");
+                console.log("An error occured while writing rates JSON Object to File.");
                 return callback(err);
             }
-
             console.log("JSON file has been saved.");
+            callback(null, { 'rates': systemRates });
         });
     });
 }

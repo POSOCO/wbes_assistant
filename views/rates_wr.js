@@ -29,6 +29,7 @@ function createRateEntryInput(gen, genRate) {
     var genRateInp = document.createElement('input');
     genRateInp.value = genRate;
     genRateInp.type = 'number';
+    genRateInp.step = "0.01";
     genRateInp.setAttribute('gen', gen);
     genRateInp.className += ' rate_inp';
     genNameCell.appendChild(genNameSpan);
@@ -52,5 +53,12 @@ function deriveGenRatesPayload() {
 
 function submitGenRates() {
     var genRatesObj = deriveGenRatesPayload();
+    $.post("./api/rates_wr", genRatesObj, function (data, status) {
+        if (status == "success") {
+            alert(data.message);
+        } else {
+            alert("Error saving data...");
+        }
+    });
     console.log(genRatesObj);
 }

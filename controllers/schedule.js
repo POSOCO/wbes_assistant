@@ -6,6 +6,7 @@ var WBESUtils = require("../utils/wbesUtils");
 var Revision = require("../models/revision");
 var Schedule = require("../models/schedule");
 var ScheduleNR = require("../models/schedule_nr");
+var RatesModel = require("../models/rates");
 
 router.get('/surrenders', function (req, res) {
     var utilId = req.query.util_id;
@@ -182,6 +183,21 @@ router.get('/sced', function (req, res) {
             scedObj[genName]['sced'] = netSchObj[genName]['sced'];
         }
         res.json(scedObj);
+    });
+});
+
+router.post('/rates_wr', function (req, res) {
+    var ratesObj = req.body;
+    //console.log("rates for saving is " + ratesObj);
+    RatesModel.setVariableCosts(ratesObj, function (err, ratesObj) {
+        if (err) {
+            // console.log(err);
+            res.json({ err: err });
+            return;
+        }
+        console.log("rates json object was saved successfully...");
+        //console.log(ratesObj);
+        res.json({ "message": "saved...", ratesObj });
     });
 });
 
