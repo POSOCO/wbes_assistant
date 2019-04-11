@@ -5,7 +5,7 @@
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = ["CGPL", "KSTPS_I&II", "KSTPS7", "MOUDA", "MOUDA_II", "NSPCL", "SASAN", "SIPAT_I", "SIPAT_II", "SOLAPUR", "VSTPS_I", "VSTPS_II", "VSTPS_III", "VSTPS_IV", "VSTPS_V"];
 var hideNegativeSced = false;
-var global_g = { 'scedObj': {}, 'plot_title': 'SCED Plot' };
+var global_g = { 'scedObj': {}, 'plot_title': 'SCED Plot', 'ratesObj': {} };
 
 window.onload = doOnLoadStuff();
 
@@ -49,6 +49,7 @@ function updateDateString() {
 function doOnLoadStuff() {
     document.getElementById('date_input').value = dateStr_;
     updateRevsList(revs_);
+    updateRatesObj();
     updateNonNegativeHideState();
     //getMargins();
     updateTimerBtnCallback();
@@ -154,8 +155,8 @@ function getSced() {
                 }
                 isCheckBoxesListCreated = true;
             }
-            global_g['plot_title'] = 'SCED for date ' + date_str + ' and Revision ' + rev;
-            updatePlot();
+            global_g['plot_title'] = ' for date ' + date_str + ' and Revision ' + rev;
+            updatePlots();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching SCED ...';
@@ -170,7 +171,7 @@ function selectAllGen() {
     for (var i = 0; i < genSelectionElements.length; i++) {
         genSelectionElements[i].checked = true;
     }
-    updatePlot();
+    updatePlots();
 }
 
 function deselectAllGen() {
@@ -178,20 +179,26 @@ function deselectAllGen() {
     for (var i = 0; i < genSelectionElements.length; i++) {
         genSelectionElements[i].checked = false;
     }
-    updatePlot();
+    updatePlots();
 }
 
-function updatePlot() {
-    var scedObj = global_g['scedObj'];
+function getSelectedGenerators() {
     // find the required generators from checkboxes
     var genSelectionElements = document.getElementsByClassName("gen_select");
-    activeGenerators = [];
+    var activeGenerators = [];
     for (var i = 0; i < genSelectionElements.length; i++) {
         var isCheckedStatus = genSelectionElements[i].checked;
         if (typeof isCheckedStatus != "undefined" && isCheckedStatus == true) {
             activeGenerators.push(genSelectionElements[i].value);
         }
     }
+    return activeGenerators;
+}
+
+function updatePlots() {
+    var scedObj = global_g['scedObj'];
+
+    var activeGenerators = getSelectedGenerators();
     // Plot the SCED values
     var dcPlotsDiv = document.getElementById("dcPlotsDiv");
     dcPlotsDiv.innerHTML = '';
@@ -243,7 +250,7 @@ function updatePlot() {
     });
 
     var layout = {
-        title: global_g['plot_title'],
+        title: "SCED" + global_g['plot_title'],
         xaxis: {
             title: 'Block Number',
             dtick: 4
@@ -272,6 +279,145 @@ function updatePlot() {
                     infoStrings.push(textDataArray[i]['name'] + " ( " + textDataArray[i]['y'][pointIndex] + " )");
                 }
                 document.getElementById("reserveInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
+            }
+        })
+        .on('plotly_unhover', function (data) {
+            //document.getElementById("reserveInfoDiv").innerHTML = '';
+        });
+
+    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching, table, plot update done!';
+    updateSavingsPlot();
+}
+
+function updateRatesObj() {
+    $.ajax({
+        //fetch revisions from sever
+        url: "./api/rates_wr",
+        type: "GET",
+        dataType: "json",
+        success: function (ratesObj) {
+            //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
+            console.log("Rates fetched are " + JSON.stringify(ratesObj));
+            if (typeof ratesObj != 'undefined' && ratesObj != null) {
+                global_g['ratesObj'] = ratesObj['rates'];
+                document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': Revisions updated!';
+                // callback(null,ratesObj);
+            } else {
+                var errStr = (new Date()).toLocaleString() + ': fetching done, revisions not found!';
+                console.log('fetchStatusLabel').innerHTML = errStr;
+                // callback(new Error(errStr));
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching revisions...';
+            console.log(textStatus, errorThrown);
+            callback(errorThrown);
+            // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
+        }
+    });
+}
+
+function updateSavingsPlot() {
+    var scedObj = global_g['scedObj'];
+
+    var activeGenerators = getSelectedGenerators();
+    // Plot the SCED savings values
+    var dcPlotsDiv = document.getElementById("savingsPlotsDiv");
+    dcPlotsDiv.innerHTML = '';
+
+    var xLabels = scedObj["time_blocks"].map(Number);
+    var traces = [];
+    var div = document.createElement('div');
+    div.className = 'sch_plot_div';
+    div.id = 'savingsDiv_0';
+    div.style.border = '1px gray dashed';
+    dcPlotsDiv.appendChild(div);
+    // initialize netScedVals array
+    var netSavingsVals = [];
+    for (var k = 0; k < scedObj["gen_names"].length; k++) {
+        // dynamically create divs - https://stackoverflow.com/questions/14094697/javascript-how-to-create-new-div-dynamically-change-it-move-it-modify-it-in
+        genName = scedObj["gen_names"][k];
+        if (activeGenerators.length != 0 && activeGenerators.indexOf(genName) == -1) {
+            continue;
+        }
+        var schVals = (scedObj[genName]['sced']).map(Number);
+        // initialize savings to zero
+        var varCostPerBlk = global_g['ratesObj'][genName]
+        if (varCostPerBlk == undefined) {
+            console.log("Variable cost not available for generator " + genName);
+            varCostPerBlk = 0;
+        }
+        var savingMulFactor = -250 * varCostPerBlk;
+        var savingsVals = schVals.map(function (sch) { return sch * savingMulFactor; });
+        traces.push({
+            x: xLabels,
+            y: savingsVals,
+            type: 'bar',
+            name: genName
+        });
+        if (netSavingsVals.length == 0) {
+            netSavingsVals = savingsVals
+        } else {
+            // adding 2 arrays - https://stackoverflow.com/questions/24094466/javascript-sum-two-arrays-in-single-iteration
+            netSavingsVals = netSavingsVals.map(function (num, idx) {
+                return num + savingsVals[idx];
+            });
+            /* for (let schIter = 0; schIter < schVals.length; schIter++) {
+                netScedVals[schIter] += schVals[schIter];
+
+            } */
+        }
+    }
+    // adding net sced line plot
+    traces.push({
+        x: xLabels,
+        y: netSavingsVals,
+        type: 'lines',
+        line: {
+            width: 3
+        },
+        name: 'Savings'
+    });
+
+    var layout = {
+        title: "Savings" + global_g['plot_title'],
+        xaxis: {
+            title: 'Block Number',
+            dtick: 4
+        },
+        yaxis: {
+            title: 'Savings'
+        },
+        legend: {
+            font: {
+                "size": "10"
+            },
+            orientation: "h"
+        },
+        barmode: 'relative',
+        margin: { 't': 35 },
+        height: 800
+    };
+    Plotly.newPlot(div, traces, layout);
+    div
+        .on('plotly_hover', function (data) {
+            if (data.points.length > 0) {
+                var pointIndex = data.points[0]['pointNumber'];
+                var textDataArray = document.getElementById("savingsDiv_0").data;
+                var infoStrings = [];
+                var cumulativeSavings = 0;
+                for (var i = textDataArray.length - 1; i >= 0; i--) {
+                    var genLabel = textDataArray[i]['name'];
+                    infoStrings.push(genLabel + " ( " + textDataArray[i]['y'][pointIndex] + " )");
+                    if (genLabel == "Savings") {
+                        // find cumulative savings
+                        for (let pntIter = 0; pntIter <= pointIndex; pntIter++) {
+                            cumulativeSavings += +textDataArray[i]['y'][pntIter];
+                        }
+                    }
+                }
+                infoStrings.push("Cumulative Savings = " + cumulativeSavings);
+                document.getElementById("savingsInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
             }
         })
         .on('plotly_unhover', function (data) {

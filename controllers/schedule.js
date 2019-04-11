@@ -201,4 +201,17 @@ router.post('/rates_wr', function (req, res) {
     });
 });
 
+router.get('/rates_wr', function (req, res) {
+    //  get the variable costs
+    RatesModel.getVariableCosts(function (err, ratesObj) {
+        if (err) {
+            res.json({ err: err });
+            return;
+        }
+        //console.log("rates json object was read successfully...");
+        //console.log(ratesObj);
+        res.json(ratesObj);
+    });
+});
+
 module.exports = router;
