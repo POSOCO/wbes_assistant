@@ -427,15 +427,7 @@ function updateSavingsPlot() {
                             cumulativeSavings += +textDataArray[i]['y'][pntIter];
                         }
                         infoStrings.push("<b> WR Savings till " + data.points[0]['x'] + " blk " + formatter.format(cumulativeSavings) + "</b>");
-                    }
-
-                    if (genLabel == "WR Savings") {
-                        // find day savings
-                        for (let pntIter = 0; pntIter < textDataArray[i]['y'].length; pntIter++) {
-                            cumulativeSavings += +textDataArray[i]['y'][pntIter];
-                        }
-                        infoStrings.push("<b> WR Savings till " + data.points[0]['x'] + " blk " + formatter.format(cumulativeSavings) + "</b>");
-                    }
+                    }                    
                 }
 
                 for (var i = textDataArray.length - 1; i >= 0; i--) {
