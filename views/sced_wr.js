@@ -6,6 +6,9 @@ var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = ["CGPL", "KSTPS_I&II", "KSTPS7", "MOUDA", "MOUDA_II", "NSPCL", "SASAN", "SIPAT_I", "SIPAT_II", "SOLAPUR", "VSTPS_I", "VSTPS_II", "VSTPS_III", "VSTPS_IV", "VSTPS_V"];
 var hideNegativeSced = false;
 var global_g = { 'scedObj': {}, 'plot_title': 'SCED Plot', 'ratesObj': {} };
+const formatter = new Intl.NumberFormat('en-IN', {
+    maximumFractionDigits: 0
+})
 
 window.onload = doOnLoadStuff();
 
@@ -241,7 +244,7 @@ function updatePlots() {
     // adding net sced line plot
     traces.push({
         x: xLabels,
-        y: netScedVals,
+        y: netScedVals.map(formatter.format),
         type: 'lines',
         line: {
             width: 3
@@ -376,7 +379,7 @@ function updateSavingsPlot() {
         line: {
             width: 3
         },
-        name: 'Savings'
+        name: 'WR Savings'
     });
 
     var layout = {
@@ -386,7 +389,7 @@ function updateSavingsPlot() {
             dtick: 4
         },
         yaxis: {
-            title: 'Savings'
+            title: 'WR Savings'
         },
         legend: {
             font: {
@@ -406,17 +409,32 @@ function updateSavingsPlot() {
                 var textDataArray = document.getElementById("savingsDiv_0").data;
                 var infoStrings = [];
                 var cumulativeSavings = 0;
+                var daySavings = 0;
                 for (var i = textDataArray.length - 1; i >= 0; i--) {
                     var genLabel = textDataArray[i]['name'];
-                    infoStrings.push(genLabel + " ( " + textDataArray[i]['y'][pointIndex] + " )");
-                    if (genLabel == "Savings") {
+
+                    if (genLabel == "WR Savings") {
                         // find cumulative savings
                         for (let pntIter = 0; pntIter <= pointIndex; pntIter++) {
+                            daySavings += +textDataArray[i]['y'][pntIter];
+                        }
+                        infoStrings.push("<b> WR Day Savings " + formatter.format(daySavings) + "</b>");
+                    }
+
+                    if (genLabel == "WR Savings") {
+                        // find day savings
+                        for (let pntIter = 0; pntIter < textDataArray[i]['y'].length; pntIter++) {
                             cumulativeSavings += +textDataArray[i]['y'][pntIter];
                         }
+                        infoStrings.push("<b> WR Savings till " + data.points[0]['x'] + " blk " + formatter.format(cumulativeSavings) + "</b>");
                     }
                 }
-                infoStrings.push("Cumulative Savings = " + cumulativeSavings);
+
+                for (var i = textDataArray.length - 1; i >= 0; i--) {
+                    var genLabel = textDataArray[i]['name'];
+                    infoStrings.push(genLabel + " " + formatter.format(textDataArray[i]['y'][pointIndex]) + "");
+                }
+
                 document.getElementById("savingsInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
             }
         })
