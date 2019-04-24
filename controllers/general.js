@@ -80,6 +80,16 @@ router.get('/isgs', function (req, res, next) {
     });
 });
 
+router.get('/custom_plot', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('custom_plot', resObj);
+    });
+});
+
 router.get('/margins_wr', function (req, res, next) {
     var tasksArray = [getRevisions, getEntUtils, getUtils];
     async.waterfall(tasksArray, function (err, resObj) {
