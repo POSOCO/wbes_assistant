@@ -166,7 +166,7 @@ router.get('/net_sch_for_dates', function (req, res) {
                 }
             }
         }
-        res.json({ schedules: schObj });
+        res.json(schObj);
     });
 
 });

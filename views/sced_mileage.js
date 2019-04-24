@@ -64,8 +64,9 @@ function netSchDcGenNameMap(acr) {
 function getSchedules() {
     var utilSelEl = document.getElementById("utils");
     var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
-    var date_str = document.getElementById('from_date_input').value;
-    getSchDataOfGenForDate(utilId, date_str, function(err, schData){
+    var from_date_str = document.getElementById('from_date_input').value;
+    var to_date_str = document.getElementById('to_date_input').value;
+    getSchDataOfGenForDates(utilId, from_date_str, to_date_str, function(err, schData){
         if (err) {
             return console.log(err);
         }
@@ -74,68 +75,15 @@ function getSchedules() {
 }
 
 
-function getSchDataOfGenForDate(utilId, dateStr, callback) {
-    getLatestRevForDate(dateStr, function (err, maxRev) {
-        if (err) {
-            return callback(err);
-        }
-        getSchDataOfGenForRev(utilId, dateStr, maxRev, function (err, schData) {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, schData);
-        });
-    });
-}
-
-function getLatestRevForDate(date_str, callback) {
-    $.ajax({
-        //fetch revisions from sever
-        url: "./api/revisions?date_str=" + date_str,
-        type: "GET",
-        dataType: "json",
-        success: function (revListObj) {
-            //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
-            document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': Revisions fetched!';
-            //console.log("Revisions fetched are " + JSON.stringify(revListObj));
-            var revListArray = revListObj['revisions'];
-            if (typeof revListArray != 'undefined' && revListArray != null && revListArray.length > 0) {
-                //console.log('revisions updated for the date '+date_str);
-                revListArray = revListArray.map(Number);
-                var maxArrValue = function (arr) {
-                    var max = arr[0];
-                    for (var i = 1; i < arr.length; i++) {
-                        if (arr[i] > max) {
-                            max = arr[i];
-                        }
-                    }
-                    return max;
-                }
-                callback(null, maxArrValue(revListArray));
-            } else {
-                var errStr = (new Date()).toLocaleString() + ': fetching done, revisions not found!';
-                document.getElementById('fetchStatusLabel').innerHTML = errStr;
-                callback(new Error(errStr));
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching revisions...';
-            console.log(textStatus, errorThrown);
-            callback(errorThrown);
-            // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
-        }
-    });
-}
-
-function getSchDataOfGenForRev(utilId, date_str, rev, callback) {
+function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
     var queryStrs = [];
     queryStrs.push("util_id=" + utilId);
-    queryStrs.push("rev=" + rev);
-    queryStrs.push("date_str=" + date_str);
+    queryStrs.push("from_date_str=" + from_date_str);
+    queryStrs.push("to_date_str=" + to_date_str);
     queryStrs.push("is_seller=true");
     $.ajax({
         //fetch categories from sever
-        url: "./api/net_sch" + "?" + queryStrs.join("&"),
+        url: "./api/net_sch_for_dates" + "?" + queryStrs.join("&"),
         type: "GET",
         dataType: "json",
         success: function (netSchMatrixObj) {
@@ -181,7 +129,7 @@ function getSchDataOfGenForRev(utilId, date_str, rev, callback) {
                 }
 
                 dcSchMatrixObj['gen_names'] = dcGenNames;
-                dcSchMatrixObj['time_blocks'] = netSchMatrixObj['time_blocks'];
+                dcSchMatrixObj['times'] = netSchMatrixObj['times'];
                 
                 for (var i = 0; i < genNames.length; i++) {
                     // genNames is net sch acronym and dcGenNames is dc acronym
