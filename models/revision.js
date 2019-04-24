@@ -19,6 +19,20 @@ module.exports.getRevisionsForDate = function (date_str, callback) {
     });
 };
 
+module.exports.getMaxRevisionForDate = function (date_str, callback) {
+    if (date_str == null) {
+        // set it to today date
+        var todayDate = new Date();
+        date_str = StrUtils.makeTwoDigits(todayDate.getDate()) + "-" + StrUtils.makeTwoDigits(todayDate.getMonth() + 1) + "-" + todayDate.getFullYear();
+    }
+    WBESUtils.getMaxRevisionForDate(date_str, function (err, maxRev) {
+        if (err) {
+            return callback(err);
+        }
+        callback(null, maxRev);
+    });
+};
+
 module.exports.getNRRevisionsForDate = function (date_str, callback) {
     if (date_str == null) {
         // set it to today date

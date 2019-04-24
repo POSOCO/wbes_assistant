@@ -103,28 +103,72 @@ router.get('/net_sch_for_dates', function (req, res) {
     var fromDate = new Date(fromDateFrags[2], fromDateFrags[1] - 1, fromDateFrags[0]);
     var toDate = new Date(toDateFrags[2], toDateFrags[1] - 1, toDateFrags[0]);
     var daysDiff = Math.floor((toDate - fromDate) / (1000 * 60 * 60 * 24));
-    var getNetSchForDate = function (utilId, dateStr, rev, isSeller, callback) {
-        Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+    var reqDatesList = [];
+    for (let dayCounter = 0; dayCounter <= daysDiff; dayCounter++) {
+        var reqDate = new Date(fromDate.getTime() + dayCounter * (1000 * 60 * 60 * 24))
+        reqDatesList.push(reqDate);
+    }
+
+    // https://stackoverflow.com/questions/20882892/pass-extra-argument-to-async-map
+    var getNetSchForDate = function (reqDate, callback) {
+        var dateStr = makeTwoDigits(reqDate.getDate()) + "-" + makeTwoDigits(reqDate.getMonth() + 1) + '-' + reqDate.getFullYear();
+        var utilId = this.utilId;
+        var isSeller = this.isSeller;
+        Revision.getMaxRevisionForDate(dateStr, function (err, maxRev) {
             if (err) {
                 return callback(err);
             }
-            callback(null, netSchObj);
+            Schedule.getIsgsNetSchObj(utilId, dateStr, maxRev, isSeller, function (err, netSchObj) {
+                if (err) {
+                    return callback(err);
+                }
+                netSchObj['date'] = reqDate;
+                callback(null, netSchObj);
+            });
         });
     }
 
-    for (let dayCounter = 0; dayCounter <= daysDiff; dayCounter++) {
-        var reqDate = new Date(fromDate.getTime() + dayCounter * (1000 * 60 * 60 * 24))
-        // todo continue here
-    }
-
-
-    Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+    async.mapSeries(reqDatesList, getNetSchForDate.bind({ "utilId": utilId, "isSeller": isSeller }), function (err, results) {
+        // console.log(results);
+        // combine all results to get a single array
         if (err) {
-            res.json({ err: err });
-            return;
+            return callback(err);
         }
-        res.json(netSchObj);
+        if (results.length == 0) {
+            return callback(new Error("No data returned from server..."));
+        }
+        var schObj = {};
+        schObj['gen_names'] = results[0]['gen_names'];
+        schObj['times'] = [];
+        const schTypes = Object.keys(results[0][schObj['gen_names'][0]]);
+        for (let genIter = 0; genIter < schObj['gen_names'].length; genIter++) {
+            const genName = schObj['gen_names'][genIter];
+            schObj[genName] = {};
+            for (let schTypeIter = 0; schTypeIter < schTypes.length; schTypeIter++) {
+                schObj[genName][schTypes[schTypeIter]] = [];
+            }
+        }
+        for (let resIter = 0; resIter < results.length; resIter++) {
+            // derive and append time values to resultant schedule object
+            const daySch = results[resIter];
+            const day = daySch['date'];
+            const dayTimeVals = [];
+            for (let blkIter = 0; blkIter < 96; blkIter++) {
+                dayTimeVals.push(new Date(day.getTime() + blkIter * 15 * 60 * 1000));
+            }
+            schObj['times'].push(...dayTimeVals);
+            // append schedules to resultant object
+            for (let genIter = 0; genIter < daySch['gen_names'].length; genIter++) {
+                const genName = daySch['gen_names'][genIter];
+                for (let schTypeIter = 0; schTypeIter < schTypes.length; schTypeIter++) {
+                    const schType = schTypes[schTypeIter];
+                    schObj[genName][schType].push(...daySch[genName][schType]);
+                }
+            }
+        }
+        res.json({ schedules: schObj });
     });
+
 });
 
 router.get('/urs_summary', function (req, res) {

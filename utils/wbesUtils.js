@@ -12,6 +12,7 @@ var async = require('async');
 
 var baseUrl = module.exports.baseUrl = "http://scheduling.wrldc.in";
 var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/wbes/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
+var maxRevisionFetchUrl = module.exports.maxRevisionFetchUrl = "%s/wbes/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate=%s";
 var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/wbes/ReportFullSchedule/GetUtils?regionId=2";
 var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl = "%s/wbes/Report/GetUtils?regionId=2";
 // string variables --> baseUrl, date_str, rev, util_id
@@ -87,6 +88,20 @@ var getRevisionsForDate = module.exports.getRevisionsForDate = function (date_st
         }
         var revisionsList = JSON.parse(resBody);
         callback(null, revisionsList);
+    });
+};
+
+// http://scheduling.wrldc.in/wbes/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate=24-04-2019
+var getMaxRevisionForDate = module.exports.getMaxRevisionForDate = function (date_str, callback) {
+    var options = defaultRequestOptions;
+    options.url = StringUtils.parse(maxRevisionFetchUrl, baseUrl, date_str);
+    // get the list of revision numbers
+    CSVFetcher.doGetRequest(options, function (err, resBody, res) {
+        if (err) {
+            return callback(err);
+        }
+        var maxRev = JSON.parse(resBody)['MaxRevision'];
+        callback(null, maxRev);
     });
 };
 

@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>ISGS Schedules</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+<%- include header_partial.ejs %>
+<h3>See ISGS Schedules</h3>
+<input type="text" id='from_date_input' value="">
+<input type="text" id='to_date_input' value="">
+
+<select name="utils" id="utils"></select>
+<button onclick="getSchedules()">Get Schedules</button>
+<span id='fetchStatusLabel'></span>
+
+<div id="dcPlotsDiv" style="margin-top: 8px"></div>
+
+<table id="dcTable" name="dcTable" style="margin-top: 8px"></table>
+<script>
+    var utilsObj_ = <%- JSON.stringify(utils)%>;
+    var utilsNetSchObj_ = <%- JSON.stringify(utils_net_sch)%>;
+    var revs_ = <%- JSON.stringify(revisions)%>;
+    var dateStr_ = <%- JSON.stringify(date_str)%>;
+</script>
+<script src="./libs/js/jquery.min.js"></script>
+<script src="./libs/js/plotly.min.js"></script>
+<script src="domUtils.js"></script>
+<script src="revision.js"></script>
+<script src="sced_mileage.js"></script>
+</body>
+</html>
