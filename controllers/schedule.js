@@ -7,6 +7,7 @@ var Revision = require("../models/revision");
 var Schedule = require("../models/schedule");
 var ScheduleNR = require("../models/schedule_nr");
 var RatesModel = require("../models/rates");
+var async = require('async');
 
 router.get('/surrenders', function (req, res) {
     var utilId = req.query.util_id;
@@ -73,6 +74,50 @@ router.get('/net_sch', function (req, res) {
     if (isSeller == 'true') {
         isSeller = true;
     }
+    Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+        if (err) {
+            res.json({ err: err });
+            return;
+        }
+        res.json(netSchObj);
+    });
+});
+
+router.get('/net_sch_for_dates', function (req, res) {
+    var utilId = req.query.util_id;
+    var fromDateStr = req.query.from_date_str;
+    var toDateStr = req.query.to_date_str;
+    var isSeller = req.query.is_seller;
+    if (isSeller == 'true') {
+        isSeller = true;
+    }
+    var makeTwoDigits = function (num) {
+        if (num < 10) {
+            return '0' + num;
+        } else {
+            return num;
+        }
+    }
+    var fromDateFrags = fromDateStr.split('-').map(Number);
+    var toDateFrags = toDateStr.split('-').map(Number);
+    var fromDate = new Date(fromDateFrags[2], fromDateFrags[1] - 1, fromDateFrags[0]);
+    var toDate = new Date(toDateFrags[2], toDateFrags[1] - 1, toDateFrags[0]);
+    var daysDiff = Math.floor((toDate - fromDate) / (1000 * 60 * 60 * 24));
+    var getNetSchForDate = function (utilId, dateStr, rev, isSeller, callback) {
+        Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, netSchObj);
+        });
+    }
+
+    for (let dayCounter = 0; dayCounter <= daysDiff; dayCounter++) {
+        var reqDate = new Date(fromDate.getTime() + dayCounter * (1000 * 60 * 60 * 24))
+        // todo continue here
+    }
+
+
     Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
         if (err) {
             res.json({ err: err });

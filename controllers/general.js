@@ -90,6 +90,16 @@ router.get('/custom_plot', function (req, res, next) {
     });
 });
 
+router.get('/sced_mileage', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('sced_mileage', resObj);
+    });
+});
+
 router.get('/margins_wr', function (req, res, next) {
     var tasksArray = [getRevisions, getEntUtils, getUtils];
     async.waterfall(tasksArray, function (err, resObj) {
