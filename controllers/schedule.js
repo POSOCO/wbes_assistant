@@ -154,7 +154,7 @@ router.get('/net_sch_for_dates', function (req, res) {
             const day = daySch['date'];
             const dayTimeVals = [];
             for (let blkIter = 0; blkIter < 96; blkIter++) {
-                dayTimeVals.push(new Date(day.getTime() + blkIter * 15 * 60 * 1000));
+                dayTimeVals.push(new Date(day.getTime() + blkIter * 15 * 60 * 1000 + 5.5 * 60 * 60 * 1000));
             }
             schObj['times'].push(...dayTimeVals);
             // append schedules to resultant object

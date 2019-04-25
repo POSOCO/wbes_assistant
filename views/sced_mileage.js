@@ -66,14 +66,15 @@ function getSchedules() {
     var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
     var from_date_str = document.getElementById('from_date_input').value;
     var to_date_str = document.getElementById('to_date_input').value;
-    getSchDataOfGenForDates(utilId, from_date_str, to_date_str, function(err, schData){
+    getSchDataOfGenForDates(utilId, from_date_str, to_date_str, function (err, schData) {
         if (err) {
             return console.log(err);
         }
         console.log(schData);
+        var reqSchData = derivePlotData(schData);
+        plotData(reqSchData);
     });
 }
-
 
 function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
     var queryStrs = [];
@@ -118,7 +119,7 @@ function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
                         dcSchMatrixObj[genNames[i]][sch_col] = zeroValues();
                     }
                 }
-                
+
                 for (var i = 0; i < genNames.length; i++) {
                     //var dcUtilAcronym = acronymFromNetSchAcronym(genNames[i]);
                     var dcUtilAcronym = netSchDcGenNameMap(genNames[i]);
@@ -130,7 +131,7 @@ function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
 
                 dcSchMatrixObj['gen_names'] = dcGenNames;
                 dcSchMatrixObj['times'] = netSchMatrixObj['times'];
-                
+
                 for (var i = 0; i < genNames.length; i++) {
                     // genNames is net sch acronym and dcGenNames is dc acronym
                     if (dcSchMatrixObj[dcGenNames[i]] != undefined) {
@@ -144,9 +145,6 @@ function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
                         dcSchMatrixObj[dcGenNames[i]]['rras'] = netSchMatrixObj[genNames[i]]['rras'];
                         dcSchMatrixObj[dcGenNames[i]]['sced'] = netSchMatrixObj[genNames[i]]['sced'];
                         dcSchMatrixObj[dcGenNames[i]]['total'] = netSchMatrixObj[genNames[i]]['total'];
-                        for (var k = 1; k < 96; k++) {
-                            dcSchMatrixObj[dcGenNames[i]]['sch_change'][k] = +dcSchMatrixObj[dcGenNames[i]]['total'][k] - +netSchMatrixObj[genNames[i]]['total'][k - 1];
-                        }
                     } else {
                         // todo handle separately if dc gen name of a corresponding net sch gen name is not found
                     }
@@ -167,4 +165,89 @@ function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
         }
     });
+}
+
+function derivePlotData(schData) {
+    var genNames = schData['gen_names'];
+    // for each generator, derive the sch_change and sch_change without sced
+    for (let genIter = 0; genIter < genNames.length; genIter++) {
+        const genName = genNames[genIter];
+        schData[genName]['sch_change'] = [0];
+        schData[genName]['sch_change_excl_sced'] = [0];
+        for (let timeBlkIter = 1; timeBlkIter < schData['times'].length; timeBlkIter++) {
+            schData[genName]['sch_change'][timeBlkIter] = +schData[genName]['total'][timeBlkIter] - +schData[genName]['total'][timeBlkIter - 1];
+            schData[genName]['sch_change_excl_sced'][timeBlkIter] = +schData[genName]['total'][timeBlkIter] - +schData[genName]['sced'][timeBlkIter] - +schData[genName]['total'][timeBlkIter - 1] + +schData[genName]['sced'][timeBlkIter - 1];
+        }
+    }
+    return schData;
+}
+
+function plotData(schData) {
+    var from_date_str = document.getElementById('from_date_input').value;
+    var to_date_str = document.getElementById('to_date_input').value;
+    for (let genIter = 0; genIter < schData['gen_names'].length; genIter++) {
+        const genName = schData['gen_names'][genIter];
+        var div = document.createElement('div');
+        div.className = 'sch_plot_div';
+        div.id = 'plotDiv_' + genName;
+        div.style.border = '1px gray dashed';
+        var dcPlotsDiv = document.getElementById("dcPlotsDiv");
+        dcPlotsDiv.appendChild(div);
+        var traces = [];
+        var reqColsList = ['sch_change', 'sch_change_excl_sced'];
+        for (let reqColInd = 0; reqColInd < reqColsList.length; reqColInd++) {
+            const reqCol = reqColsList[reqColInd];
+            traces.push({
+                x: schData['times'],
+                y: (schData[genName][reqCol]).map(Number),
+                name: reqCol
+            });
+        }
+        var layout = {
+            title: genName + ' plots from ' + from_date_str + ' to ' + to_date_str,
+            xaxis: {
+                title: ''
+            },
+            yaxis: {
+                title: 'MW'
+            },
+            legend: {
+                font: {
+                    "size": "20"
+                },
+                orientation: "h"
+            },
+            margin: { 't': 35 },
+            height: 500
+        };
+        Plotly.newPlot(div, traces, layout);
+
+        // find the mileage values
+        var schMileage = 0;
+        var schExclScedMileage = 0;
+        var schChangeCount = 0;
+        var schExclScedChangeCount = 0;
+        for (let blkIter = 1; blkIter < schData['times'].length; blkIter++) {
+            const schChangeVal = Math.abs(schData[genName]['sch_change'][blkIter]);
+            const schExclScedChangeVal = Math.abs(schData[genName]['sch_change_excl_sced'][blkIter]);
+            schMileage += schChangeVal;
+            schExclScedMileage += schExclScedChangeVal;
+            if (schChangeVal > 0) {
+                schChangeCount += 1;
+            }
+            if (schExclScedChangeVal > 0) {
+                schExclScedChangeCount += 1;
+            }
+        }
+
+        var mileageSpan = document.createElement('span');
+        mileageSpan.innerHTML = "Mileage with SCED = " + schMileage.toFixed(0);
+        mileageSpan.innerHTML += "<br> Mileage without SCED = " + schExclScedMileage.toFixed(0);
+        mileageSpan.innerHTML += "<br> Sch changes with SCED = " + schChangeCount;
+        mileageSpan.innerHTML += "<br> Sch changes without SCED = " + schExclScedChangeCount;
+
+        // append output text to plot div
+        div.appendChild(mileageSpan);
+    }
+
 }
