@@ -66,6 +66,7 @@ function getSchedules() {
     var utilId = utilSelEl.options[utilSelEl.selectedIndex].getAttribute('value');
     var from_date_str = document.getElementById('from_date_input').value;
     var to_date_str = document.getElementById('to_date_input').value;
+    document.getElementById('fetchStatusLabel').innerHTML = 'fetching net schedules, please wait...';
     getSchDataOfGenForDates(utilId, from_date_str, to_date_str, function (err, schData) {
         if (err) {
             return console.log(err);
@@ -192,6 +193,7 @@ function plotData(schData) {
         div.id = 'plotDiv_' + genName;
         div.style.border = '1px gray dashed';
         var dcPlotsDiv = document.getElementById("dcPlotsDiv");
+        dcPlotsDiv.innerHTML = "";
         dcPlotsDiv.appendChild(div);
         var traces = [];
         var reqColsList = ['sch_change', 'sch_change_excl_sced'];
@@ -249,5 +251,6 @@ function plotData(schData) {
         // append output text to plot div
         div.appendChild(mileageSpan);
     }
+    document.getElementById('fetchStatusLabel').innerHTML = 'plotting done...';
 
 }
