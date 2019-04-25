@@ -111,15 +111,7 @@ function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
                 };
                 var genNames = netSchMatrixObj["gen_names"];
                 var dcGenNames = [];
-                var dcSchMatrixObj = {};
-                for (var i = 0; i < genNames.length; i++) {
-                    dcSchMatrixObj[genNames[i]] = {};
-                    var sch_cols = ['isgs', 'mtoa', 'lta', 'stoa', 'iex', 'pxi', 'urs', 'rras', 'sced', 'total', 'sch_change'];
-                    for (let sch_col_iter = 0; sch_col_iter < sch_cols.length; sch_col_iter++) {
-                        const sch_col = sch_cols[sch_col_iter];
-                        dcSchMatrixObj[genNames[i]][sch_col] = zeroValues();
-                    }
-                }
+                
 
                 for (var i = 0; i < genNames.length; i++) {
                     //var dcUtilAcronym = acronymFromNetSchAcronym(genNames[i]);
@@ -130,8 +122,18 @@ function getSchDataOfGenForDates(utilId, from_date_str, to_date_str, callback) {
                     dcGenNames.push(dcUtilAcronym);
                 }
 
+                var dcSchMatrixObj = {};
                 dcSchMatrixObj['gen_names'] = dcGenNames;
                 dcSchMatrixObj['times'] = netSchMatrixObj['times'];
+                
+                for (var i = 0; i < dcGenNames.length; i++) {
+                    dcSchMatrixObj[dcGenNames[i]] = {};
+                    var sch_cols = ['isgs', 'mtoa', 'lta', 'stoa', 'iex', 'pxi', 'urs', 'rras', 'sced', 'total', 'sch_change'];
+                    for (let sch_col_iter = 0; sch_col_iter < sch_cols.length; sch_col_iter++) {
+                        const sch_col = sch_cols[sch_col_iter];
+                        dcSchMatrixObj[dcGenNames[i]][sch_col] = zeroValues();
+                    }
+                }
 
                 for (var i = 0; i < genNames.length; i++) {
                     // genNames is net sch acronym and dcGenNames is dc acronym
