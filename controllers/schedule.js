@@ -159,10 +159,10 @@ router.get('/net_sch_for_dates', function (req, res) {
             schObj['times'].push(...dayTimeVals);
             // append schedules to resultant object
             for (let genIter = 0; genIter < daySch['gen_names'].length; genIter++) {
-                const genName = daySch['gen_names'][genIter];
+                const genName = schObj['gen_names'][genIter];
                 for (let schTypeIter = 0; schTypeIter < schTypes.length; schTypeIter++) {
                     const schType = schTypes[schTypeIter];
-                    schObj[genName][schType].push(...daySch[genName][schType]);
+                    schObj[genName][schType].push(...daySch[daySch['gen_names'][genIter]][schType]);
                 }
             }
         }
