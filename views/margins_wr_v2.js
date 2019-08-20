@@ -5,7 +5,7 @@
 var isCheckBoxesListCreated = false;
 var initialDesiredGenerators = [];
 var hideNegativeMargins = true;
-var global_g = { 'dcSchObj': {}, 'plot_title':'Margins Plot' };
+var global_g = { 'dcSchObj': {}, 'plot_title': 'Margins Plot' };
 
 window.onload = doOnLoadStuff();
 
@@ -200,6 +200,7 @@ function updatePlot() {
 
     var xLabels = dcSchObj["time_blocks"].map(Number);
     var traces = [];
+    var lineStyle = document.getElementById('line_style').value;
     var div = document.createElement('div');
     div.className = 'sch_plot_div';
     div.id = 'plotDiv_0';
@@ -215,7 +216,8 @@ function updatePlot() {
             x: xLabels,
             y: (dcSchObj[genName]['margin']).map(Number),
             fill: 'tonexty',
-            name: genName
+            name: genName,
+            line: { shape: lineStyle }
         });
     }
     traces[0].fill = 'tozeroy';
