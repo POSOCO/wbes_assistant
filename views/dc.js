@@ -165,7 +165,7 @@ function getDC() {
                             },
                             orientation: "h"
                         },
-                        margin: {'t': 35},
+                        margin: { 't': 35 },
                         height: 500
                     };
                     Plotly.newPlot(div, traces, layout);
@@ -217,7 +217,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                 // copy the dcMatrixObj for adding schedules also
                 var dcSchMatrixObj = dcMatrixObj;
                 // initialise the net schedule attributes of the dcSchMatrixObj to 0
-                var zeroValues = function(){
+                var zeroValues = function () {
                     var zeroValuesArray = [];
                     for (var i = 0; i < 96; i++) {
                         zeroValuesArray.push(0);
@@ -327,77 +327,92 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                     div.style.border = '1px gray dashed';
                     dcPlotsDiv.appendChild(div);
                     var genName = dcSchMatrixObj["gen_names"][k];
+                    var lineStyle = document.getElementById('line_style').value;
                     var traces = [];
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['on_bar_dc']).map(Number),
-                        name: "OnBar"
+                        name: "OnBar",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['off_bar_dc']).map(Number),
-                        name: "OffBar"
+                        name: "OffBar",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['total_dc']).map(Number),
-                        name: "Total DC"
+                        name: "Total DC",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['isgs']).map(Number),
-                        name: "ISGS"
+                        name: "ISGS",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['mtoa']).map(Number),
-                        name: "MTOA"
+                        name: "MTOA",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['stoa']).map(Number),
-                        name: "STOA"
+                        name: "STOA",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['lta']).map(Number),
-                        name: "LTA"
+                        name: "LTA",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['iex']).map(Number),
-                        name: "IEX"
+                        name: "IEX",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['pxi']).map(Number),
-                        name: "PXI"
+                        name: "PXI",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['urs']).map(Number),
-                        name: "URS"
+                        name: "URS",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['rras']).map(Number),
-                        name: "RRAS"
+                        name: "RRAS",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['sced']).map(Number),
-                        name: "SCED"
+                        name: "SCED",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['total']).map(Number),
-                        name: "TOTAL"
+                        name: "TOTAL",
+                        line: { shape: lineStyle }
                     });
                     traces.push({
                         x: xLabels,
                         y: (dcSchMatrixObj[genName]['margin']).map(Number),
                         name: "Margin",
-                        visible: 'legendonly'
+                        visible: 'legendonly',
+                        line: { shape: lineStyle }
                     });
                     var layout = {
                         title: genName + ' Schedules for date ' + date_str + ' and Revision ' + rev,
@@ -414,7 +429,7 @@ function fetchNetSchAfterDC(dcMatrixObj) {
                             },
                             orientation: "h"
                         },
-                        margin: {'t': 35},
+                        margin: { 't': 35 },
                         height: 500
                     };
                     Plotly.newPlot(div, traces, layout);
