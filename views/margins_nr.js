@@ -3,7 +3,7 @@
  */
 
 var isCheckBoxesListCreated = false;
-var initialDesiredGenerators = ['ANTA', 'AURY', 'DADRI', 'DADRT2', 'DHAULIGNGA', 'JHAJJAR', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SINGRAULI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4'];
+var initialDesiredGenerators = ['ANTA', 'AURY', 'DADRI', 'DADRT2', 'JHAJJAR', 'RIHAND1', 'RIHAND2', 'RIHAND3', 'SINGRAULI', 'UNCHAHAR1', 'UNCHAHAR2', 'UNCHAHAR3', 'UNCHAHAR4'];
 var hideNegativeMargins = true;
 
 window.onload = doOnLoadStuff();
