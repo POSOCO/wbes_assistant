@@ -55,7 +55,7 @@ function getURSSummary() {
                 //console.log(summaryArray);
                 var resMatrix = [["Generator", "Constituent", "Quantum (MW)"]];
                 for (var i = 0; i < summaryArray.length; i++) {
-                    resMatrix.push([summaryArray[i][0], summaryArray[i][1].replace("_Beneficiary", ""), summaryArray[i][2] + " - " + summaryArray[i][3]]);
+                    resMatrix.push([summaryArray[i][0], renameConstituent(summaryArray[i][1].replace("_Beneficiary", "")), summaryArray[i][2] + " - " + summaryArray[i][3]]);
                 }
                 createTable(resMatrix, document.getElementById('summaryTable'));
                 document.getElementById('fetchStatusLabel').innerHTML = 'URS summary fetching and table update done!';
@@ -71,15 +71,34 @@ function getURSSummary() {
     });
 }
 
-function setShift(shiftCode){
-	if(shiftCode == 1){
-		document.getElementById('from_blk').value = 33;
-		document.getElementById('to_blk').value = 58;
-	} else if(shiftCode == 2){
-		document.getElementById('from_blk').value = 59;
-		document.getElementById('to_blk').value = 84;
-	}else if(shiftCode == 3){
-		document.getElementById('from_blk').value = 1;
-		document.getElementById('to_blk').value = 32;
-	}
+function setShift(shiftCode) {
+    if (shiftCode == 1) {
+        document.getElementById('from_blk').value = 33;
+        document.getElementById('to_blk').value = 58;
+    } else if (shiftCode == 2) {
+        document.getElementById('from_blk').value = 59;
+        document.getElementById('to_blk').value = 84;
+    } else if (shiftCode == 3) {
+        document.getElementById('from_blk').value = 1;
+        document.getElementById('to_blk').value = 32;
+    }
+}
+
+function renameConstituent(constName) {
+    transformObj = {
+        "GEB": "GUVNL",
+        "MSEB": "MSEDCL",
+        "MPSEB": "MPPMCL",
+        "CSEB": "CSPDCL",
+        "SAIL_BSP_CSEB": "SAIL_BSP_CSPDCL"
+    };
+    var newName = constName;
+    Object.keys(transformObj).every(function (oldName, ind) {
+        if (constName.startsWith(oldName)) {
+            newName = constName.replace(oldName, transformObj[oldName]);
+            return false;
+        }
+        return true;
+    });
+    return newName;
 }
