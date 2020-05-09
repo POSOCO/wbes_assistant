@@ -3,7 +3,7 @@
  */
 
 var isCheckBoxesListCreated = false;
-var initialDesiredGenerators = ["CGPL", "KSTPS_I&II", "KSTPS7", "MOUDA", "MOUDA_II", "NSPCL", "SASAN", "SIPAT_I", "SIPAT_II", "SOLAPUR", "VSTPS_I", "VSTPS_II", "VSTPS_III", "VSTPS_IV", "VSTPS_V"];
+var initialDesiredGenerators = ["CGPL", "KHARGONE-I", "KSTPS_I&II", "KSTPS7", "LARA-I", "MOUDA", "MOUDA_II", "NSPCL", "SASAN", "SIPAT_I", "SIPAT_II", "SOLAPUR", "VSTPS_I", "VSTPS_II", "VSTPS_III", "VSTPS_IV", "VSTPS_V"];
 var hideNegativeSced = false;
 var global_g = { 'scedObj': {}, 'plot_title': 'SCED Plot', 'ratesObj': {} };
 const formatter = new Intl.NumberFormat('en-IN', {
@@ -63,9 +63,9 @@ function timerFunc() {
     updateDateString();
     updateNonNegativeHideState();
     async.waterfall([
-        function (callback) {
+        function(callback) {
             // update the revisions
-            refreshRevisionsCb(function (err, revListArray) {
+            refreshRevisionsCb(function(err, revListArray) {
                 if (!err) {
                     document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': Revisions fetched!';
                     callback(null, true);
@@ -75,7 +75,7 @@ function timerFunc() {
                 }
             });
         }
-    ], function (err, res) {
+    ], function(err, res) {
         // handle err if required
         // do SCED fetching
         getSced();
@@ -99,7 +99,7 @@ function getSced() {
         url: "./api/sced" + "?" + queryStrs.join("&"),
         type: "GET",
         dataType: "json",
-        success: function (scedObj) {
+        success: function(scedObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
             document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching sced done!';
             //console.log("DC Object fetched is " + JSON.stringify(dcMatrixObj));
@@ -161,7 +161,7 @@ function getSced() {
             global_g['plot_title'] = ' for date ' + date_str + ' and Revision ' + rev;
             updatePlots();
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        error: function(jqXHR, textStatus, errorThrown) {
             document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching SCED ...';
             console.log(textStatus, errorThrown);
             // toastr.error("The error from server for surrenders fetch is --- " + jqXHR.responseJSON.message);
@@ -232,7 +232,7 @@ function updatePlots() {
             netScedVals = schVals
         } else {
             // adding 2 arrays - https://stackoverflow.com/questions/24094466/javascript-sum-two-arrays-in-single-iteration
-            netScedVals = netScedVals.map(function (num, idx) {
+            netScedVals = netScedVals.map(function(num, idx) {
                 return num + schVals[idx];
             });
             /* for (let schIter = 0; schIter < schVals.length; schIter++) {
@@ -273,7 +273,7 @@ function updatePlots() {
     };
     Plotly.newPlot(div, traces, layout);
     div
-        .on('plotly_hover', function (data) {
+        .on('plotly_hover', function(data) {
             if (data.points.length > 0) {
                 var pointIndex = data.points[0]['pointNumber'];
                 var textDataArray = document.getElementById("plotDiv_0").data;
@@ -284,7 +284,7 @@ function updatePlots() {
                 document.getElementById("reserveInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
             }
         })
-        .on('plotly_unhover', function (data) {
+        .on('plotly_unhover', function(data) {
             //document.getElementById("reserveInfoDiv").innerHTML = '';
         });
 
@@ -298,7 +298,7 @@ function updateRatesObj() {
         url: "./api/rates_wr",
         type: "GET",
         dataType: "json",
-        success: function (ratesObj) {
+        success: function(ratesObj) {
             //toastr["info"]("Surrenders fetch result is " + JSON.stringify(data.categories));
             console.log("Rates fetched are " + JSON.stringify(ratesObj));
             if (typeof ratesObj != 'undefined' && ratesObj != null) {
@@ -311,7 +311,7 @@ function updateRatesObj() {
                 // callback(new Error(errStr));
             }
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        error: function(jqXHR, textStatus, errorThrown) {
             //document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': error in fetching revisions...';
             console.log(textStatus, errorThrown);
             callback(errorThrown);
@@ -351,7 +351,7 @@ function updateSavingsPlot() {
             varCostPerBlk = 0;
         }
         var savingMulFactor = -250 * varCostPerBlk;
-        var savingsVals = schVals.map(function (sch) { return sch * savingMulFactor; });
+        var savingsVals = schVals.map(function(sch) { return sch * savingMulFactor; });
         traces.push({
             x: xLabels,
             y: savingsVals,
@@ -362,7 +362,7 @@ function updateSavingsPlot() {
             netSavingsVals = savingsVals
         } else {
             // adding 2 arrays - https://stackoverflow.com/questions/24094466/javascript-sum-two-arrays-in-single-iteration
-            netSavingsVals = netSavingsVals.map(function (num, idx) {
+            netSavingsVals = netSavingsVals.map(function(num, idx) {
                 return num + savingsVals[idx];
             });
             /* for (let schIter = 0; schIter < schVals.length; schIter++) {
@@ -403,7 +403,7 @@ function updateSavingsPlot() {
     };
     Plotly.newPlot(div, traces, layout);
     div
-        .on('plotly_hover', function (data) {
+        .on('plotly_hover', function(data) {
             if (data.points.length > 0) {
                 var pointIndex = data.points[0]['pointNumber'];
                 var textDataArray = document.getElementById("savingsDiv_0").data;
@@ -427,7 +427,7 @@ function updateSavingsPlot() {
                             cumulativeSavings += +textDataArray[i]['y'][pntIter];
                         }
                         infoStrings.push("<b> WR Savings till " + data.points[0]['x'] + " blk " + formatter.format(cumulativeSavings) + "</b>");
-                    }                    
+                    }
                 }
 
                 for (var i = textDataArray.length - 1; i >= 0; i--) {
@@ -438,7 +438,7 @@ function updateSavingsPlot() {
                 document.getElementById("savingsInfoDiv").innerHTML = "BLOCK (" + data.points[0]['x'] + ')<div style="height: 5px"></div>' + infoStrings.join('<div style="height: 5px"></div>');
             }
         })
-        .on('plotly_unhover', function (data) {
+        .on('plotly_unhover', function(data) {
             //document.getElementById("reserveInfoDiv").innerHTML = '';
         });
 
