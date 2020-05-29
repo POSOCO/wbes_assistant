@@ -9,15 +9,15 @@ var ArrayHelper = require('../helpers/arrayHelpers');
 var Cookie = require('cookie');
 var async = require('async');
 
-var baseUrl = module.exports.baseUrl = "http://103.7.128.190";
+var baseUrl = module.exports.baseUrl = "http://wbes.nrldc.in";
 
-var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/wbes/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=3&ScheduleDate=%s";
+var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=3&ScheduleDate=%s";
 
 // string parameters --> baseUrl, date_str, rev, seller_id
-var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=3&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0"
+var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/Report/GetDeclarationReport?regionId=3&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0"
 
 // string parameters --> baseUrl, date_str, seller_id, rev, tokenStr
-var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=3&byDetails=1&isDrawer=0&isBuyer=0"
+var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=3&byDetails=1&isDrawer=0&isBuyer=0"
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -34,20 +34,7 @@ var defaultRequestOptions = module.exports.defaultRequestOptions = {
 
 var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = function (callback) {
     var options = defaultRequestOptions;
-    options.url = "http://103.7.130.121/wbes/";
-    // get the cookies from response header
-    CSVFetcher.doGetRequest(options, function (err, resBody, res) {
-        if (err) {
-            return callback(err);
-        }
-        // console.log(res.headers['set-cookie']);
-        callback(null, res.headers['set-cookie']);
-    });
-};
-
-var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = function (callback) {
-    var options = defaultRequestOptions;
-    options.url = baseUrl + "/wbes/";
+    options.url = baseUrl;
     // get the cookies from response header
     CSVFetcher.doGetRequest(options, function (err, resBody, res) {
         if (err) {
