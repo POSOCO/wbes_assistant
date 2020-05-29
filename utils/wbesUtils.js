@@ -10,30 +10,30 @@ var Cookie = require('cookie');
 var async = require('async');
 
 
-var baseUrl = module.exports.baseUrl = "http://scheduling.wrldc.in";
-var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/wbes/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
-var maxRevisionFetchUrl = module.exports.maxRevisionFetchUrl = "%s/wbes/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate=%s";
-var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/wbes/ReportFullSchedule/GetUtils?regionId=2";
-var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl = "%s/wbes/Report/GetUtils?regionId=2";
+var baseUrl = module.exports.baseUrl = "http://wbes.wrldc.in";
+var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
+var maxRevisionFetchUrl = module.exports.maxRevisionFetchUrl = "%s/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate=%s";
+var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/ReportFullSchedule/GetUtils?regionId=2";
+var entitlementsUtilitiesFetchUrl = module.exports.entitlementsUtilitiesFetchUrl = "%s/Report/GetUtils?regionId=2";
 // string variables --> baseUrl, date_str, rev, util_id
-var buyerISGSEntitlementFetchUrl = module.exports.buyerEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=1&byOnBar=1";
+var buyerISGSEntitlementFetchUrl = module.exports.buyerEntitlementFetchUrl = "%s/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=1&byOnBar=1";
 // string parameters --> baseUrl, date_str, utilId, revNum, timestamp
-var buyerISGSNetScheduleUrl = module.exports.buyerISGSNetScheduleUrl = "%s/wbes/ReportNetSchedule/ExportNetScheduleDetailToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&schType=1";
+var buyerISGSNetScheduleUrl = module.exports.buyerISGSNetScheduleUrl = "%s/ReportNetSchedule/ExportNetScheduleDetailToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&schType=1";
 // string parameters --> baseUrl, utilId, date_str, rev
-var buyerISGSRequisitionUrl = module.exports.buyerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=true&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
+var buyerISGSRequisitionUrl = module.exports.buyerISGSRequisitionUrl = "%s/Report/GetRldcData?isBuyer=true&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
-var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl = "%s/wbes/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
+var sellerISGSEntitlementFetchUrl = module.exports.sellerISGSEntitlementFetchUrl = "%s/Report/GetReportData?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1";
 // string parameters --> baseUrl, utilId, date_str, rev
-var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/wbes/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
+var sellerISGSRequisitionUrl = module.exports.sellerISGSRequisitionUrl = "%s/Report/GetRldcData?isBuyer=false&utilId=%s&regionId=2&scheduleDate=%s&revisionNumber=%s&byOnBar=1";
 // string parameters --> baseUrl, date_str, rev, utilId
-var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0";
+var isgsDeclarationFetchUrl = module.exports.isgsDeclarationFetchUrl = "%s/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=0";
 // string parameters --> baseUrl, date_str, rev, utilId
-var isgsOnbarSchFetchUrl = module.exports.isgsOnbarSchFetchUrl = "%s/wbes/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=1";
+var isgsOnbarSchFetchUrl = module.exports.isgsOnbarSchFetchUrl = "%s/Report/GetDeclarationReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnBar=1&byDCSchd=1";
 // string parameters --> baseUrl, date_str, utilId, rev, timestamp
-var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
-var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/wbes/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
+var sellerIsgsNetSchFetchUrl = module.exports.sellerIsgsNetSchFetchUrl = "%s/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=0";
+var buyerIsgsNetSchFetchUrl = module.exports.buyerIsgsNetSchFetchUrl = "%s/ReportFullSchedule/ExportFullScheduleInjSummaryToPDF?scheduleDate=%s&sellerId=%s&revisionNumber=%s&getTokenValue=%s&fileType=csv&regionId=2&byDetails=1&isDrawer=0&isBuyer=1";
 // string parameters --> baseUrl, date_str, rev, utilId
-var isgsURSAvailedFetchUrl = module.exports.isgsURSAvailedFetchUrl = "%s/wbes/Report/GetUrsReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnReg=0";
+var isgsURSAvailedFetchUrl = module.exports.isgsURSAvailedFetchUrl = "%s/Report/GetUrsReport?regionId=2&date=%s&revision=%s&utilId=%s&isBuyer=0&byOnReg=0";
 
 // Default Request headers
 var defaultRequestHeaders = module.exports.defaultRequestHeaders = {
@@ -67,7 +67,7 @@ var getStartEndBlks = module.exports.getStartEndBlks = function (fromBlk, toBlk)
 
 var fetchCookiesFromReportsUrl = module.exports.fetchCookiesFromReportsUrl = function (callback) {
     var options = defaultRequestOptions;
-    options.url = baseUrl + "/wbes/";
+    options.url = baseUrl;
     // get the cookies from response header
     CSVFetcher.doGetRequest(options, function (err, resBody, res) {
         if (err) {

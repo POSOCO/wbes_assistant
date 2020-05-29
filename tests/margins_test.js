@@ -7,7 +7,7 @@ var MarginUtil = require('../utils/wbesDCSchUtils');
 //     console.log(res);
 // });
 
-MarginUtil.getIsgsDcOnbarSchObj('29-11-2018',10,'ALL',function(err, res){
+MarginUtil.getIsgsDcOnbarSchObj('29-05-2020',10,'ALL',function(err, res){
     if (err) {
         return console.log(err);
     }
