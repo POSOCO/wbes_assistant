@@ -168,4 +168,14 @@ router.get('/rates_wr', function (req, res, next) {
         res.render('rates_wr', ratesObj);
     });
 });
+
+router.get('/rtm_wr', function (req, res, next) {
+    var tasksArray = [getRevisions, getEntUtils, getUtils];
+    async.waterfall(tasksArray, function (err, resObj) {
+        if (err) {
+            return next(err);
+        }
+        res.render('rtm_wr', resObj);
+    });
+});
 module.exports = router;

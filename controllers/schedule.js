@@ -303,4 +303,33 @@ router.get('/rates_wr', function (req, res) {
     });
 });
 
+router.get('/rtm', function (req, res) {
+    var utilId = req.query.util_id;
+    var rev = req.query.rev;
+    var dateStr = req.query.date_str;
+    var isSeller = req.query.is_seller;
+    if (isSeller == 'true') {
+        isSeller = true;
+    }
+    Schedule.getIsgsNetSchObj(utilId, dateStr, rev, isSeller, function (err, netSchObj) {
+        if (err) {
+            res.json({ err: err });
+            return;
+        }
+        var rtmObj = {};
+        rtmObj['gen_names'] = netSchObj['gen_names'];
+        rtmObj['time_blocks'] = netSchObj['time_blocks'];
+        const gen_names = netSchObj['gen_names'];
+        for (let genIter = 0; genIter < gen_names.length; genIter++) {
+            const genName = gen_names[genIter];
+            rtmObj[genName] = {};
+            rtmObj[genName]['rtm'] = [];
+            for (var i = 0; i < netSchObj[genName]['rtm_iex'].length; i++) {
+                rtmObj[genName]['rtm'].push(+netSchObj[genName]['rtm_iex'][i] + +netSchObj[genName]['rtm_pxi'][i])
+            }
+        }
+        res.json(rtmObj);
+    });
+});
+
 module.exports = router;
