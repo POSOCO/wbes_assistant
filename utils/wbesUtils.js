@@ -10,7 +10,7 @@ var Cookie = require('cookie');
 var async = require('async');
 
 
-var baseUrl = module.exports.baseUrl = "http://wbes.wrldc.in";
+var baseUrl = module.exports.baseUrl = "https://wbes.wrldc.in";
 var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=2&ScheduleDate=%s";
 var maxRevisionFetchUrl = module.exports.maxRevisionFetchUrl = "%s/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate=%s";
 var utilitiesFetchUrl = module.exports.utilitiesFetchUrl = "%s/ReportFullSchedule/GetUtils?regionId=2";
