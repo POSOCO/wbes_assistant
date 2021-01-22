@@ -9,7 +9,7 @@ var ArrayHelper = require('../helpers/arrayHelpers');
 var Cookie = require('cookie');
 var async = require('async');
 
-var baseUrl = module.exports.baseUrl = "http://wbes.nrldc.in";
+var baseUrl = module.exports.baseUrl = "https://wbes.nrldc.in";
 
 var revisionsFetchUrl = module.exports.revisionsFetchUrl = "%s/Report/GetNetScheduleRevisionNoForSpecificRegion?regionid=3&ScheduleDate=%s";
 
